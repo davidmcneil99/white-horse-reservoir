@@ -1,1 +1,57 @@
-{% extends "base.html" %}{% block content %}index{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}White Horse Reservoir -- Campaign Information{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="stage-banner stage-pre-application" role="alert">
+  <strong>DCO Stage: Pre-application</strong> -- the application has not yet been submitted.
+</div>
+
+<section class="intro-section">
+  <h1>White Horse Reservoir (SESRO)</h1>
+  <p>This site presents publicly available information about Thames Water's proposed Strategic Environmental and Resilience Options reservoir in the Vale of White Horse, Oxfordshire.</p>
+
+  <a class="btn-primary" href="https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/WA010005/get-updates/start">
+    Sign up for Planning Inspectorate updates
+  </a>
+</section>
+
+<section class="lookup-section">
+  <h2>Find your representatives</h2>
+  <div id="lookup-widget">
+    <label for="lookup-postcode">Enter your postcode to find your representatives</label>
+    <input id="lookup-postcode" type="text" autocomplete="postal-code" maxlength="8">
+    <button id="lookup-btn">Look up</button>
+    <div id="lookup-result"></div>
+  </div>
+</section>
+
+<section class="map-section">
+  <h2>Reservoir location and access points</h2>
+  <div id="reservoir-map" aria-label="Map showing reservoir location and access points" style="height:400px"></div>
+</section>
+
+<section class="news-section">
+  <h2>Latest news</h2>
+  {% if news_items %}
+    {% for item in news_items[:10] %}
+    <article class="news-item">
+      <h3><a href="{{ item.url }}">{{ item.headline }}</a></h3>
+      <p class="news-meta">
+        <time datetime="{{ item.date }}">{{ item.date }}</time>
+      </p>
+    </article>
+    {% endfor %}
+  {% else %}
+    <p>No recent news items.</p>
+  {% endif %}
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+{% endblock %}

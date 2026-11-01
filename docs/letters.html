@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Write a letter -- White Horse Reservoir</title>
+  <link rel="stylesheet" href="/white-horse-reservoir/assets/style.css">
+  
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/white-horse-reservoir/" class="site-title">White Horse Reservoir</a>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-hidden="true">
+      <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="/white-horse-reservoir/">Home</a></li>
+          <li><a href="/white-horse-reservoir/facts.html">Facts</a></li>
+          <li><a href="/white-horse-reservoir/actions.html">Actions</a></li>
+          <li><a href="/white-horse-reservoir/letters.html">Letters</a></li>
+          <li><a href="/white-horse-reservoir/about.html">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    
+<h1>Write to your representatives</h1>
+<p>Use the tools below to find your representatives and generate a letter you can send to them about the White Horse Reservoir project.</p>
+
+<section class="lookup-section">
+  <h2>Step 1: Find your representatives</h2>
+  <div id="lookup-widget">
+    <label for="lookup-postcode">Enter your postcode to find your representatives</label>
+    <input id="lookup-postcode" type="text" autocomplete="postal-code" maxlength="8">
+    <button id="lookup-btn">Look up</button>
+    <div id="lookup-result"></div>
+  </div>
+</section>
+
+<section class="letter-section">
+  <h2>Step 2: Choose a letter type</h2>
+  <div class="letter-controls">
+    <label for="letter-type">Letter type</label>
+    <select id="letter-type">
+      <option value="">-- Select a letter --</option>
+      <option value="county-councillor">County councillor</option>
+      <option value="defra-secretary-of-state">Secretary of State (Emma Reynolds MP)</option>
+      <option value="district-councillor">District councillor</option>
+      <option value="eir-thames-water">Thames Water (EIR request)</option>
+      <option value="foi-missing-minutes">Thames Water (FOI - missing minutes)</option>
+      <option value="mp">Your MP</option>
+      <option value="ofwat">Ofwat</option>
+      <option value="parish-clerk">Parish clerk</option>
+      <option value="planning-inspectorate-relevant-representation">Planning Inspectorate (Relevant Representation)</option>
+      <option value="thames-water">Thames Water</option>
+    </select>
+  </div>
+
+  <div id="letter-output"></div>
+
+  <div class="letter-actions">
+    <button id="copy-letter" style="display:none">Copy letter</button>
+    <button id="email-letter" style="display:none">Open in email client</button>
+  </div>
+
+  <p class="correction-link-para">
+    <a href="https://github.com/davidmcneil99/white-horse-reservoir/issues/new?title=Correction+report&amp;body=What+is+wrong%3A%0AWhat+it+should+say%3A%0ASource+URL%3A" class="correction-link">Report an error in this letter</a>
+  </p>
+</section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Built by volunteers in support of GARD's campaign. Independent of GARD. Last updated: 2026-11-01.</p>
+    </div>
+  </footer>
+
+  <script src="/white-horse-reservoir/assets/lookup.js" defer></script>
+  <script src="/white-horse-reservoir/assets/letters.js" defer></script>
+  <script src="/white-horse-reservoir/assets/map.js" defer></script>
+  
+</body>
+</html>

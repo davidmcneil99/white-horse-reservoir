@@ -1,1 +1,45 @@
-<!DOCTYPE html><html><head><title>{% block title %}{% endblock %}</title></head><body>{% block content %}{% endblock %}</body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}White Horse Reservoir{% endblock %}</title>
+  <link rel="stylesheet" href="/white-horse-reservoir/assets/style.css">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/white-horse-reservoir/" class="site-title">White Horse Reservoir</a>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-hidden="true">
+      <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="site-nav" aria-label="Main navigation">
+        <ul>
+          <li><a href="/white-horse-reservoir/">Home</a></li>
+          <li><a href="/white-horse-reservoir/facts.html">Facts</a></li>
+          <li><a href="/white-horse-reservoir/actions.html">Actions</a></li>
+          <li><a href="/white-horse-reservoir/letters.html">Letters</a></li>
+          <li><a href="/white-horse-reservoir/about.html">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Built by volunteers in support of GARD's campaign. Independent of GARD. Last updated: {{ built_on }}.</p>
+    </div>
+  </footer>
+
+  <script src="/white-horse-reservoir/assets/lookup.js" defer></script>
+  <script src="/white-horse-reservoir/assets/letters.js" defer></script>
+  <script src="/white-horse-reservoir/assets/map.js" defer></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

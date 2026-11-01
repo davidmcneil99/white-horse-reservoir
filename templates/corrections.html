@@ -1,1 +1,48 @@
-{% extends "base.html" %}{% block content %}corrections{% endblock %}
+{% extends "base.html" %}
+
+{% block title %}Corrections -- White Horse Reservoir{% endblock %}
+
+{% block content %}
+<h1>Corrections</h1>
+<p>This page lists corrections made to data on this site.</p>
+
+{% if corrections %}
+<table class="corrections-table">
+  <caption>Data corrections</caption>
+  <thead>
+    <tr>
+      <th scope="col">Date corrected</th>
+      <th scope="col">Type</th>
+      <th scope="col">Item</th>
+      <th scope="col">What changed</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in corrections %}
+    <tr>
+      <td>{{ item._corrected_on }}</td>
+      <td>
+        {% if item.id.startswith('t') %}Timeline
+        {% elif item.id.startswith('q') %}Quote
+        {% elif item.id.startswith('ac') %}Action
+        {% else %}{{ item.id }}
+        {% endif %}
+      </td>
+      <td>
+        {% if item.id.startswith('t') %}
+          <a href="/white-horse-reservoir/facts.html#tl-{{ item.id }}">{{ item.event[:80] }}{% if item.event | length > 80 %}...{% endif %}</a>
+        {% elif item.id.startswith('q') %}
+          <a href="/white-horse-reservoir/facts.html#q-{{ item.id }}">{{ item.speaker }}{% if item.date_display %} ({{ item.date_display }}){% endif %}</a>
+        {% else %}
+          {{ item.id }}
+        {% endif %}
+      </td>
+      <td>{{ item._correction_note }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No corrections have been made to this site's data.</p>
+{% endif %}
+{% endblock %}
