@@ -134,18 +134,18 @@ def test_letters_data_json_exists(tmp_path):
 def test_correction_note_appears_in_output(tmp_path):
     # Write a temp override and verify it appears in facts/index.html
     import json, shutil
-    shutil.copy("data/overrides.json", tmp_path / "overrides_backup.json")
+    shutil.copy("data/reservoir/overrides.json", tmp_path / "overrides_backup.json")
     overrides = [{"item_type": "quote", "item_id": "q001",
                   "corrected_on": "2026-11-15", "corrected_by": "test",
                   "correction_note": "test correction", "field": "quote",
                   "new_value": "corrected text"}]
-    Path("data/overrides.json").write_text(json.dumps(overrides))
+    Path("data/reservoir/overrides.json").write_text(json.dumps(overrides))
     try:
         build(output_dir=tmp_path)
         facts = (tmp_path / "facts.html").read_text()
         assert "test correction" in facts
     finally:
-        shutil.copy(tmp_path / "overrides_backup.json", "data/overrides.json")
+        shutil.copy(tmp_path / "overrides_backup.json", "data/reservoir/overrides.json")
 
 
 def test_featured_actions_in_context():

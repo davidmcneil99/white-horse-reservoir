@@ -1,7 +1,7 @@
 """Feed fetcher for the White Horse Reservoir campaign site.
 
 Fetches RSS feeds, JSON APIs, and monitors pages for changes.
-Run as a script (python3 generator/fetch.py) to update data/fetched/.
+Run as a script (python3 generator/fetch.py) to update data/reservoir/fetched/.
 """
 
 import csv
@@ -19,6 +19,10 @@ USER_AGENT = "WHReservoir/1.0 (+https://github.com/davidmcneil99/white-horse-res
 _HEADERS = {"User-Agent": USER_AGENT}
 
 logger = logging.getLogger(__name__)
+
+_HERE = Path(__file__).parent
+_ROOT = _HERE.parent
+RES_DATA_DIR = _ROOT / "data" / "reservoir"
 
 _robots_cache: dict[str, urllib.robotparser.RobotFileParser] = {}
 
@@ -204,8 +208,8 @@ def detect_page_change(url: str, old_hashes: dict) -> tuple[bool, str]:
 
 
 def load_sources() -> list[dict]:
-    """Load sources from data/national-and-other-sources.csv."""
-    csv_path = Path("data/national-and-other-sources.csv")
+    """Load sources from data/reservoir/national-and-other-sources.csv."""
+    csv_path = RES_DATA_DIR / "national-and-other-sources.csv"
     if not csv_path.exists():
         logging.warning("load_sources: CSV not found at %s", csv_path)
         return []
@@ -267,8 +271,8 @@ if __name__ == "__main__":
     import json
 
     sources = load_sources()
-    hashes_path = Path("data/fetched/page_hashes.json")
-    news_path = Path("data/fetched/news_items.json")
+    hashes_path = RES_DATA_DIR / "fetched" / "page_hashes.json"
+    news_path = RES_DATA_DIR / "fetched" / "news_items.json"
 
     hashes = json.loads(hashes_path.read_text(encoding="utf-8")) if hashes_path.exists() else {}
     existing = json.loads(news_path.read_text(encoding="utf-8")) if news_path.exists() else []

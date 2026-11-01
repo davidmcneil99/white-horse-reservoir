@@ -18,7 +18,9 @@ _HERE = Path(__file__).parent
 _ROOT = _HERE.parent
 
 DATA_DIR = _ROOT / "data"
-CONTENT_DIR = DATA_DIR / "content"
+RES_DATA_DIR   = DATA_DIR / "reservoir"
+CEARN_DATA_DIR = DATA_DIR / "cearn"
+CONTENT_DIR    = RES_DATA_DIR / "content"
 TEMPLATES_DIR = _ROOT / "templates"
 
 
@@ -75,30 +77,30 @@ def load_all_data() -> dict:
     )
 
     # --- CSV files ---
-    with (DATA_DIR / "representatives.csv").open(encoding="utf-8", newline="") as fh:
+    with (RES_DATA_DIR / "representatives.csv").open(encoding="utf-8", newline="") as fh:
         representatives: list[dict] = list(csv.DictReader(fh))
 
-    with (DATA_DIR / "local-councils.csv").open(encoding="utf-8", newline="") as fh:
+    with (RES_DATA_DIR / "local-councils.csv").open(encoding="utf-8", newline="") as fh:
         local_councils: list[dict] = list(csv.DictReader(fh))
 
-    with (DATA_DIR / "access-points.csv").open(encoding="utf-8", newline="") as fh:
+    with (RES_DATA_DIR / "access-points.csv").open(encoding="utf-8", newline="") as fh:
         access_points: list[dict] = list(csv.DictReader(fh))
 
     # --- Sources: still_to_check_by_hand ---
     sources_raw = json.loads(
-        (DATA_DIR / "white-horse-reservoir-sources.json").read_text(encoding="utf-8")
+        (RES_DATA_DIR / "white-horse-reservoir-sources.json").read_text(encoding="utf-8")
     )
     still_to_check: list[str] = sources_raw.get("still_to_check_by_hand", [])
 
     # --- Fetched news items ---
-    news_items_path = DATA_DIR / "fetched" / "news_items.json"
+    news_items_path = RES_DATA_DIR / "fetched" / "news_items.json"
     if news_items_path.exists():
         news_items: list[dict] = json.loads(news_items_path.read_text(encoding="utf-8"))
     else:
         news_items = []
 
     # --- Overrides ---
-    overrides_path = DATA_DIR / "overrides.json"
+    overrides_path = RES_DATA_DIR / "overrides.json"
     if overrides_path.exists():
         overrides: list[dict] = json.loads(overrides_path.read_text(encoding="utf-8"))
     else:
