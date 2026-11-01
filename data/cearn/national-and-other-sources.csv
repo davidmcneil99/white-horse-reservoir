@@ -1,0 +1,19 @@
+name,level,url,feed,status,notes
+Planning Inspectorate project page (EN0110044),National,https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/EN0110044,None. Email updates: https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/EN0110044/get-updates/start ; boundary GeoJSON at /download-boundary,Works (no documents or updates yet),"Poll /documents and /project-updates. Contact cearnsolarfarm@planninginspectorate.gov.uk, 0303 444 5000"
+Botley West (EN010147),National,https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/EN010147,Email updates,Works; decision due 10 Nov 2026,Shares the Farmoor substation
+Cearn developer website,Developer,https://cearnsolarfarm.co.uk/,/feed/ valid but empty,Works,"Watch the #documents list for changes. Contact info@cearnsolarfarm.co.uk, 08000 129 168, Freepost CEARN SOLAR FARM. The register-for-updates link points to crm.leodasolarfarm.co.uk (a different project domain); check before linking"
+Vale Cearn page,District,https://www.whitehorsedc.gov.uk/vale-of-white-horse-district-council/planning-and-development/nationally-significant-infrastructure-projects-nsips/cearn-solar-farm/,None,Works (updated 28 Oct 2026),Scoping response due 23 November
+Vale news feed,District,https://www.whitehorsedc.gov.uk/feed/,RSS,Works (some relative URLs),Filter for Cearn and solar
+Vale ModernGov,District,https://democratic.whitehorsedc.gov.uk/mgRss.aspx,RSS; keyword alerts at https://democratic.whitehorsedc.gov.uk/mgRegisterKeywordInterest.aspx?bcr=1,Works,Council 21 Oct 2026 minutes pending
+Vale planning register,District,https://valeofwhitehorse.planning-register.co.uk/,Weekly list https://valeofwhitehorse.planning-register.co.uk/Planning/WeeklyList ; email alerts via account,Works (records behind a disclaimer gate),"For local applications such as Manor Solar Farm conditions, not Cearn itself"
+Parliament (Hansard and written questions),National,https://hansard-api.parliament.uk/search.json?queryParameters.searchTerm=Cearn&queryParameters.take=10,JSON API,Works; no mentions yet,Also https://questions-statements-api.parliament.uk/api/writtenquestions/questions?searchTerm=Cearn&take=10&expandMember=true
+GOV.UK DESNZ,National,https://www.gov.uk/government/organisations/department-for-energy-security-and-net-zero,GOV.UK search API and Atom feeds,Works,Decision-maker's department
+Charney Bassett PC news feed,Parish,https://charneybassett-pc.gov.uk/news/feed/,RSS,Works,Best parish source on Cearn
+Protect the Vale,Campaign,https://protect-the-vale.org.uk/,None working,Works,Watch the page for changes
+CPRE Oxfordshire,Campaign,https://www.cpreoxon.org.uk/feed/,RSS,Works,
+Oxford Magazine Cearn topic,Media,https://theoxfordmagazine.com/topic/cearn-solar-farm-news/feed/,RSS,"Works (1 item, 5 Sep 2026)",
+Planning Geek,Media,https://www.planninggeek.co.uk/2026/cearn-solar-farm-council-motion/,Email digest,Works,Good analysis of the motion
+Oxford Clarion,Media,https://oxfordclarion.uk/the-clarion-27-october-2026/,Not tested,Works,Reported reactions to the motion
+Herald Series / BBC (via now.solar mirrors),Media,https://now.solar/2026/09/20/fears-as-2800-acre-oxfordshire-solar-farm-almost-the-size-of-heathrow-proposed-heraldseries-co-uk/,,Mirror only; originals not found,Prefer original URLs when found
+Google News RSS,Media,https://news.google.com/rss/search?q=%22Cearn+Solar+Farm%22&hl=en-GB&gl=GB&ceid=GB:en,RSS,Not testable from here,Catch-all
+The Hanneys community site,Community,https://thehanneys.uk/,None found,Works,No Cearn coverage yet; Facebook group https://www.facebook.com/groups/eastandwesthanney/
