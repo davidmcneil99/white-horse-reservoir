@@ -3,6 +3,7 @@
 import csv
 import json
 import logging
+import shutil
 from datetime import date
 from pathlib import Path
 
@@ -252,6 +253,12 @@ def build(output_dir: Path = Path("docs")) -> None:
         encoding="utf-8",
     )
     logging.info("Wrote %s", assets_dir / "lookup-data.json")
+
+    # Copy ward-aliases.json so lookup.js can fetch it alongside lookup-data.json.
+    ward_aliases_src = CONTENT_DIR / "ward-aliases.json"
+    if ward_aliases_src.exists():
+        shutil.copy2(ward_aliases_src, assets_dir / "ward-aliases.json")
+        logging.info("Copied %s -> %s", ward_aliases_src, assets_dir / "ward-aliases.json")
 
 
 if __name__ == "__main__":
