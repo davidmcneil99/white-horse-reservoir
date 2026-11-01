@@ -110,20 +110,19 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Hamburger toggle (pure CSS) */
-.nav-toggle-input {
-  display: none;
-}
-
-.nav-toggle-label {
+/* Hamburger toggle button */
+.nav-toggle-btn {
   display: flex;
   flex-direction: column;
   gap: 5px;
   cursor: pointer;
   padding: 4px;
+  background: none;
+  border: none;
+  color: inherit;
 }
 
-.nav-toggle-label span {
+.nav-toggle-btn span {
   display: block;
   width: 24px;
   height: 2px;
@@ -135,13 +134,11 @@ a:hover {
 /* Nav */
 .site-nav {
   width: 100%;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.25s ease;
+  display: none;
 }
 
-.nav-toggle-input:checked + .nav-toggle-label + .site-nav {
-  max-height: 300px;
+.site-nav.is-open {
+  display: block;
 }
 
 .site-nav ul {
@@ -167,14 +164,13 @@ a:hover {
 
 /* Desktop nav */
 @media (min-width: 768px) {
-  .nav-toggle-label {
+  .nav-toggle-btn {
     display: none;
   }
 
   .site-nav {
+    display: block;
     width: auto;
-    max-height: none;
-    overflow: visible;
   }
 
   .site-nav ul {

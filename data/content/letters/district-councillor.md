@@ -1,9 +1,9 @@
 ---
 title: Letter to your district councillor
-recipient_name: "{{recipient_name}}"
-recipient_title: "Dear Councillor {{recipient_name}}"
-recipient_email: "{{recipient_email}}"
-recipient_address: "{{recipient_address}}"
+recipient_name: "{{district_councillor_name}}"
+recipient_title: "Dear Councillor {{district_councillor_name}}"
+recipient_email: "{{district_councillor_email}}"
+recipient_address: "Vale of White Horse District Council, 135 Eastern Avenue, Milton Park, Abingdon, OX14 4SB"
 note: "Recipient is populated from the sender's district ward using the representatives data."
 ---
 

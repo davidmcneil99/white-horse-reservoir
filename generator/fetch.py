@@ -7,9 +7,10 @@ Run as a script (python3 generator/fetch.py) to update data/fetched/.
 import csv
 import hashlib
 import logging
-import time
+import urllib.robotparser
 from datetime import date
 from pathlib import Path
+from urllib.parse import urlparse
 
 import feedparser
 import requests
@@ -18,6 +19,23 @@ USER_AGENT = "WHReservoir/1.0 (+https://github.com/davidmcneil99/white-horse-res
 _HEADERS = {"User-Agent": USER_AGENT}
 
 logger = logging.getLogger(__name__)
+
+_robots_cache: dict[str, urllib.robotparser.RobotFileParser] = {}
+
+
+def _robots_allowed(url: str) -> bool:
+    """Return True if our user-agent is allowed to fetch url per robots.txt."""
+    try:
+        parsed = urlparse(url)
+        origin = f"{parsed.scheme}://{parsed.netloc}"
+        if origin not in _robots_cache:
+            rp = urllib.robotparser.RobotFileParser()
+            rp.set_url(origin + "/robots.txt")
+            rp.read()
+            _robots_cache[origin] = rp
+        return _robots_cache[origin].can_fetch(USER_AGENT, url)
+    except Exception:
+        return True
 
 
 def _struct_time_to_date(st) -> str:
@@ -32,16 +50,24 @@ def _struct_time_to_date(st) -> str:
 
 def fetch_rss(url: str, source_name: str) -> list[dict]:
     """Fetch an RSS/Atom feed and return a list of new_item dicts."""
-    result = feedparser.parse(url)
-
-    # Check for HTTP error status
-    status = getattr(result, "status", None)
-    if status == 403:
-        logging.warning("fetch_rss: 403 Forbidden for %s (%s)", source_name, url)
+    if not _robots_allowed(url):
+        logging.warning("fetch_rss: robots.txt disallows fetching %s (%s)", source_name, url)
+        return []
+    try:
+        response = requests.get(url, headers=_HEADERS, timeout=15)
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as exc:
+        code = exc.response.status_code if exc.response is not None else 0
+        logging.warning("fetch_rss: HTTP %s for %s (%s)", code, source_name, url)
+        return []
+    except Exception as exc:
+        logging.warning("fetch_rss: request failed for %s (%s): %s", source_name, url, exc)
         return []
 
+    result = feedparser.parse(response.text)
     entries = getattr(result, "entries", [])
     if not entries:
+        logging.info("fetch_rss: no entries for %s (%s)", source_name, url)
         return []
 
     items = []
@@ -78,6 +104,9 @@ def fetch_json_api(
     summary_field: str,
 ) -> list[dict]:
     """Fetch a JSON API endpoint and return a list of new_item dicts."""
+    if not _robots_allowed(url):
+        logging.warning("fetch_json_api: robots.txt disallows fetching %s (%s)", source_name, url)
+        return []
     try:
         response = requests.get(url, headers=_HEADERS, timeout=15)
     except Exception as exc:
@@ -119,6 +148,9 @@ def fetch_json_api(
         date_str = str(raw.get(date_field, date.today().isoformat()))[:10]
         summary = str(raw.get(summary_field, ""))[:300]
 
+        if not title or not item_url:
+            continue
+
         items.append({
             "title": title,
             "url": item_url,
@@ -137,6 +169,9 @@ def detect_page_change(url: str, old_hashes: dict) -> tuple[bool, str]:
     Returns (changed: bool, new_hash: str).
     If the request fails, returns (False, old hash or "").
     """
+    if not _robots_allowed(url):
+        logging.warning("detect_page_change: robots.txt disallows fetching %s", url)
+        return False, old_hashes.get(url, "")
     try:
         response = requests.get(url, headers=_HEADERS, timeout=15)
     except Exception as exc:

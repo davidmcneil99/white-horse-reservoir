@@ -1,9 +1,9 @@
 ---
 title: Letter to your county councillor
-recipient_name: "{{recipient_name}}"
-recipient_title: "Dear Councillor {{recipient_name}}"
-recipient_email: "{{recipient_email}}"
-recipient_address: "{{recipient_address}}"
+recipient_name: "{{county_councillor_name}}"
+recipient_title: "Dear Councillor {{county_councillor_name}}"
+recipient_email: "{{county_councillor_email}}"
+recipient_address: "Oxfordshire County Council, County Hall, New Road, Oxford, OX1 1ND"
 note: "Recipient is populated from the sender's county council ward using the representatives data."
 ---
 

@@ -11,11 +11,10 @@
   <header class="site-header">
     <div class="container header-inner">
       <a href="/white-horse-reservoir/" class="site-title">White Horse Reservoir</a>
-      <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-hidden="true">
-      <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation">
+      <button class="nav-toggle-btn" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation">
         <span></span><span></span><span></span>
-      </label>
-      <nav class="site-nav" aria-label="Main navigation">
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main navigation">
         <ul>
           <li><a href="/white-horse-reservoir/">Home</a></li>
           <li><a href="/white-horse-reservoir/facts.html">Facts</a></li>
@@ -46,8 +45,7 @@
 <section>
   <h2>Corrections and errors</h2>
   <p>To report an error, open a GitHub issue:
-    <a href="https://github.com/davidmcneil99/white-horse-reservoir/issues/new?title=Correction+report&amp;body=What+is+wrong%3A%0AWhat+it+should+say%3A%0ASource+URL%3A">Report an error</a>
-    or email [placeholder].
+    <a href="https://github.com/davidmcneil99/white-horse-reservoir/issues/new?title=Correction+report&amp;body=What+is+wrong%3A%0AWhat+it+should+say%3A%0ASource+URL%3A">Report an error</a>.
   </p>
 </section>
 
@@ -75,5 +73,17 @@
   <script src="/white-horse-reservoir/assets/letters.js" defer></script>
   <script src="/white-horse-reservoir/assets/map.js" defer></script>
   
+  <script>
+    (function () {
+      var btn = document.querySelector('.nav-toggle-btn');
+      var nav = document.getElementById('site-nav');
+      if (btn && nav) {
+        btn.addEventListener('click', function () {
+          var open = nav.classList.toggle('is-open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+      }
+    }());
+  </script>
 </body>
 </html>

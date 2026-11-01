@@ -11,11 +11,10 @@
   <header class="site-header">
     <div class="container header-inner">
       <a href="/white-horse-reservoir/" class="site-title">White Horse Reservoir</a>
-      <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-hidden="true">
-      <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation">
+      <button class="nav-toggle-btn" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation">
         <span></span><span></span><span></span>
-      </label>
-      <nav class="site-nav" aria-label="Main navigation">
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main navigation">
         <ul>
           <li><a href="/white-horse-reservoir/">Home</a></li>
           <li><a href="/white-horse-reservoir/facts.html">Facts</a></li>
@@ -192,6 +191,76 @@
 
   
   
+  <section class="actions-group" id="actions-on-submission">
+    <h2>After DCO submission</h2>
+    
+    <article class="action-item" id="action-ac018">
+      <h3>Find out about statutory blight and property compensation</h3>
+      <p>Once land is identified for compulsory purchase in a DCO application, statutory blight notices may be available under Part VI of the Town and Country Planning Act 1990. Compensation follows the Compensation Code. Seek advice from a RICS-qualified surveyor. No project-specific discretionary blight scheme has been found for this project.</p>
+      <p class="action-who"><strong>Who can do this:</strong> Landowners and property owners in the Order limits area</p>
+      
+      <p><a href="https://www.legislation.gov.uk/ukpga/1990/8/part/VI" rel="external noopener">More information</a></p>
+      
+      
+      <p class="legal-disclaimer">This is general information, not legal advice.</p>
+      
+      
+    </article>
+    
+  </section>
+  
+
+  
+  
+  <section class="actions-group" id="actions-on-acceptance">
+    <h2>After DCO acceptance</h2>
+    
+    <article class="action-item" id="action-ac012">
+      <h3>Submit a Relevant Representation</h3>
+      <p>Once the DCO application is accepted, a Relevant Representation window of at least 30 days will open. Submitting a representation makes you an Interested Party, giving you full participation rights: written submissions, comments on Examining Authority questions, and the right to speak at hearings. Keep your representation focused on specific impacts.</p>
+      <p class="action-who"><strong>Who can do this:</strong> Anyone with an interest in the project</p>
+      
+      <p><a href="https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/WA010005" rel="external noopener">More information</a></p>
+      
+      
+      
+    </article>
+    
+    <article class="action-item" id="action-ac013">
+      <h3>Register as an Interested Party to participate in the examination</h3>
+      <p>After submitting a Relevant Representation you become an Interested Party. Only Interested Parties can make written submissions at each examination deadline, comment on the Examining Authority&#39;s questions, and request to speak at open floor hearings.</p>
+      <p class="action-who"><strong>Who can do this:</strong> Those who submitted a Relevant Representation</p>
+      
+      <p><a href="https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/WA010005" rel="external noopener">More information</a></p>
+      
+      
+      
+    </article>
+    
+    <article class="action-item" id="action-ac014">
+      <h3>Submit written representations during the examination</h3>
+      <p>Once an Interested Party, you can submit written representations at each examination deadline set by the Examining Authority. Comment specifically on traffic, flood risk, noise or other local impacts from named access points or roads.</p>
+      <p class="action-who"><strong>Who can do this:</strong> Registered Interested Parties</p>
+      
+      <p><a href="https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/WA010005" rel="external noopener">More information</a></p>
+      
+      
+      
+    </article>
+    
+    <article class="action-item" id="action-ac017">
+      <h3>Ask your parish or district council to raise concerns in their Local Impact Report</h3>
+      <p>Councils&#39; Local Impact Reports carry significant weight in the DCO examination. Councils must be invited to produce one by the Examining Authority. Ask your councillors to include specific local impacts: named roads, access points, flood risk, noise.</p>
+      <p class="action-who"><strong>Who can do this:</strong> Residents</p>
+      
+      <p><a href="https://groupagainstreservoirdevelopment.org/dco-planning-process/" rel="external noopener">More information</a></p>
+      
+      
+      
+    </article>
+    
+  </section>
+  
 
   
   
@@ -223,9 +292,6 @@
   </section>
   
 
-  
-  
-
 
   </main>
 
@@ -239,5 +305,17 @@
   <script src="/white-horse-reservoir/assets/letters.js" defer></script>
   <script src="/white-horse-reservoir/assets/map.js" defer></script>
   
+  <script>
+    (function () {
+      var btn = document.querySelector('.nav-toggle-btn');
+      var nav = document.getElementById('site-nav');
+      if (btn && nav) {
+        btn.addEventListener('click', function () {
+          var open = nav.classList.toggle('is-open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+      }
+    }());
+  </script>
 </body>
 </html>

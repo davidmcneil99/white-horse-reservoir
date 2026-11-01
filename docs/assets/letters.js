@@ -58,10 +58,16 @@ window.WHRLetters = (function () {
     var NOT_FOUND = '[not found - please fill in]';
 
     var map = {
-      mp_name:             (r.mp && r.mp.name)  || NOT_FOUND,
-      mp_email:            (r.mp && r.mp.email) || NOT_FOUND,
-      sender_area:         (r.raw && (r.raw.parish || r.raw.admin_ward)) || NOT_FOUND,
-      sender_constituency: (r.raw && r.raw.parliamentary_constituency) || NOT_FOUND,
+      mp_name:                  (r.mp && r.mp.name)  || NOT_FOUND,
+      mp_email:                 (r.mp && r.mp.email) || NOT_FOUND,
+      county_councillor_name:   (r.countyCouncillors && r.countyCouncillors[0] && r.countyCouncillors[0].name) || NOT_FOUND,
+      county_councillor_email:  (r.countyCouncillors && r.countyCouncillors[0] && r.countyCouncillors[0].email) || NOT_FOUND,
+      district_councillor_name:  (r.districtCouncillors && r.districtCouncillors[0] && r.districtCouncillors[0].name) || NOT_FOUND,
+      district_councillor_email: (r.districtCouncillors && r.districtCouncillors[0] && r.districtCouncillors[0].email) || NOT_FOUND,
+      parish_contact:           (r.parish && r.parish.contact) || NOT_FOUND,
+      sender_area:              (r.raw && (r.raw.parish || r.raw.admin_ward)) || NOT_FOUND,
+      sender_ward:              (r.raw && r.raw.admin_ward) || NOT_FOUND,
+      sender_constituency:      (r.raw && r.raw.parliamentary_constituency) || NOT_FOUND,
       current_date: new Date().toLocaleDateString('en-GB', {
         day: 'numeric', month: 'long', year: 'numeric'
       }),
@@ -190,10 +196,16 @@ window.WHRLetters = (function () {
           var r = _currentLookup || {};
           var NOT_FOUND = '[not found - please fill in]';
           var fmMap = {
-            mp_name:             (r.mp && r.mp.name)  || NOT_FOUND,
-            mp_email:            (r.mp && r.mp.email) || NOT_FOUND,
-            sender_area:         (r.raw && (r.raw.parish || r.raw.admin_ward)) || NOT_FOUND,
-            sender_constituency: (r.raw && r.raw.parliamentary_constituency) || NOT_FOUND,
+            mp_name:                  (r.mp && r.mp.name)  || NOT_FOUND,
+            mp_email:                 (r.mp && r.mp.email) || NOT_FOUND,
+            county_councillor_name:   (r.countyCouncillors && r.countyCouncillors[0] && r.countyCouncillors[0].name) || NOT_FOUND,
+            county_councillor_email:  (r.countyCouncillors && r.countyCouncillors[0] && r.countyCouncillors[0].email) || NOT_FOUND,
+            district_councillor_name:  (r.districtCouncillors && r.districtCouncillors[0] && r.districtCouncillors[0].name) || NOT_FOUND,
+            district_councillor_email: (r.districtCouncillors && r.districtCouncillors[0] && r.districtCouncillors[0].email) || NOT_FOUND,
+            parish_contact:           (r.parish && r.parish.contact) || NOT_FOUND,
+            sender_area:              (r.raw && (r.raw.parish || r.raw.admin_ward)) || NOT_FOUND,
+            sender_ward:              (r.raw && r.raw.admin_ward) || NOT_FOUND,
+            sender_constituency:      (r.raw && r.raw.parliamentary_constituency) || NOT_FOUND,
             current_date: new Date().toLocaleDateString('en-GB', {
               day: 'numeric', month: 'long', year: 'numeric'
             }),
@@ -211,7 +223,7 @@ window.WHRLetters = (function () {
             }
           }
 
-          var recipientEmail = fmMap['recipient_email'] || '';
+          var recipientEmail = (fmMap['recipient_email'] !== NOT_FOUND ? fmMap['recipient_email'] : '') || '';
           var subject        = fmMap['subject']         || fmMap['title'] || '';
           var pre            = output.querySelector('pre.letter-preview');
           var bodyText       = pre ? pre.textContent : '';

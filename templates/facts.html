@@ -22,7 +22,7 @@
       <div class="timeline-checked">Last checked: {{ item.last_checked }}{% if item.last_checked_note %} ({{ item.last_checked_note }}){% endif %}</div>
       {% endif %}
       {% if item._corrected_on is defined %}
-      <span class="correction-note">Corrected {{ item._corrected_on }}: {{ item._correction_note }}</span>
+      <span class="correction-note">Corrected on {{ item._corrected_on }}: {{ item._correction_note }}</span>
       {% endif %}
     </li>
     {% endfor %}
@@ -62,7 +62,7 @@
           {% endif %}
         </footer>
         {% if q._corrected_on is defined %}
-        <span class="correction-note">Corrected {{ q._corrected_on }}: {{ q._correction_note }}</span>
+        <span class="correction-note">Corrected on {{ q._corrected_on }}: {{ q._correction_note }}</span>
         {% endif %}
       </blockquote>
       {% endfor %}

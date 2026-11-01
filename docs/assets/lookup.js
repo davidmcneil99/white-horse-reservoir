@@ -66,8 +66,9 @@ window.WHRLookup = (function () {
 
       const constituency = pcData.parliamentary_constituency || '';
       const rawWard = pcData.admin_ward || '';
-      const ward = aliases[rawWard.toLowerCase()] || rawWard;
-      const division = pcData.county_electoral_division || '';
+      const normWard = rawWard.replace(/\s*&\s*/g, ' and ');
+      const ward = aliases[normWard.toLowerCase()] || normWard;
+      const division = pcData.ced || '';
       const parish = pcData.parish || '';
 
       return {
@@ -75,7 +76,10 @@ window.WHRLookup = (function () {
         countyCouncillors: _match(reps, 'area', division).filter(function (r) { return r.tier === 'County'; }),
         districtCouncillors: _match(reps, 'area', ward).filter(function (r) { return r.tier === 'District'; }),
         parish: data.parishes.find(function (p) {
-          return parish && (p.name || '').toLowerCase() === parish.toLowerCase();
+          if (!parish) return false;
+          var pn = (p.name || '').toLowerCase();
+          var pc = parish.toLowerCase();
+          return pn === pc || pn.startsWith(pc + ' ') || pn.startsWith(pc + '-');
         }) || null,
         accessPoints: data.access_points,
         raw: pcData
@@ -149,7 +153,7 @@ window.WHRLookup = (function () {
       parts.push(
         '<div class="lookup-rep"><h3>County councillors</h3>' +
         '<p>We could not automatically match county councillors for division: ' +
-        _esc(r.raw.county_electoral_division || 'unknown') + '.</p></div>'
+        _esc(r.raw.ced || 'unknown') + '.</p></div>'
       );
     }
 

@@ -166,7 +166,7 @@ def _build_lookup_data(data: dict) -> dict:
             "contact": c.get("contact", ""),
         }
         for c in data["local_councils"]
-        if c.get("type", "").lower() == "parish council"
+        if c.get("type", "").lower().startswith("parish") or c.get("type", "").lower().startswith("town council")
     ]
 
     # Access points.

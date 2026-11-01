@@ -1,9 +1,9 @@
 ---
 title: Letter to the parish clerk
-recipient_name: "{{recipient_name}}"
-recipient_title: "Dear {{recipient_name}}"
-recipient_email: "{{recipient_email}}"
-recipient_address: "{{recipient_address}}"
+recipient_name: "The Parish Clerk"
+recipient_title: "Dear Clerk"
+recipient_email: "{{parish_contact}}"
+recipient_address: "[please check your parish council's website for the address]"
 note: "Recipient is populated from the sender's parish using the local-councils data."
 ---
 

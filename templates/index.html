@@ -13,7 +13,7 @@
 
 <section class="intro-section">
   <h1>White Horse Reservoir (SESRO)</h1>
-  <p>This site presents publicly available information about Thames Water's proposed Strategic Environmental and Resilience Options reservoir in the Vale of White Horse, Oxfordshire.</p>
+  <p>This site presents publicly available information about Thames Water's proposed South East Strategic Reservoir Option (SESRO) in the Vale of White Horse, Oxfordshire.</p>
 
   <a class="btn-primary" href="https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/WA010005/get-updates/start">
     Sign up for Planning Inspectorate updates
@@ -40,7 +40,7 @@
   {% if news_items %}
     {% for item in news_items[:10] %}
     <article class="news-item">
-      <h3><a href="{{ item.url }}">{{ item.headline }}</a></h3>
+      <h3><a href="{{ item.url }}">{{ item.title }}</a></h3>
       <p class="news-meta">
         <time datetime="{{ item.date }}">{{ item.date }}</time>
         {% if item.ai_generated %}<span class="ai-label">AI summary</span>{% endif %}

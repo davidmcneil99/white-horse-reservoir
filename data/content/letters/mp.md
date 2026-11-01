@@ -2,7 +2,7 @@
 title: Letter to your MP
 recipient_name: "{{mp_name}}"
 recipient_title: "Dear {{mp_name}}"
-recipient_email: "{{recipient_email}}"
+recipient_email: "{{mp_email}}"
 recipient_address: "House of Commons, London SW1A 0AA"
 note: "Recipient is populated from the sender's constituency MP using the representatives data."
 ---

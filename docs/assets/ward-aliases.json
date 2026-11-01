@@ -1,3 +1,4 @@
 {
-  "_note": "Add entries as postcodes.io -> CSV name mismatches are found"
+  "_note": "postcodes.io ward name -> CSV area name. & is also normalised to 'and' in code.",
+  "Steventon & the Hanneys": "Steventon and the Hanneys"
 }
