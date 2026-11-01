@@ -127,9 +127,8 @@ def load_all_data() -> dict:
     actions_by_id: dict = {a["id"]: a for a in actions}
 
     # Add is_distant_future flag to timeline items.
-    # Use year+4 so that items like 2029 (starting with "202") stay in the
-    # normal list; only 2030+ are considered distant future.
-    threshold_year = datetime.today().year + 4
+    # Items with year >= today.year + 3 (i.e. >= 2029 as of 2026) are distant future.
+    threshold_year = datetime.today().year + 3
     for item in timeline:
         try:
             item_year = int(str(item.get("date", "0"))[:4])
@@ -302,28 +301,20 @@ def build(output_dir: Path = Path("docs")) -> None:
         autoescape=True,
     )
 
-    # Pages: (template_name, output_subdir, output_filename)
-    # Sub-pages are written as {subdir}/index.html for GitHub Pages pretty URLs.
-    # The home page is written directly as index.html.
     pages = [
-        ("index.html", "", "index.html"),
-        ("about.html", "about", "index.html"),
-        ("facts.html", "facts", "index.html"),
-        ("actions.html", "actions", "index.html"),
-        ("letters.html", "letters", "index.html"),
-        ("corrections.html", "corrections", "index.html"),
-        ("access-points.html", "access-points", "index.html"),
+        ("index.html", "index.html"),
+        ("about.html", "about.html"),
+        ("facts.html", "facts.html"),
+        ("actions.html", "actions.html"),
+        ("letters.html", "letters.html"),
+        ("corrections.html", "corrections.html"),
+        ("access-points.html", "access-points.html"),
     ]
 
-    for template_name, subdir, output_name in pages:
+    for template_name, output_name in pages:
         template = env.get_template(template_name)
         rendered = template.render(**data)
-        if subdir:
-            page_dir = output_dir / subdir
-            page_dir.mkdir(parents=True, exist_ok=True)
-            out_path = page_dir / output_name
-        else:
-            out_path = output_dir / output_name
+        out_path = output_dir / output_name
         out_path.write_text(rendered, encoding="utf-8")
         logging.info("Wrote %s", out_path)
 

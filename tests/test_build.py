@@ -6,10 +6,11 @@ from generator.build import load_all_data, build
 def test_timeline_is_distant_future_flag():
     """Items with year >= today().year + 3 get is_distant_future=True."""
     data = load_all_data()
-    near = [t for t in data["timeline"] if t.get("date", "").startswith("202")]
-    far  = [t for t in data["timeline"] if t.get("date", "").startswith("204")]
-    assert all(not t["is_distant_future"] for t in near), "recent items should not be distant future"
-    assert all(t["is_distant_future"] for t in far), "2040 item should be distant future"
+    # Use integer year comparison so 2029 is correctly classified as distant future
+    near = [t for t in data["timeline"] if int(str(t.get("date", "0000"))[:4]) < 2029]
+    far  = [t for t in data["timeline"] if int(str(t.get("date", "0000"))[:4]) >= 2029]
+    assert all(not t["is_distant_future"] for t in near), "pre-2029 items should not be distant future"
+    assert all(t["is_distant_future"] for t in far), "2029+ items should be distant future"
 
 
 def test_timeline_linked_actions():
@@ -47,7 +48,7 @@ def test_actions_by_id_in_context():
 def test_actions_page_has_letter_buttons():
     """actions.html output has Generate-letter links for actions with letter_key."""
     build()
-    html = Path("docs/actions/index.html").read_text(encoding="utf-8")
+    html = Path("docs/actions.html").read_text(encoding="utf-8")
     # ac006 has letter_key = "thames-water"
     assert "thames-water" in html
     assert "Generate letter" in html
@@ -56,33 +57,31 @@ def test_actions_page_has_letter_buttons():
 def test_actions_page_has_deadlines():
     """actions.html output shows deadline for actions that have one."""
     build()
-    html = Path("docs/actions/index.html").read_text(encoding="utf-8")
+    html = Path("docs/actions.html").read_text(encoding="utf-8")
     assert "2026-11-30" in html or "November 2026" in html or "30 November" in html
 
 
 def test_letters_page_has_template_note():
     """letters.html output contains the template note."""
     build()
-    html = Path("docs/letters/index.html").read_text(encoding="utf-8")
+    html = Path("docs/letters.html").read_text(encoding="utf-8")
     assert "template" in html.lower() and "adjust" in html.lower()
 
 
 def test_facts_page_has_details_element():
     """facts.html output contains a <details> element for distant-future items."""
     build()
-    facts_html = Path("docs/facts/index.html").read_text(encoding="utf-8")
+    facts_html = Path("docs/facts.html").read_text(encoding="utf-8")
     assert "<details" in facts_html
-    assert "2040" in facts_html  # distant-future item appears somewhere
+    assert "2029" in facts_html or "2040" in facts_html  # at least one distant-future item
 
 
 def test_facts_page_action_links():
     """facts.html output contains links to actions for timeline items with action_ids."""
     build()
-    facts_html = Path("docs/facts/index.html").read_text(encoding="utf-8")
+    facts_html = Path("docs/facts.html").read_text(encoding="utf-8")
     # t024 has action_ids linking to ac019 and ac012
-    assert 'href="../actions/#action-ac019"' in facts_html or \
-           'href="/actions/#action-ac019"' in facts_html or \
-           '#action-ac019' in facts_html
+    assert '#action-ac019' in facts_html
 
 
 def test_load_all_data_has_required_keys():
@@ -103,12 +102,12 @@ def test_build_creates_all_pages(tmp_path):
     build(output_dir=tmp_path)
     expected = [
         "index.html",
-        "about/index.html",
-        "facts/index.html",
-        "actions/index.html",
-        "letters/index.html",
-        "corrections/index.html",
-        "access-points/index.html",
+        "about.html",
+        "facts.html",
+        "actions.html",
+        "letters.html",
+        "corrections.html",
+        "access-points.html",
     ]
     for page in expected:
         assert (tmp_path / page).exists(), f"Missing: {page}"
@@ -143,7 +142,7 @@ def test_correction_note_appears_in_output(tmp_path):
     Path("data/overrides.json").write_text(json.dumps(overrides))
     try:
         build(output_dir=tmp_path)
-        facts = (tmp_path / "facts" / "index.html").read_text()
+        facts = (tmp_path / "facts.html").read_text()
         assert "test correction" in facts
     finally:
         shutil.copy(tmp_path / "overrides_backup.json", "data/overrides.json")
