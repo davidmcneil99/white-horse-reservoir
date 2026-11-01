@@ -34,6 +34,15 @@ def test_build_creates_lookup_data(tmp_path):
     assert len(data["representatives"]) >= 30
 
 
+def test_letters_data_json_exists(tmp_path):
+    build(output_dir=tmp_path)
+    ld = tmp_path / "assets" / "letters-data.json"
+    assert ld.exists()
+    data = json.loads(ld.read_text())
+    assert "mp" in data
+    assert "defra-secretary-of-state" in data
+
+
 def test_correction_note_appears_in_output(tmp_path):
     # Write a temp override and verify it appears in facts.html
     import json, shutil

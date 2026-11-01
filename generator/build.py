@@ -208,6 +208,34 @@ def _build_lookup_data(data: dict) -> dict:
     }
 
 
+def _build_letters_data() -> dict:
+    """Read all letter template .md files and return a dict for letters-data.json.
+
+    Each entry key is the filename stem (e.g. ``mp.md`` -> ``"mp"``).  Each
+    value is the flat frontmatter dict with an added ``"body"`` key containing
+    the template body text (plain text with ``{{placeholder}}`` tokens).
+
+    Returns:
+        Dict mapping template key -> entry dict.
+    """
+    letters_dir = CONTENT_DIR / "letters"
+    result: dict = {}
+    for path in sorted(letters_dir.glob("*.md")):
+        text = path.read_text(encoding="utf-8")
+        fm = _parse_frontmatter(text)
+        # Extract body: everything after the second '---' delimiter.
+        lines = text.splitlines()
+        delimiters = [i for i, ln in enumerate(lines) if ln.strip() == "---"]
+        if len(delimiters) >= 2:
+            body = "\n".join(lines[delimiters[1] + 1 :]).strip()
+        else:
+            body = text.strip()
+        entry = dict(fm)
+        entry["body"] = body
+        result[path.stem] = entry
+    return result
+
+
 def build(output_dir: Path = Path("docs")) -> None:
     """Render all site pages to output_dir.
 
@@ -253,6 +281,14 @@ def build(output_dir: Path = Path("docs")) -> None:
         encoding="utf-8",
     )
     logging.info("Wrote %s", assets_dir / "lookup-data.json")
+
+    # Write letters-data.json.
+    letters_data = _build_letters_data()
+    (assets_dir / "letters-data.json").write_text(
+        json.dumps(letters_data, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    logging.info("Wrote %s", assets_dir / "letters-data.json")
 
     # Copy ward-aliases.json so lookup.js can fetch it alongside lookup-data.json.
     ward_aliases_src = CONTENT_DIR / "ward-aliases.json"
