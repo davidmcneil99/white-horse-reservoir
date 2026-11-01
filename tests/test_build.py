@@ -146,3 +146,44 @@ def test_correction_note_appears_in_output(tmp_path):
         assert "test correction" in facts
     finally:
         shutil.copy(tmp_path / "overrides_backup.json", "data/overrides.json")
+
+
+def test_featured_actions_in_context():
+    """load_all_data returns featured_actions sorted by featured_order."""
+    data = load_all_data()
+    assert "featured_actions" in data
+    fa = data["featured_actions"]
+    assert len(fa) >= 5
+    orders = [a.get("featured_order", 99) for a in fa]
+    assert orders == sorted(orders)
+
+
+def test_featured_actions_includes_sos():
+    """ac021 (Secretary of State) is in featured_actions."""
+    data = load_all_data()
+    ids = [a["id"] for a in data["featured_actions"]]
+    assert "ac021" in ids
+
+
+def test_sos_action_has_letter_key():
+    """ac021 has letter_key = defra-secretary-of-state."""
+    data = load_all_data()
+    sos = data["actions_by_id"].get("ac021")
+    assert sos is not None
+    assert sos["letter_key"] == "defra-secretary-of-state"
+
+
+def test_actions_page_has_featured_panel():
+    """actions.html output contains the 'Take action now' featured panel."""
+    build()
+    html = Path("docs/actions.html").read_text(encoding="utf-8")
+    assert "Take action now" in html
+    assert "featured-actions" in html
+
+
+def test_home_page_has_most_urgent_actions():
+    """index.html output contains the 'Most urgent actions' section."""
+    build()
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    assert "Most urgent actions" in html
+    assert "home-actions" in html

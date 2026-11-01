@@ -6,6 +6,29 @@
 <h1>What you can do</h1>
 <p>There are a number of ways you can engage with the planning process for the White Horse Reservoir (SESRO) project.</p>
 
+{% if featured_actions %}
+<section class="featured-actions" aria-label="Priority actions">
+  <h2>Take action now</h2>
+  <p class="featured-actions-intro">These are the actions GARD identifies as most urgent. The DCO application is expected in November 2026 — time is short.</p>
+  <ol class="featured-actions-list">
+    {% for action in featured_actions %}
+    <li class="featured-action-item">
+      <h3><a href="#action-{{ action.id }}">{{ action.title }}</a></h3>
+      <p>{{ action.description }}</p>
+      <div class="featured-action-links">
+        {% if action.source_url %}
+        <a class="btn-primary" href="{{ action.source_url }}" rel="external noopener">Take action</a>
+        {% endif %}
+        {% if action.letter_key %}
+        <a class="action-letter-btn" href="letters.html#{{ action.letter_key }}">Generate letter</a>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+{% endif %}
+
 {% for timing_value, timing_label in [("now", "Act now"), ("on-submission", "After DCO submission"), ("on-acceptance", "After DCO acceptance"), ("ongoing", "Ongoing")] %}
   {% set timing_actions = actions | selectattr("timing", "equalto", timing_value) | list %}
   {% if timing_actions %}
