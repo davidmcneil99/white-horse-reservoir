@@ -1,0 +1,96 @@
+[
+  {
+    "id": "ca001",
+    "title": "Ask your parish and Vale councillor to shape the Environmental Statement",
+    "description": "The public cannot respond to the Planning Inspectorate directly during scoping. Ask your parish clerk and Vale ward councillor to press for specific items in the Environmental Statement: field-level land grades, viewpoints from village conservation areas, HGV routes avoiding villages, cumulative assessment with the reservoir construction programme, and battery storage siting and fire safety.",
+    "timing": "now",
+    "deadline": "2026-11-23",
+    "who_can": "Anyone, via parish and Vale",
+    "source_url": "https://www.whitehorsedc.gov.uk/vale-of-white-horse-district-council/planning-and-development/nationally-significant-infrastructure-projects-nsips/cearn-solar-farm/",
+    "source_label": "Vale of White Horse: Cearn Solar Farm page",
+    "is_legal_info": false,
+    "note": "The Vale is a statutory consultee, not the decision-maker. Its planning committee has no vote on the application. Ask it to strengthen its Local Impact Report."
+  },
+  {
+    "id": "ca002",
+    "title": "Register for Planning Inspectorate and developer updates",
+    "description": "Register for Planning Inspectorate email updates on EN0110044 and the developer's updates. You can also write to the developer at info@cearnsolarfarm.co.uk or by post: Freepost CEARN SOLAR FARM.",
+    "timing": "now",
+    "who_can": "Anyone",
+    "source_url": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/EN0110044/get-updates/start",
+    "source_label": "Planning Inspectorate: Cearn Solar Farm email updates (EN0110044)",
+    "is_legal_info": false
+  },
+  {
+    "id": "ca003",
+    "title": "Join Protect the Vale and ask your parish to engage",
+    "description": "Join Protect the Vale's update list. Ask your parish council or meeting to engage with the Vale's Oxfordshire Association of Local Councils route for parish input.",
+    "timing": "now",
+    "who_can": "Anyone",
+    "source_url": "https://protect-the-vale.org.uk/",
+    "source_label": "Protect the Vale",
+    "is_legal_info": false
+  },
+  {
+    "id": "ca004",
+    "title": "Respond to the Stage 2 consultation",
+    "description": "Respond to the developer's Stage 2 consultation, the main chance to shape the layout and cable route. It is no longer a legal requirement but the developer says it will run it. Expected February to March 2027.",
+    "timing": "on-submission",
+    "who_can": "Anyone",
+    "source_url": "https://cearnsolarfarm.co.uk/wp-content/uploads/2026/08/Programme-Document.pdf",
+    "source_label": "Cearn Solar Farm: Programme Document (August 2026)",
+    "is_legal_info": false
+  },
+  {
+    "id": "ca005",
+    "title": "Register as an Interested Party",
+    "description": "Register as an Interested Party with a Relevant Representation on the Planning Inspectorate project page within the advertised window after the application is accepted. Only Interested Parties can take full part in the examination.",
+    "timing": "on-acceptance",
+    "who_can": "Anyone",
+    "source_url": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/EN0110044",
+    "source_label": "Planning Inspectorate: Cearn Solar Farm (EN0110044)",
+    "is_legal_info": false
+  },
+  {
+    "id": "ca006",
+    "title": "Lobby for strong Local Impact Reports and take part in the examination",
+    "description": "Lobby the Vale and Oxfordshire County Council for strong Local Impact Reports. As an Interested Party, make written submissions and speak at open floor hearings during the examination.",
+    "timing": "on-acceptance",
+    "who_can": "Interested Parties",
+    "source_url": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/EN0110044",
+    "source_label": "Planning Inspectorate: Cearn Solar Farm (EN0110044)",
+    "is_legal_info": false,
+    "note": "The Vale is a statutory consultee, not the decision-maker. Its planning committee has no vote on the application. Ask it to strengthen its Local Impact Report."
+  },
+  {
+    "id": "ca007",
+    "title": "Write to your MPs, councillors and the DESNZ Secretary of State",
+    "description": "Write to your MPs and councillors (see representatives) and to the DESNZ Secretary of State by post. Focus on planning matters: landscape, heritage setting, farmland grades, flood risk, traffic, noise, ecology, battery safety, and cumulative effects.",
+    "timing": "ongoing",
+    "who_can": "Anyone",
+    "source_url": "https://www.gov.uk/guidance/contact-desnz",
+    "source_label": "DESNZ: contact the department",
+    "is_legal_info": false,
+    "letter_key": "desnz-secretary-of-state"
+  },
+  {
+    "id": "ca008",
+    "title": "Judicial review",
+    "description": "Judicial review in the High Court under section 118 of the Planning Act 2008 is available on legal and procedural grounds only. It must be brought within 6 weeks of the decision. This is general information, not legal advice.",
+    "timing": "on-acceptance",
+    "who_can": "Anyone with standing",
+    "source_url": "https://www.legislation.gov.uk/ukpga/2008/29/section/118",
+    "source_label": "Planning Act 2008, section 118",
+    "is_legal_info": true
+  },
+  {
+    "id": "ca009",
+    "title": "Note: Vale planning committee rules do not apply",
+    "description": "The Vale planning committee and its speaking rules do not apply to Cearn because it is an NSIP decided by the Secretary of State.",
+    "timing": "ongoing",
+    "who_can": "Anyone",
+    "source_url": "https://www.whitehorsedc.gov.uk/vale-of-white-horse-district-council/planning-and-development/nationally-significant-infrastructure-projects-nsips/cearn-solar-farm/",
+    "source_label": "Vale of White Horse: Cearn Solar Farm page",
+    "is_legal_info": false
+  }
+]

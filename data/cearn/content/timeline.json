@@ -1,0 +1,182 @@
+[
+  {
+    "id": "ct001",
+    "date": "2022-11-24",
+    "date_precision": "day",
+    "event": "Manor Solar Farm (separate 30MW scheme) consultation event at Denchworth Village Hall.",
+    "status": "confirmed",
+    "source_url": "https://www.westchallow.org/news/solar-farm-pv-proposal-east-of-denchworth-invitation-to-a-consultation",
+    "source_label": "West Challow: Manor Solar Farm consultation notice",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct002",
+    "date": "2025-04-03",
+    "date_precision": "day",
+    "event": "Manor Solar Farm allowed on appeal (APP/V3120/W/24/3356504) after Vale refusal in May 2024.",
+    "status": "confirmed",
+    "source_url": "https://www.rushcliffe.gov.uk/media/5mqb5o1a/cd-761-3356504-appeal-decision-denchworth.pdf",
+    "source_label": "Planning Inspectorate: appeal decision, Manor Solar Farm",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct003",
+    "date": "2026-07-24",
+    "date_precision": "day",
+    "event": "Statutory pre-application consultation duties for NSIPs removed (Planning and Infrastructure Act 2025, section 5 commenced).",
+    "status": "confirmed",
+    "source_url": "https://www.planninggeek.co.uk/2026/cearn-solar-farm-council-motion/",
+    "source_label": "Planning Geek: Cearn council motion",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct004",
+    "date": "2026-08-04",
+    "date_precision": "day",
+    "event": "Cearn inception meeting with the Planning Inspectorate (section 51 advice published).",
+    "status": "confirmed",
+    "source_url": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/EN0110044/s51advice",
+    "source_label": "Planning Inspectorate: Cearn section 51 advice (EN0110044)",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct005",
+    "date": "2026-09-03",
+    "date_precision": "day",
+    "event": "Cearn Solar Farm publicly launched.",
+    "status": "confirmed",
+    "source_url": "https://www.energy-pedia.com/news/united-kingdom/delivering-clean--renewable-energy--cearn-solar-farm-launches-to-the-public-205188",
+    "source_label": "Energy Pedia: Cearn Solar Farm launch",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct006",
+    "date": "2026-09 to 2026-10",
+    "date_precision": "month",
+    "event": "Stage 1 Co:Design workshops for councils, parishes and technical stakeholders (invitation only, not public). One held 6 October 2026 at Frilford Heath Golf Club.",
+    "status": "confirmed",
+    "source_url": "https://cearnsolarfarm.co.uk/",
+    "source_label": "Cearn Solar Farm: developer website",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct007",
+    "date": "2026-10-03",
+    "date_precision": "day",
+    "event": "Charney Bassett Parish Council news item on Cearn; signposts the Protect the Vale action group.",
+    "status": "confirmed",
+    "source_url": "https://charneybassett-pc.gov.uk/news/proposed-solar-farm/",
+    "source_label": "Charney Bassett Parish Council: proposed solar farm news item",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct008",
+    "date": "2026-10",
+    "date_precision": "month",
+    "event": "EIA scoping information submitted to the Planning Inspectorate (not yet published on the PINS page).",
+    "status": "confirmed",
+    "source_url": "https://www.whitehorsedc.gov.uk/vale-of-white-horse-district-council/planning-and-development/nationally-significant-infrastructure-projects-nsips/cearn-solar-farm/",
+    "source_label": "Vale of White Horse: Cearn Solar Farm page",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct009",
+    "date": "2026-10-21",
+    "date_precision": "day",
+    "event": "Vale Council: Cllr Lee Evans' motion on Cearn passed with amendments; questions from Cllrs Rayner and Whiteman answered.",
+    "status": "confirmed",
+    "source_url": "https://democratic.whitehorsedc.gov.uk/ieListDocuments.aspx?CId=108&MId=3509",
+    "source_label": "Vale of White Horse: council meeting documents, 21 October 2026",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct010",
+    "date": "2026-10-23",
+    "date_precision": "day",
+    "event": "Vale press release on Cearn and the concentration of centrally decided projects in the Vale.",
+    "status": "confirmed",
+    "source_url": "https://www.whitehorsedc.gov.uk/vale-of-white-horse-district-council/cearn-solar-farm-proposal-increase-in-major-developments-decided-by-central-government-in-the-vale-causing-concern/",
+    "source_label": "Vale of White Horse: Cearn press release, 23 October 2026",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct011",
+    "date": "2026-11-10",
+    "date_precision": "day",
+    "event": "Botley West Solar Farm decision deadline (shares the proposed Farmoor 400kV substation Cearn would connect to).",
+    "status": "confirmed",
+    "source_url": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/EN010147",
+    "source_label": "Planning Inspectorate: Botley West Solar Farm (EN010147)",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct012",
+    "date": "2026-11-18",
+    "date_precision": "day",
+    "event": "Charney Bassett Parish Council meeting (page metadata conflicts; check date).",
+    "status": "confirmed",
+    "source_url": "https://charneybassett-pc.gov.uk/meetings/?view=all",
+    "source_label": "Charney Bassett Parish Council: meetings",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct013",
+    "date": "2026-11-23",
+    "date_precision": "day",
+    "event": "Vale of White Horse response due on Cearn scoping (parishes feed in via the Vale and their clerks).",
+    "status": "confirmed",
+    "source_url": "https://www.whitehorsedc.gov.uk/vale-of-white-horse-district-council/planning-and-development/nationally-significant-infrastructure-projects-nsips/cearn-solar-farm/",
+    "source_label": "Vale of White Horse: Cearn Solar Farm page",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct014",
+    "date": "2026-12",
+    "date_precision": "month",
+    "event": "Planning Inspectorate Scoping Opinion expected.",
+    "status": "forecast",
+    "source_url": "https://cearnsolarfarm.co.uk/wp-content/uploads/2026/08/Programme-Document.pdf",
+    "source_label": "Cearn Solar Farm: Programme Document (August 2026)",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct015",
+    "date": "2027-02 to 2027-03",
+    "date_precision": "month",
+    "event": "Stage 2 public consultation, including the preferred grid cable route.",
+    "status": "forecast",
+    "source_url": "https://cearnsolarfarm.co.uk/wp-content/uploads/2026/08/Programme-Document.pdf",
+    "source_label": "Cearn Solar Farm: Programme Document (August 2026)",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct016",
+    "date": "2027-09",
+    "date_precision": "month",
+    "event": "DCO application submission to the Planning Inspectorate.",
+    "status": "forecast",
+    "source_url": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/EN0110044",
+    "source_label": "Planning Inspectorate: Cearn Solar Farm (EN0110044)",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct017",
+    "date": "Late 2027 to 2029",
+    "date_precision": "year",
+    "event": "Acceptance (28 days), Relevant Representations, examination (up to 6 months), recommendation (3 months), decision (3 months). Estimate from statutory maxima, not a developer commitment.",
+    "status": "forecast",
+    "source_url": "",
+    "source_label": "",
+    "last_checked": "2026-11-01"
+  },
+  {
+    "id": "ct018",
+    "date": "2028-04-03",
+    "date_precision": "day",
+    "event": "Latest start date for Manor Solar Farm under its appeal consent.",
+    "status": "forecast",
+    "source_url": "https://www.rushcliffe.gov.uk/media/5mqb5o1a/cd-761-3356504-appeal-decision-denchworth.pdf",
+    "source_label": "Planning Inspectorate: appeal decision, Manor Solar Farm",
+    "last_checked": "2026-11-01"
+  }
+]

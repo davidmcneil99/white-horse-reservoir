@@ -187,3 +187,15 @@ def test_home_page_has_most_urgent_actions():
     html = Path("docs/index.html").read_text(encoding="utf-8")
     assert "Most urgent actions" in html
     assert "home-actions" in html
+
+
+def test_cearn_content_files_exist():
+    for name in ["timeline.json", "quotes.json", "actions.json"]:
+        p = Path("data/cearn/content") / name
+        assert p.exists(), f"Missing: {p}"
+
+
+def test_cearn_timeline_has_forecast_entries():
+    data = json.loads(Path("data/cearn/content/timeline.json").read_text(encoding="utf-8"))
+    forecasts = [e for e in data if e.get("status") == "forecast"]
+    assert len(forecasts) >= 3, "Expected at least 3 forecast entries (Stage 2, DCO, decision)"
