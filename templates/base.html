@@ -11,18 +11,30 @@
   <header class="site-header">
     <div class="container header-inner">
       <a href="/white-horse-reservoir/" class="site-title">White Horse Reservoir</a>
-      <button class="nav-toggle-btn" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation">
-        <span></span><span></span><span></span>
-      </button>
-      <nav class="site-nav" id="site-nav" aria-label="Main navigation">
-        <ul>
-          <li><a href="/white-horse-reservoir/">Home</a></li>
-          <li><a href="/white-horse-reservoir/facts.html">Facts</a></li>
-          <li><a href="/white-horse-reservoir/actions.html">Actions</a></li>
-          <li><a href="/white-horse-reservoir/letters.html">Letters</a></li>
-          <li><a href="/white-horse-reservoir/about.html">About</a></li>
-        </ul>
-      </nav>
+      <nav aria-label="Site navigation">
+  <ul class="nav-primary">
+    <li><a href="index.html" {% if page_id == 'home' %}aria-current="page"{% endif %}>Home</a></li>
+    <li class="has-dropdown">
+      <a href="facts.html" {% if page_id in ('res-facts','res-actions','res-letters','access-points') %}aria-current="true"{% endif %}>Reservoir</a>
+      <ul class="nav-dropdown">
+        <li><a href="facts.html" {% if page_id == 'res-facts' %}aria-current="page"{% endif %}>Facts &amp; timeline</a></li>
+        <li><a href="actions.html" {% if page_id == 'res-actions' %}aria-current="page"{% endif %}>What you can do</a></li>
+        <li><a href="letters.html" {% if page_id == 'res-letters' %}aria-current="page"{% endif %}>Write letters</a></li>
+        <li><a href="access-points.html" {% if page_id == 'access-points' %}aria-current="page"{% endif %}>Access points</a></li>
+      </ul>
+    </li>
+    <li class="has-dropdown">
+      <a href="solar-facts.html" {% if page_id in ('solar-facts','solar-actions','solar-letters') %}aria-current="true"{% endif %}>Solar Farm</a>
+      <ul class="nav-dropdown">
+        <li><a href="solar-facts.html" {% if page_id == 'solar-facts' %}aria-current="page"{% endif %}>Facts &amp; timeline</a></li>
+        <li><a href="solar-actions.html" {% if page_id == 'solar-actions' %}aria-current="page"{% endif %}>What you can do</a></li>
+        <li><a href="solar-letters.html" {% if page_id == 'solar-letters' %}aria-current="page"{% endif %}>Write letters</a></li>
+      </ul>
+    </li>
+    <li><a href="combined-impacts.html" {% if page_id == 'combined' %}aria-current="page"{% endif %}>Combined Impacts</a></li>
+    <li><a href="about.html" {% if page_id == 'about' %}aria-current="page"{% endif %}>About</a></li>
+  </ul>
+</nav>
     </div>
   </header>
 
@@ -42,12 +54,11 @@
   {% block extra_scripts %}{% endblock %}
   <script>
     (function () {
-      var btn = document.querySelector('.nav-toggle-btn');
-      var nav = document.getElementById('site-nav');
-      if (btn && nav) {
-        btn.addEventListener('click', function () {
-          var open = nav.classList.toggle('is-open');
-          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      var toggle = document.getElementById('nav-toggle');
+      var navPrimary = document.querySelector('.nav-primary');
+      if (toggle && navPrimary) {
+        toggle.addEventListener('change', function () {
+          navPrimary.classList.toggle('is-open', toggle.checked);
         });
       }
     }());

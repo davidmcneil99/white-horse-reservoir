@@ -369,30 +369,30 @@ def build(output_dir: Path = Path("docs")) -> None:
     )
 
     pages = [
-        ("index.html", "index.html"),
-        ("about.html", "about.html"),
-        ("facts.html", "facts.html"),
-        ("actions.html", "actions.html"),
-        ("letters.html", "letters.html"),
-        ("corrections.html", "corrections.html"),
-        ("access-points.html", "access-points.html"),
+        ("index.html", "index.html", "home"),
+        ("about.html", "about.html", "about"),
+        ("facts.html", "facts.html", "res-facts"),
+        ("actions.html", "actions.html", "res-actions"),
+        ("letters.html", "letters.html", "res-letters"),
+        ("corrections.html", "corrections.html", ""),
+        ("access-points.html", "access-points.html", "access-points"),
     ]
 
     solar_pages = [
-        ("solar-facts.html", "solar-facts.html"),
-        ("solar-actions.html", "solar-actions.html"),
-        ("solar-letters.html", "solar-letters.html"),
-        ("combined-impacts.html", "combined-impacts.html"),
+        ("solar-facts.html", "solar-facts.html", "solar-facts"),
+        ("solar-actions.html", "solar-actions.html", "solar-actions"),
+        ("solar-letters.html", "solar-letters.html", "solar-letters"),
+        ("combined-impacts.html", "combined-impacts.html", "combined"),
     ]
 
     available_templates = env.list_templates()
-    for template_name, output_name in solar_pages:
+    for template_name, output_name, page_id in solar_pages:
         if template_name in available_templates:
-            pages.append((template_name, output_name))
+            pages.append((template_name, output_name, page_id))
 
-    for template_name, output_name in pages:
+    for template_name, output_name, page_id in pages:
         template = env.get_template(template_name)
-        rendered = template.render(**data)
+        rendered = template.render(**data, page_id=page_id)
         out_path = output_dir / output_name
         out_path.write_text(rendered, encoding="utf-8")
         logging.info("Wrote %s", out_path)

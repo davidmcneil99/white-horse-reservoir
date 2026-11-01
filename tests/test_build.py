@@ -211,3 +211,11 @@ def test_cearn_timeline_forecast_flag():
     data = load_all_data()
     forecasts = [e for e in data["cearn_timeline"] if e.get("is_forecast")]
     assert len(forecasts) >= 3
+
+
+def test_nav_contains_both_projects():
+    build()
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    assert "Solar Farm" in html
+    assert "Reservoir" in html
+    assert "Combined Impacts" in html
