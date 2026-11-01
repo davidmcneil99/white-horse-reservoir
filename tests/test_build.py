@@ -44,6 +44,22 @@ def test_actions_by_id_in_context():
     assert data["actions_by_id"]["ac006"]["letter_key"] == "thames-water"
 
 
+def test_actions_page_has_letter_buttons():
+    """actions.html output has Generate-letter links for actions with letter_key."""
+    build()
+    html = Path("docs/actions/index.html").read_text(encoding="utf-8")
+    # ac006 has letter_key = "thames-water"
+    assert "thames-water" in html
+    assert "Generate letter" in html
+
+
+def test_actions_page_has_deadlines():
+    """actions.html output shows deadline for actions that have one."""
+    build()
+    html = Path("docs/actions/index.html").read_text(encoding="utf-8")
+    assert "2026-11-30" in html or "November 2026" in html or "30 November" in html
+
+
 def test_facts_page_has_details_element():
     """facts.html output contains a <details> element for distant-future items."""
     build()

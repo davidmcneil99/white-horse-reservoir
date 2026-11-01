@@ -25,6 +25,12 @@
       {% if action._corrected_on is defined %}
       <span class="correction-note">Corrected on {{ action._corrected_on }}: {{ action._correction_note }}</span>
       {% endif %}
+      {% if action.deadline_display is defined %}
+      <p class="action-deadline"><strong>Complete by:</strong> {{ action.deadline_display }}</p>
+      {% endif %}
+      {% if action.letter_key %}
+      <p><a class="action-letter-btn" href="../letters/#{{ action.letter_key }}">Generate letter</a></p>
+      {% endif %}
     </article>
     {% endfor %}
   </section>
