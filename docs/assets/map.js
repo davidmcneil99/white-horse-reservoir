@@ -60,14 +60,14 @@
   // Sources: Nominatim/OpenStreetMap geocoding or map estimate from road/locality
   // description in data/access-points.csv. See coord_source column for per-point detail.
   var WHR_ACCESS_POINTS = [
-    {id: 'A1',  lat: 51.6190, lon: -1.4148, label: 'A415 Marcham Road (main entrance / A34 interchange)'},
+    {id: 'A1',  lat: 51.6689, lon: -1.3107, label: 'A415 Marcham Road (main entrance / A34 interchange)'},
     {id: 'A2',  lat: 51.6302, lon: -1.4490, label: 'A338 near East Hanney (rail siding)'},
     {id: 'A4',  lat: 51.6368, lon: -1.4680, label: 'A338 near Garford (eastern wetlands)'},
     {id: 'A5',  lat: 51.6063, lon: -1.3890, label: 'Steventon to Hanney Road (east end, Steventon)'},
     {id: 'A6',  lat: 51.6492, lon: -1.2911, label: 'Drayton Road / Stonehill Lane, Sutton Courtenay'},
     {id: 'A7',  lat: 51.6472, lon: -1.2813, label: 'A415 east / The Burycroft, Caldecott (Thames berm)'},
     {id: 'A8',  lat: 51.6758, lon: -1.3879, label: 'A415 Kingston Road near Frilford / Hanney Road'},
-    {id: 'A9',  lat: 51.5908, lon: -1.4128, label: 'A417 near Ardington Lane, Ardington'},
+    {id: 'A9',  lat: 51.5950, lon: -1.3750, label: 'A417 near Ardington Lane, Ardington'},
     {id: 'A10', lat: 51.5936, lon: -1.3752, label: "A417 / Wood's Farm Road near East Hendred"},
     {id: 'A11', lat: 51.6143, lon: -1.3141, label: 'A417 Featherbed Lane near A4130/A34 (Rowstock)'},
     {id: 'A12', lat: 51.6112, lon: -1.3935, label: 'A417/A338 Grove Park Drive (King Alfred Way), Grove'},
