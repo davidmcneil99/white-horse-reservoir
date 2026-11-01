@@ -155,21 +155,25 @@ window.WHRLetters = (function () {
       if (postcodeInput && postcodeInput.value.trim() && window.WHRLookup) {
         try {
           _currentLookup = await window.WHRLookup.lookup(postcodeInput.value.trim());
+          window._WHRLastLookup = _currentLookup;
         } catch (_e) {
           _currentLookup = null;
         }
       }
 
       _currentKey = key;
+      var zipBtn = document.getElementById('download-zip');
       try {
         var html = await render(key, _currentLookup);
         output.innerHTML = html;
         if (copyBtn)  copyBtn.style.display  = '';
         if (emailBtn) emailBtn.style.display = '';
+        if (zipBtn)   zipBtn.style.display   = '';
       } catch (e) {
         output.textContent = 'Error loading letter template. Please try again.';
         if (copyBtn)  copyBtn.style.display  = 'none';
         if (emailBtn) emailBtn.style.display = 'none';
+        if (zipBtn)   zipBtn.style.display   = 'none';
       }
     }
 
@@ -249,10 +253,77 @@ window.WHRLetters = (function () {
     }
   }
 
+  /**
+   * Download all 10 letter templates as a ZIP file.
+   *
+   * @param {object} lookupResult - Lookup result to personalise letters (may be empty).
+   */
+  var _LETTER_KEYS = [
+    'county-councillor',
+    'defra-secretary-of-state',
+    'district-councillor',
+    'eir-thames-water',
+    'foi-missing-minutes',
+    'mp',
+    'ofwat',
+    'parish-clerk',
+    'planning-inspectorate-relevant-representation',
+    'thames-water',
+  ];
+
+  async function _downloadAllAsZip(lookupResult) {
+    if (typeof JSZip === 'undefined') {
+      alert('ZIP library not loaded. Please try again.');
+      return;
+    }
+    try {
+      var data = await _loadData();
+      var zip = new JSZip();
+      _LETTER_KEYS.forEach(function (key) {
+        var tpl = data[key];
+        var text = tpl ? _fill(tpl, lookupResult || {}) : '';
+        zip.file(key + '.txt', text);
+      });
+      var blob = await zip.generateAsync({ type: 'blob' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'white-horse-reservoir-letters.zip';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+    } catch (e) {
+      alert('Could not generate ZIP. Please try again.');
+    }
+  }
+
   // Auto-wire on DOMContentLoaded when running in a browser.
   if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', function () {
       wire('letter-section', null);
+
+      // Pre-select letter type from URL hash (e.g. letters.html#mp).
+      (function () {
+        var hash = window.location.hash.replace('#', '');
+        if (hash) {
+          var sel = document.getElementById('letter-type');
+          if (sel) {
+            var opt = sel.querySelector('option[value="' + hash + '"]');
+            if (opt) {
+              sel.value = hash;
+              sel.dispatchEvent(new Event('change'));
+            }
+          }
+        }
+      }());
+
+      // Wire ZIP download button.
+      var zipBtn = document.getElementById('download-zip');
+      if (zipBtn) {
+        zipBtn.addEventListener('click', function () {
+          _downloadAllAsZip(window._WHRLastLookup || {});
+        });
+      }
     });
   }
 
