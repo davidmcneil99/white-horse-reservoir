@@ -24,14 +24,27 @@ _robots_cache: dict[str, urllib.robotparser.RobotFileParser] = {}
 
 
 def _robots_allowed(url: str) -> bool:
-    """Return True if our user-agent is allowed to fetch url per robots.txt."""
+    """Return True if our user-agent is allowed to fetch url per robots.txt.
+
+    Fetches robots.txt via requests (correct user-agent, 10 s timeout).
+    4xx or network error is treated as "allowed" -- we cannot know, so we
+    proceed optimistically.
+    """
     try:
         parsed = urlparse(url)
         origin = f"{parsed.scheme}://{parsed.netloc}"
         if origin not in _robots_cache:
             rp = urllib.robotparser.RobotFileParser()
             rp.set_url(origin + "/robots.txt")
-            rp.read()
+            try:
+                resp = requests.get(origin + "/robots.txt", headers=_HEADERS, timeout=10)
+                if resp.status_code == 200:
+                    rp.parse(resp.text.splitlines())
+                else:
+                    # No usable robots.txt (404, 4xx, 5xx) -- treat as allowed.
+                    rp.allow_all = True
+            except Exception:
+                rp.allow_all = True
             _robots_cache[origin] = rp
         return _robots_cache[origin].can_fetch(USER_AGENT, url)
     except Exception:

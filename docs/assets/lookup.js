@@ -10,6 +10,11 @@ window.WHRLookup = (function () {
 
   let _cache = null;
 
+  // Parishes where postcodes.io uses a different form of the name than the CSV.
+  const _PARISH_ALIASES = {
+    'appleford on thames': 'appleford'
+  };
+
   async function _loadData() {
     if (_cache) return _cache;
     const base = document.currentScript
@@ -69,7 +74,11 @@ window.WHRLookup = (function () {
       const normWard = rawWard.replace(/\s*&\s*/g, ' and ');
       const ward = aliases[normWard.toLowerCase()] || normWard;
       const division = pcData.ced || '';
-      const parish = pcData.parish || '';
+      // Normalise hyphens to spaces (postcodes.io sometimes uses hyphens where
+      // the CSV uses spaces, e.g. "Abingdon on Thames" vs "Abingdon-on-Thames").
+      // Apply alias table for cases where the names differ more substantially.
+      const rawParish = (pcData.parish || '').replace(/-/g, ' ');
+      const parish = _PARISH_ALIASES[rawParish.toLowerCase()] || rawParish;
 
       return {
         mp: _match(reps, 'area', constituency).find(function (r) { return r.tier === 'MP'; }) || null,
@@ -77,7 +86,7 @@ window.WHRLookup = (function () {
         districtCouncillors: _match(reps, 'area', ward).filter(function (r) { return r.tier === 'District'; }),
         parish: data.parishes.find(function (p) {
           if (!parish) return false;
-          var pn = (p.name || '').toLowerCase();
+          var pn = (p.name || '').toLowerCase().replace(/-/g, ' ');
           var pc = parish.toLowerCase();
           return pn === pc || pn.startsWith(pc + ' ') || pn.startsWith(pc + '-');
         }) || null,

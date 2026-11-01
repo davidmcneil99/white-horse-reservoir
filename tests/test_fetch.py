@@ -74,3 +74,41 @@ def test_detect_page_change_403_returns_false_and_logs(caplog):
         mock_req.get.return_value = Mock(status_code=403, ok=False)
         changed, new_hash = detect_page_change("https://blocked.com", {})
     assert changed is False
+
+
+# --- _robots_allowed tests ---
+
+def test_robots_allowed_uses_requests_headers_and_timeout():
+    from generator.fetch import _robots_allowed, _robots_cache, _HEADERS
+    _robots_cache.clear()
+    mock_resp = Mock(status_code=200, text="User-agent: *\nDisallow: /blocked/\n")
+    with patch("generator.fetch.requests") as mock_req:
+        mock_req.get.return_value = mock_resp
+        result = _robots_allowed("https://example.com/allowed/page")
+    assert result is True
+    _args, kwargs = mock_req.get.call_args
+    assert kwargs.get("headers") == _HEADERS
+    assert kwargs.get("timeout") == 10
+    _robots_cache.clear()
+
+
+def test_robots_allowed_respects_disallow_rule():
+    from generator.fetch import _robots_allowed, _robots_cache
+    _robots_cache.clear()
+    mock_resp = Mock(status_code=200, text="User-agent: *\nDisallow: /blocked/\n")
+    with patch("generator.fetch.requests") as mock_req:
+        mock_req.get.return_value = mock_resp
+        result = _robots_allowed("https://example.com/blocked/page")
+    assert result is False
+    _robots_cache.clear()
+
+
+def test_robots_allowed_404_allows():
+    from generator.fetch import _robots_allowed, _robots_cache
+    _robots_cache.clear()
+    mock_resp = Mock(status_code=404, text="")
+    with patch("generator.fetch.requests") as mock_req:
+        mock_req.get.return_value = mock_resp
+        result = _robots_allowed("https://example.com/any/page")
+    assert result is True
+    _robots_cache.clear()

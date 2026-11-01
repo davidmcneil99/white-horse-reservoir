@@ -64,7 +64,12 @@ window.WHRLetters = (function () {
       county_councillor_email:  (r.countyCouncillors && r.countyCouncillors[0] && r.countyCouncillors[0].email) || NOT_FOUND,
       district_councillor_name:  (r.districtCouncillors && r.districtCouncillors[0] && r.districtCouncillors[0].name) || NOT_FOUND,
       district_councillor_email: (r.districtCouncillors && r.districtCouncillors[0] && r.districtCouncillors[0].email) || NOT_FOUND,
-      parish_contact:           (r.parish && r.parish.contact) || NOT_FOUND,
+      parish_contact: (function () {
+        var contact = r.parish && r.parish.contact;
+        if (!contact) return NOT_FOUND;
+        var m = contact.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
+        return m ? m[0] : NOT_FOUND;
+      }()),
       sender_area:              (r.raw && (r.raw.parish || r.raw.admin_ward)) || NOT_FOUND,
       sender_ward:              (r.raw && r.raw.admin_ward) || NOT_FOUND,
       sender_constituency:      (r.raw && r.raw.parliamentary_constituency) || NOT_FOUND,
@@ -202,7 +207,12 @@ window.WHRLetters = (function () {
             county_councillor_email:  (r.countyCouncillors && r.countyCouncillors[0] && r.countyCouncillors[0].email) || NOT_FOUND,
             district_councillor_name:  (r.districtCouncillors && r.districtCouncillors[0] && r.districtCouncillors[0].name) || NOT_FOUND,
             district_councillor_email: (r.districtCouncillors && r.districtCouncillors[0] && r.districtCouncillors[0].email) || NOT_FOUND,
-            parish_contact:           (r.parish && r.parish.contact) || NOT_FOUND,
+            parish_contact: (function () {
+              var contact = r.parish && r.parish.contact;
+              if (!contact) return NOT_FOUND;
+              var m = contact.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
+              return m ? m[0] : NOT_FOUND;
+            }()),
             sender_area:              (r.raw && (r.raw.parish || r.raw.admin_ward)) || NOT_FOUND,
             sender_ward:              (r.raw && r.raw.admin_ward) || NOT_FOUND,
             sender_constituency:      (r.raw && r.raw.parliamentary_constituency) || NOT_FOUND,
