@@ -16,7 +16,7 @@ def apply_overrides(items: list[dict], overrides: list[dict], item_type: str) ->
         item_type: Only process overrides where override['item_type'] matches this.
 
     Returns:
-        The mutated items list.
+        New list of items with overrides applied (originals not mutated).
     """
     relevant = [o for o in overrides if o.get("item_type") == item_type]
 
