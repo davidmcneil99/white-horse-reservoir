@@ -1,3 +1,4 @@
+import logging
 import sys
 from datetime import datetime
 
@@ -10,17 +11,29 @@ def format_date(date_str: str, precision: str) -> str:
         precision: One of 'year', 'month', or 'day'.
 
     Returns:
-        Formatted date string in UK English.
+        Formatted date string in UK English. Returns original string on parse failure.
     """
     if precision == "year":
         return date_str
 
     if precision == "month":
-        dt = datetime.strptime(date_str, "%Y-%m")
-        return dt.strftime("%B %Y")
+        # Try YYYY-MM-DD first (data stores month-precision dates as first-of-month),
+        # then fall back to YYYY-MM.
+        for fmt in ("%Y-%m-%d", "%Y-%m"):
+            try:
+                dt = datetime.strptime(date_str, fmt)
+                return dt.strftime("%B %Y")
+            except ValueError:
+                continue
+        logging.warning("format_date: could not parse %r with month precision", date_str)
+        return date_str
 
     # precision == "day"
-    dt = datetime.strptime(date_str, "%Y-%m-%d")
+    try:
+        dt = datetime.strptime(date_str, "%Y-%m-%d")
+    except ValueError:
+        logging.warning("format_date: could not parse %r with day precision", date_str)
+        return date_str
     if sys.platform == "win32":
         return dt.strftime("%#d %B %Y")
     return dt.strftime("%-d %B %Y")

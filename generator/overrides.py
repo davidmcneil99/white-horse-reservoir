@@ -20,7 +20,8 @@ def apply_overrides(items: list[dict], overrides: list[dict], item_type: str) ->
     """
     relevant = [o for o in overrides if o.get("item_type") == item_type]
 
-    id_index = {item["id"]: item for item in items}
+    # Copy each item so callers' originals are never mutated.
+    id_index = {item["id"]: dict(item) for item in items}
 
     for override in relevant:
         target_id = override["item_id"]
@@ -32,4 +33,4 @@ def apply_overrides(items: list[dict], overrides: list[dict], item_type: str) ->
         item["_corrected_on"] = override["corrected_on"]
         item["_correction_note"] = override["correction_note"]
 
-    return items
+    return list(id_index.values())
