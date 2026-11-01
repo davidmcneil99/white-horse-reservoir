@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Actions | White Horse Reservoir{% endblock %}
+
+{% block content %}
+<h1>What you can do</h1>
+<p>There are a number of ways you can engage with the planning process for the White Horse Reservoir (SESRO) project.</p>
+
+{% for timing_value, timing_label in [("now", "Act now"), ("on-submission", "After DCO submission"), ("on-acceptance", "After DCO acceptance"), ("ongoing", "Ongoing")] %}
+  {% set timing_actions = actions | selectattr("timing", "equalto", timing_value) | list %}
+  {% if timing_actions %}
+  <section class="actions-group" id="actions-{{ timing_value }}">
+    <h2>{{ timing_label }}</h2>
+    {% for action in timing_actions %}
+    <article class="action-item" id="action-{{ action.id }}">
+      <h3>{{ action.title }}</h3>
+      <p>{{ action.description }}</p>
+      <p class="action-who"><strong>Who can do this:</strong> {{ action.who_can }}</p>
+      {% if action.source_url %}
+      <p><a href="{{ action.source_url }}" rel="external noopener">More information</a></p>
+      {% endif %}
+      {% if action.is_legal_info %}
+      <p class="legal-disclaimer">This is general information, not legal advice.</p>
+      {% endif %}
+      {% if action._corrected_on is defined %}
+      <span class="correction-note">Corrected on {{ action._corrected_on }}: {{ action._correction_note }}</span>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+{% endfor %}
+{% endblock %}

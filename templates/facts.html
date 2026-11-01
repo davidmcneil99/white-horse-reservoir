@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Facts | White Horse Reservoir{% endblock %}
+
+{% block content %}
+<h1>Facts about the White Horse Reservoir project</h1>
+
+<section class="timeline-section">
+  <h2>Timeline</h2>
+  <p>Events in reverse chronological order.</p>
+  <ol class="timeline-list" reversed>
+    {% for item in timeline | reverse %}
+    <li class="timeline-item" id="tl-{{ item.id }}">
+      <div class="timeline-date">{{ item.date_display }}</div>
+      <div class="timeline-event">
+        {{ item.event }}
+        {% if item.source_url %}
+          <a class="source-link" href="{{ item.source_url }}" rel="external noopener">Source</a>
+        {% endif %}
+      </div>
+      {% if item.last_checked %}
+      <div class="timeline-checked">Last checked: {{ item.last_checked }}{% if item.last_checked_note %} ({{ item.last_checked_note }}){% endif %}</div>
+      {% endif %}
+      {% if item._corrected_on is defined %}
+      <span class="correction-note">Corrected on {{ item._corrected_on }}: {{ item._correction_note }}</span>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="positions-section">
+  <h2>Positions and statements</h2>
+  <p>Statements from public figures, organisations and bodies about the reservoir proposal.</p>
+
+  {% for stance_value in ["opposed", "concerned", "neutral", "supportive", "unknown"] %}
+    {% set stance_quotes = quotes | selectattr("stance", "equalto", stance_value) | list %}
+    {% if stance_quotes %}
+    <div class="stance-group stance-{{ stance_value }}">
+      <h3>
+        {% if stance_value == "opposed" %}Opposed
+        {% elif stance_value == "concerned" %}Concerned
+        {% elif stance_value == "neutral" %}Neutral
+        {% elif stance_value == "supportive" %}Supportive
+        {% else %}Position not known
+        {% endif %}
+      </h3>
+      {% for q in quotes if q.stance == stance_value %}
+      <blockquote class="quote-item" id="q-{{ q.id }}">
+        <p>
+          {{ q.quote }}
+          {% if q.paraphrased %} (paraphrased){% endif %}
+        </p>
+        <footer>
+          <cite>{{ q.speaker }}{% if q.role %}, {{ q.role }}{% endif %}{% if q.organisation %}, {{ q.organisation }}{% endif %}</cite>
+          <span class="quote-date">{{ q.date_display }}</span>
+          {% if q.source_url %}
+            <a class="source-link" href="{{ q.source_url }}" rel="external noopener">Source</a>
+          {% endif %}
+          {% if q.source_is_secondary and q.source_note %}
+            <span class="source-note">Note: {{ q.source_note }}</span>
+          {% endif %}
+        </footer>
+        {% if q._corrected_on is defined %}
+        <span class="correction-note">Corrected on {{ q._corrected_on }}: {{ q._correction_note }}</span>
+        {% endif %}
+      </blockquote>
+      {% endfor %}
+    </div>
+    {% endif %}
+  {% endfor %}
+</section>
+{% endblock %}

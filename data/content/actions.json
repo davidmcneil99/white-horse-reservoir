@@ -1,0 +1,202 @@
+[
+  {
+    "id": "ac001",
+    "title": "Sign up for Planning Inspectorate email updates",
+    "description": "Register on the WA010005 project page to receive updates directly from the Planning Inspectorate on application status, acceptance decisions and examination dates.",
+    "timing": "now",
+    "who_can": "Anyone",
+    "source_url": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/WA010005/get-updates/start",
+    "source_label": "Planning Inspectorate: WA010005 get updates",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac002",
+    "title": "Sign the GARD/38 Degrees petition",
+    "description": "Add your name to the joint GARD and CPRE Oxfordshire petition calling for a stop to Thames Water's plans for the White Horse Reservoir.",
+    "timing": "now",
+    "who_can": "Anyone",
+    "source_url": "https://you.38degrees.org.uk/petitions/stop-thames-water-s-plans-for-a-devastating-mega-reservoir",
+    "source_label": "38 Degrees: GARD/CPRE petition",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac003",
+    "title": "Join GARD (Group Against Reservoir Development)",
+    "description": "Join the local campaign group for updates, newsletters, and to support the organisation's work funding DCO expertise.",
+    "timing": "now",
+    "who_can": "Anyone",
+    "source_url": "https://groupagainstreservoirdevelopment.org/",
+    "source_label": "GARD: website",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac004",
+    "title": "Contribute to the GARD crowdfunder",
+    "description": "Help fund GARD's DCO expertise by donating to their crowdfunder campaign. Reached £5k in its first week after launching in October 2026.",
+    "timing": "now",
+    "who_can": "Anyone",
+    "source_url": "https://www.crowdfunder.co.uk/p/better-water-future",
+    "source_label": "Crowdfunder: GARD Better Water Future",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac005",
+    "title": "Take the joint parish survey",
+    "description": "Complete the joint survey across eight affected parishes to record local impacts for use in councils' Local Impact Reports and consultation responses.",
+    "timing": "now",
+    "who_can": "Residents of affected parishes",
+    "source_url": "https://ee-eu.kobotoolbox.org/x/fXVdDnek",
+    "source_label": "Joint parish survey (KoboToolbox)",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac006",
+    "title": "Write to Thames Water",
+    "description": "Contact the project team directly at whitehorsereservoir@thameswater.co.uk to raise concerns before the DCO is submitted. Thames Water is required to consider pre-application responses.",
+    "timing": "now",
+    "who_can": "Anyone",
+    "source_url": "https://thames-sro.co.uk/whitehorsereservoir",
+    "source_label": "Thames Water: White Horse Reservoir contact",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac007",
+    "title": "Write to your MP",
+    "description": "Contact your Member of Parliament to raise concerns about the reservoir, construction traffic impacts, and the adequacy of consultation. MPs can table questions, request debates and write formally to ministers.",
+    "timing": "now",
+    "who_can": "Constituents",
+    "source_url": "https://www.parliament.uk/get-involved/contact-your-mp/",
+    "source_label": "UK Parliament: contact your MP",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac008",
+    "title": "Write to your county councillor",
+    "description": "Contact your Oxfordshire County Councillor to ask them to raise highway, traffic and environmental concerns. Oxfordshire County Council is a statutory consultee and the highway authority.",
+    "timing": "now",
+    "who_can": "Oxfordshire residents",
+    "source_url": "https://mycouncil.oxfordshire.gov.uk",
+    "source_label": "Oxfordshire County Council: ModernGov",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac009",
+    "title": "Write to your district councillor",
+    "description": "Contact your Vale of White Horse or South Oxfordshire District Councillor to raise concerns. The Vale Leader has already written to Defra demanding intervention.",
+    "timing": "now",
+    "who_can": "Vale of White Horse and South Oxfordshire residents",
+    "source_url": "https://democratic.whitehorsedc.gov.uk/mgMemberIndexMP.aspx?bcr=1",
+    "source_label": "Vale of White Horse DC: councillor contact",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac010",
+    "title": "Speak at a parish council meeting",
+    "description": "Attend your parish council meeting and use the public participation slot to raise the reservoir on the record. Parish councils' Local Impact Reports carry weight in the DCO examination.",
+    "timing": "now",
+    "who_can": "Residents in affected parishes",
+    "source_url": "https://groupagainstreservoirdevelopment.org/dco-planning-process/",
+    "source_label": "GARD: DCO process explainer",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac011",
+    "title": "Ask your parish clerk about missing meeting minutes",
+    "description": "Under the Transparency Code for Smaller Authorities and the Freedom of Information Act 2000, parish councils must publish minutes within one month of a meeting and respond to FOI requests within 20 working days.",
+    "timing": "now",
+    "who_can": "Anyone",
+    "source_url": "https://www.legislation.gov.uk/ukpga/2000/36/contents",
+    "source_label": "Freedom of Information Act 2000",
+    "is_legal_info": true
+  },
+  {
+    "id": "ac012",
+    "title": "Submit a Relevant Representation",
+    "description": "Once the DCO application is accepted, a Relevant Representation window of at least 30 days will open. Submitting a representation makes you an Interested Party, giving you full participation rights: written submissions, comments on Examining Authority questions, and the right to speak at hearings. Keep your representation focused on specific impacts.",
+    "timing": "on-acceptance",
+    "who_can": "Anyone with an interest in the project",
+    "source_url": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/WA010005",
+    "source_label": "Planning Inspectorate: WA010005",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac013",
+    "title": "Register as an Interested Party to participate in the examination",
+    "description": "After submitting a Relevant Representation you become an Interested Party. Only Interested Parties can make written submissions at each examination deadline, comment on the Examining Authority's questions, and request to speak at open floor hearings.",
+    "timing": "on-acceptance",
+    "who_can": "Those who submitted a Relevant Representation",
+    "source_url": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/WA010005",
+    "source_label": "Planning Inspectorate: WA010005",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac014",
+    "title": "Submit written representations during the examination",
+    "description": "Once an Interested Party, you can submit written representations at each examination deadline set by the Examining Authority. Comment specifically on traffic, flood risk, noise or other local impacts from named access points or roads.",
+    "timing": "on-acceptance",
+    "who_can": "Registered Interested Parties",
+    "source_url": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/WA010005",
+    "source_label": "Planning Inspectorate: WA010005",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac015",
+    "title": "Submit an EIR request to Thames Water",
+    "description": "Under the Environmental Information Regulations 2004, Thames Water counts as a public authority for EIR purposes and must respond within 20 working days. Use this to request documents about traffic modelling, access point assessments, or environmental mitigation.",
+    "timing": "now",
+    "who_can": "Anyone",
+    "source_url": "https://www.legislation.gov.uk/uksi/2004/3391/contents/made",
+    "source_label": "Environmental Information Regulations 2004",
+    "is_legal_info": true
+  },
+  {
+    "id": "ac016",
+    "title": "Submit an FOI request to Oxfordshire County Council or Vale of White Horse DC",
+    "description": "Under the Freedom of Information Act 2000, local authorities must respond within 20 working days. Use this to request correspondence with Thames Water, consultation responses, or highway assessment documents.",
+    "timing": "now",
+    "who_can": "Anyone",
+    "source_url": "https://www.legislation.gov.uk/ukpga/2000/36/contents",
+    "source_label": "Freedom of Information Act 2000",
+    "is_legal_info": true
+  },
+  {
+    "id": "ac017",
+    "title": "Ask your parish or district council to raise concerns in their Local Impact Report",
+    "description": "Councils' Local Impact Reports carry significant weight in the DCO examination. Councils must be invited to produce one by the Examining Authority. Ask your councillors to include specific local impacts: named roads, access points, flood risk, noise.",
+    "timing": "on-acceptance",
+    "who_can": "Residents",
+    "source_url": "https://groupagainstreservoirdevelopment.org/dco-planning-process/",
+    "source_label": "GARD: DCO process explainer",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac018",
+    "title": "Find out about statutory blight and property compensation",
+    "description": "Once land is identified for compulsory purchase in a DCO application, statutory blight notices may be available under Part VI of the Town and Country Planning Act 1990. Compensation follows the Compensation Code. Seek advice from a RICS-qualified surveyor. No project-specific discretionary blight scheme has been found for this project.",
+    "timing": "on-submission",
+    "who_can": "Landowners and property owners in the Order limits area",
+    "source_url": "https://www.legislation.gov.uk/ukpga/1990/8/part/VI",
+    "source_label": "Town and Country Planning Act 1990, Part VI (statutory blight)",
+    "is_legal_info": true
+  },
+  {
+    "id": "ac019",
+    "title": "Monitor Thames Water's project page for DCO submission",
+    "description": "The DCO application is expected in November 2026. Check the Thames Water project page and the Planning Inspectorate's WA010005 project page for confirmation of submission, and watch for the acceptance decision (within 28 days of submission).",
+    "timing": "ongoing",
+    "who_can": "Anyone",
+    "source_url": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/WA010005",
+    "source_label": "Planning Inspectorate: WA010005",
+    "is_legal_info": false
+  },
+  {
+    "id": "ac020",
+    "title": "Follow GARD for campaign updates and newsletters",
+    "description": "GARD publishes regular newsletters, distributed through parish councils and on their website. Sign up to stay informed about consultation dates, examination milestones and campaign events.",
+    "timing": "ongoing",
+    "who_can": "Anyone",
+    "source_url": "https://groupagainstreservoirdevelopment.org/",
+    "source_label": "GARD: website",
+    "is_legal_info": false
+  }
+]

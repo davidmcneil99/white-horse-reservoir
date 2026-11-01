@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Access Points | White Horse Reservoir{% endblock %}
+
+{% block content %}
+<h1>Construction access points</h1>
+
+<p>The table below lists the proposed construction access points for the White Horse Reservoir project, with traffic figures from the Environmental Statement.</p>
+
+<p class="source-note">Figures from the Thames Water Environmental Statement map book.</p>
+
+<p class="disclaimer">Coordinates are not yet available; this table will be updated when access point locations are confirmed.</p>
+
+<div class="table-wrapper">
+  <table class="access-points-table">
+    <caption>Proposed construction access points</caption>
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Roads</th>
+        <th scope="col">Localities</th>
+        <th scope="col">Purpose</th>
+        <th scope="col">Status</th>
+        <th scope="col">Peak HGV/hr</th>
+        <th scope="col">Peak LGV/hr</th>
+        <th scope="col">Figure confidence</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ap in access_points %}
+      <tr>
+        <td>{{ ap.id }}</td>
+        <td>{{ ap.roads }}</td>
+        <td>{{ ap.localities }}</td>
+        <td>{{ ap.purpose }}</td>
+        <td>{{ ap.status }}</td>
+        <td>{{ ap.peak_hgv_per_hr }}</td>
+        <td>{{ ap.peak_lgv_per_hr }}</td>
+        <td>{{ ap.figure_confidence }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
