@@ -1,0 +1,1 @@
+{% extends "base.html" %}{% block content %}{% for q in quotes %}{{ q._correction_note|default('') }}{% endfor %}{% endblock %}

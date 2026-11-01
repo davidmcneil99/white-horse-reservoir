@@ -1,0 +1,256 @@
+"""Generator core: load_all_data() and build()."""
+
+import csv
+import json
+import logging
+from pathlib import Path
+
+from jinja2 import Environment, FileSystemLoader
+
+from generator.overrides import apply_overrides
+from generator.utils import format_date
+
+# Paths are resolved relative to the project root (the parent of this file's
+# directory), so the generator can be called from any working directory.
+_HERE = Path(__file__).parent
+_ROOT = _HERE.parent
+
+DATA_DIR = _ROOT / "data"
+CONTENT_DIR = DATA_DIR / "content"
+TEMPLATES_DIR = _ROOT / "templates"
+
+
+def _parse_frontmatter(text: str) -> dict:
+    """Parse a simple YAML-like frontmatter block from a Markdown file.
+
+    Looks for content between the first pair of '---' delimiters and splits
+    each line on the first ':' to build a flat string-to-string dict.
+    Leading/trailing whitespace and surrounding quotes are stripped from
+    values.
+
+    Args:
+        text: Full text of a Markdown file.
+
+    Returns:
+        Dict of key/value pairs found in the frontmatter.
+    """
+    lines = text.splitlines()
+    delimiters = [i for i, line in enumerate(lines) if line.strip() == "---"]
+    if len(delimiters) < 2:
+        return {}
+    block_lines = lines[delimiters[0] + 1 : delimiters[1]]
+    result: dict = {}
+    for line in block_lines:
+        if ":" not in line:
+            continue
+        key, _, value = line.partition(":")
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        result[key] = value
+    return result
+
+
+def load_all_data() -> dict:
+    """Load all project data and return a single context dict.
+
+    Reads JSON content files, CSV data files, fetched news and overrides,
+    applies any overrides, and normalises date display strings.
+
+    Returns:
+        Dict with keys:
+            timeline, quotes, actions, representatives, local_councils,
+            access_points, news_items, corrections, still_to_check.
+    """
+    # --- JSON content files ---
+    timeline: list[dict] = json.loads(
+        (CONTENT_DIR / "timeline.json").read_text(encoding="utf-8")
+    )
+    quotes: list[dict] = json.loads(
+        (CONTENT_DIR / "quotes.json").read_text(encoding="utf-8")
+    )
+    actions: list[dict] = json.loads(
+        (CONTENT_DIR / "actions.json").read_text(encoding="utf-8")
+    )
+
+    # --- CSV files ---
+    with (DATA_DIR / "representatives.csv").open(encoding="utf-8", newline="") as fh:
+        representatives: list[dict] = list(csv.DictReader(fh))
+
+    with (DATA_DIR / "local-councils.csv").open(encoding="utf-8", newline="") as fh:
+        local_councils: list[dict] = list(csv.DictReader(fh))
+
+    with (DATA_DIR / "access-points.csv").open(encoding="utf-8", newline="") as fh:
+        access_points: list[dict] = list(csv.DictReader(fh))
+
+    # --- Sources: still_to_check_by_hand ---
+    sources_raw = json.loads(
+        (DATA_DIR / "white-horse-reservoir-sources.json").read_text(encoding="utf-8")
+    )
+    still_to_check: list[str] = sources_raw.get("still_to_check_by_hand", [])
+
+    # --- Fetched news items ---
+    news_items_path = DATA_DIR / "fetched" / "news_items.json"
+    if news_items_path.exists():
+        news_items: list[dict] = json.loads(news_items_path.read_text(encoding="utf-8"))
+    else:
+        news_items = []
+
+    # --- Overrides ---
+    overrides_path = DATA_DIR / "overrides.json"
+    if overrides_path.exists():
+        overrides: list[dict] = json.loads(overrides_path.read_text(encoding="utf-8"))
+    else:
+        overrides = []
+
+    # Apply overrides to content items.
+    timeline = apply_overrides(timeline, overrides, "timeline")
+    quotes = apply_overrides(quotes, overrides, "quote")
+    actions = apply_overrides(actions, overrides, "action")
+
+    # Normalise display dates for timeline and quotes (T2/T3 ruling).
+    for item in timeline:
+        item["date_display"] = format_date(item["date"], item.get("date_precision", "day"))
+    for item in quotes:
+        item["date_display"] = format_date(item["date"], item.get("date_precision", "day"))
+
+    # Build corrections list: items that have been corrected.
+    corrections: list[dict] = [
+        item for item in (timeline + quotes + actions)
+        if "_correction_note" in item
+    ]
+
+    return {
+        "timeline": timeline,
+        "quotes": quotes,
+        "actions": actions,
+        "representatives": representatives,
+        "local_councils": local_councils,
+        "access_points": access_points,
+        "news_items": news_items,
+        "corrections": corrections,
+        "still_to_check": still_to_check,
+    }
+
+
+def _build_lookup_data(data: dict) -> dict:
+    """Construct the lookup-data.json payload from the loaded context dict.
+
+    Args:
+        data: The dict returned by load_all_data().
+
+    Returns:
+        Dict ready to be serialised as lookup-data.json.
+    """
+    # Representatives: include all rows with key fields.
+    reps = [
+        {
+            "tier": r.get("tier", ""),
+            "area": r.get("area", ""),
+            "name": r.get("name", ""),
+            "email": r.get("email", ""),
+            "profile_url": r.get("profile_url", ""),
+            "places": r.get("places", ""),
+            "stance": r.get("stance", ""),
+        }
+        for r in data["representatives"]
+    ]
+
+    # Parishes: local_councils rows of type 'Parish council'.
+    parishes = [
+        {
+            "name": c.get("name", ""),
+            "website": c.get("website", ""),
+            "contact": c.get("contact", ""),
+        }
+        for c in data["local_councils"]
+        if c.get("type", "").lower() == "parish council"
+    ]
+
+    # Access points.
+    aps = [
+        {
+            "id": ap.get("id", ""),
+            "roads": ap.get("roads", ""),
+            "localities": ap.get("localities", ""),
+            "peak_hgv_per_hr": ap.get("peak_hgv_per_hr", ""),
+        }
+        for ap in data["access_points"]
+    ]
+
+    # Letter recipients.
+    # 'mp' uses placeholder tokens for client-side JS substitution.
+    mp_recipient = {
+        "name": "{{mp_name}}",
+        "email": "{{mp_email}}",
+        "address": "House of Commons, London SW1A 0AA",
+    }
+
+    # 'defra' is read from the defra letter's frontmatter.
+    defra_letter_path = CONTENT_DIR / "letters" / "defra-secretary-of-state.md"
+    defra_fm = _parse_frontmatter(defra_letter_path.read_text(encoding="utf-8"))
+    defra_recipient = {
+        "name": defra_fm.get("recipient_name", ""),
+        "email": defra_fm.get("recipient_email", ""),
+        "address": defra_fm.get("recipient_address", ""),
+    }
+
+    return {
+        "representatives": reps,
+        "parishes": parishes,
+        "access_points": aps,
+        "letter_recipients": {
+            "mp": mp_recipient,
+            "defra": defra_recipient,
+        },
+    }
+
+
+def build(output_dir: Path = Path("docs")) -> None:
+    """Render all site pages to output_dir.
+
+    Loads data, builds the Jinja2 environment from templates/, renders each
+    page template, and writes lookup-data.json to output_dir/assets/.
+
+    Args:
+        output_dir: Destination directory. Created if it does not exist.
+    """
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    data = load_all_data()
+
+    env = Environment(
+        loader=FileSystemLoader(str(TEMPLATES_DIR)),
+        autoescape=True,
+    )
+
+    # Pages: (template_name, output_filename)
+    pages = [
+        ("index.html", "index.html"),
+        ("about.html", "about.html"),
+        ("facts.html", "facts.html"),
+        ("actions.html", "actions.html"),
+        ("letters.html", "letters.html"),
+        ("corrections.html", "corrections.html"),
+        ("access-points.html", "access-points.html"),
+    ]
+
+    for template_name, output_name in pages:
+        template = env.get_template(template_name)
+        rendered = template.render(**data)
+        (output_dir / output_name).write_text(rendered, encoding="utf-8")
+        logging.info("Wrote %s", output_dir / output_name)
+
+    # Write lookup-data.json.
+    assets_dir = output_dir / "assets"
+    assets_dir.mkdir(parents=True, exist_ok=True)
+    lookup = _build_lookup_data(data)
+    (assets_dir / "lookup-data.json").write_text(
+        json.dumps(lookup, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    logging.info("Wrote %s", assets_dir / "lookup-data.json")
+
+
+if __name__ == "__main__":
+    build()
