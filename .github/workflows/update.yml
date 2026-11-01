@@ -37,10 +37,10 @@ jobs:
       - run: pip install -r requirements.txt
 
       - name: Fetch sources
-        run: python3 generator/fetch.py
+        run: python3 -m generator.fetch
 
       - name: Build site
-        run: python3 generator/build.py
+        run: python3 -m generator.build
 
       - name: Commit updated cache
         run: |
