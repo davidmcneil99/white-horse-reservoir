@@ -3,6 +3,7 @@
 import csv
 import json
 import logging
+from datetime import date
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
@@ -129,6 +130,7 @@ def load_all_data() -> dict:
         "news_items": news_items,
         "corrections": corrections,
         "still_to_check": still_to_check,
+        "built_on": date.today().isoformat(),
     }
 
 
