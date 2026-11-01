@@ -259,6 +259,7 @@ def _build_lookup_data(data: dict) -> dict:
             "profile_url": r.get("profile_url", ""),
             "places": r.get("places", ""),
             "stance": r.get("stance", ""),
+            "projects": r.get("projects", "reservoir"),
         }
         for r in data["representatives"]
     ]
