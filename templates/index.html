@@ -20,6 +20,31 @@
   </a>
 </section>
 
+{% set home_featured = featured_actions | selectattr("featured_order", "lessthan", 5) | list %}
+{% if home_featured %}
+<section class="home-actions-section" aria-label="Most urgent actions">
+  <h2>Most urgent actions</h2>
+  <p>GARD — the local campaign group — says these are the most important things you can do right now.</p>
+  <ul class="home-actions-list">
+    {% for action in home_featured %}
+    <li class="home-action-card">
+      <h3>{{ action.title }}</h3>
+      <p>{{ action.description }}</p>
+      <div class="home-action-links">
+        {% if action.source_url %}
+        <a class="btn-primary" href="{{ action.source_url }}" rel="external noopener">Take action</a>
+        {% endif %}
+        {% if action.letter_key %}
+        <a class="action-letter-btn" href="letters.html#{{ action.letter_key }}">Generate letter</a>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  <p class="home-actions-more"><a href="actions.html">See all actions →</a></p>
+</section>
+{% endif %}
+
 <section class="lookup-section">
   <h2>Find your representatives</h2>
   <div id="lookup-widget">

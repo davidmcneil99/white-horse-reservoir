@@ -166,11 +166,18 @@ def load_all_data() -> dict:
     )
     actions[:] = [a for _, a in indexed_actions]
 
+    # Extract featured actions sorted by featured_order.
+    featured_actions = sorted(
+        [a for a in actions if a.get("featured")],
+        key=lambda a: a.get("featured_order", 99),
+    )
+
     return {
         "timeline": timeline,
         "quotes": quotes,
         "actions": actions,
         "actions_by_id": actions_by_id,
+        "featured_actions": featured_actions,
         "representatives": representatives,
         "local_councils": local_councils,
         "access_points": access_points,

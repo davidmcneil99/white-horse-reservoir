@@ -7,17 +7,21 @@
     "who_can": "Anyone",
     "source_url": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/WA010005/get-updates/start",
     "source_label": "Planning Inspectorate: WA010005 get updates",
-    "is_legal_info": false
+    "is_legal_info": false,
+    "featured": true,
+    "featured_order": 5
   },
   {
     "id": "ac002",
     "title": "Sign the GARD/38 Degrees petition",
-    "description": "Add your name to the joint GARD and CPRE Oxfordshire petition calling for a stop to Thames Water's plans for the White Horse Reservoir.",
+    "description": "Add your name to the joint GARD and CPRE Oxfordshire petition calling for a stop to Thames Water's plans for the White Horse Reservoir. 8,000+ have already signed.",
     "timing": "now",
     "who_can": "Anyone",
     "source_url": "https://you.38degrees.org.uk/petitions/stop-thames-water-s-plans-for-a-devastating-mega-reservoir",
     "source_label": "38 Degrees: GARD/CPRE petition",
-    "is_legal_info": false
+    "is_legal_info": false,
+    "featured": true,
+    "featured_order": 2
   },
   {
     "id": "ac003",
@@ -32,12 +36,14 @@
   {
     "id": "ac004",
     "title": "Contribute to the GARD crowdfunder",
-    "description": "Help fund GARD's DCO expertise by donating to their crowdfunder campaign. Reached £5k in its first week after launching in October 2026.",
+    "description": "Help fund proper scrutiny of Thames Water's DCO application. GARD needs funds for legal and flood expertise during the examination.",
     "timing": "now",
     "who_can": "Anyone",
     "source_url": "https://www.crowdfunder.co.uk/p/better-water-future",
     "source_label": "Crowdfunder: GARD Better Water Future",
-    "is_legal_info": false
+    "is_legal_info": false,
+    "featured": true,
+    "featured_order": 1
   },
   {
     "id": "ac005",
@@ -47,7 +53,9 @@
     "who_can": "Residents of affected parishes",
     "source_url": "https://ee-eu.kobotoolbox.org/x/fXVdDnek",
     "source_label": "Joint parish survey (KoboToolbox)",
-    "is_legal_info": false
+    "is_legal_info": false,
+    "featured": true,
+    "featured_order": 3
   },
   {
     "id": "ac006",
@@ -213,5 +221,19 @@
     "source_url": "https://groupagainstreservoirdevelopment.org/",
     "source_label": "GARD: website",
     "is_legal_info": false
+  },
+  {
+    "id": "ac021",
+    "title": "Write to the Secretary of State for the Environment",
+    "description": "Contact Emma Reynolds MP, Secretary of State for Environment, Food and Rural Affairs, to raise concerns and request an independent cost re-evaluation comparing the reservoir to the Severn Thames Transfer alternative before any DCO is granted.",
+    "timing": "now",
+    "who_can": "Anyone",
+    "source_url": "https://www.parliament.uk/get-involved/contact-your-mp/",
+    "source_label": "UK Parliament: contact your representative",
+    "is_legal_info": false,
+    "deadline": "2027-01-31",
+    "letter_key": "defra-secretary-of-state",
+    "featured": true,
+    "featured_order": 4
   }
 ]
