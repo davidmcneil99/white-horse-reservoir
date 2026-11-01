@@ -4,6 +4,7 @@
 
 {% block content %}
 <h1>Write to your representatives</h1>
+<p class="letter-template-note">These are template letters — you should review and adjust the wording before sending to make sure it reflects your own situation and views.</p>
 <p>Use the tools below to find your representatives and generate a letter you can send to them about the White Horse Reservoir project.</p>
 
 <section class="lookup-section">
@@ -40,10 +41,12 @@
   <div class="letter-actions">
     <button id="copy-letter" style="display:none">Copy letter</button>
     <button id="email-letter" style="display:none">Open in email client</button>
+    <button id="download-zip" style="display:none">Download all letters as ZIP</button>
   </div>
 
   <p class="correction-link-para">
     <a href="https://github.com/davidmcneil99/white-horse-reservoir/issues/new?title=Correction+report&amp;body=What+is+wrong%3A%0AWhat+it+should+say%3A%0ASource+URL%3A" class="correction-link">Report an error in this letter</a>
   </p>
 </section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}

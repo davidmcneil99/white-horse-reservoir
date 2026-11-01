@@ -60,6 +60,13 @@ def test_actions_page_has_deadlines():
     assert "2026-11-30" in html or "November 2026" in html or "30 November" in html
 
 
+def test_letters_page_has_template_note():
+    """letters.html output contains the template note."""
+    build()
+    html = Path("docs/letters/index.html").read_text(encoding="utf-8")
+    assert "template" in html.lower() and "adjust" in html.lower()
+
+
 def test_facts_page_has_details_element():
     """facts.html output contains a <details> element for distant-future items."""
     build()
