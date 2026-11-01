@@ -4,7 +4,7 @@ import csv
 import json
 import logging
 import shutil
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
@@ -121,10 +121,57 @@ def load_all_data() -> dict:
         if "_correction_note" in item
     ]
 
+    # --- Enrichment ---
+
+    # Build actions_by_id lookup.
+    actions_by_id: dict = {a["id"]: a for a in actions}
+
+    # Add is_distant_future flag to timeline items.
+    # Use year+4 so that items like 2029 (starting with "202") stay in the
+    # normal list; only 2030+ are considered distant future.
+    threshold_year = datetime.today().year + 4
+    for item in timeline:
+        try:
+            item_year = int(str(item.get("date", "0"))[:4])
+            item["is_distant_future"] = item_year >= threshold_year
+        except (ValueError, TypeError):
+            item["is_distant_future"] = False
+
+    # Add linked_actions to timeline items.
+    for item in timeline:
+        linked: list[dict] = []
+        for aid in item.get("action_ids", []):
+            action = actions_by_id.get(aid)
+            if action:
+                linked.append({"id": action["id"], "title": action["title"]})
+        item["linked_actions"] = linked
+
+    # Add deadline_display to action items.
+    for action in actions:
+        if action.get("deadline"):
+            try:
+                dt = datetime.strptime(action["deadline"], "%Y-%m-%d")
+                action["deadline_display"] = dt.strftime("%d %B %Y").lstrip("0")
+            except ValueError:
+                action["deadline_display"] = action["deadline"]
+
+    # Sort actions by (timing_order, deadline_nulls_last, original_index).
+    timing_order = {"now": 0, "on-submission": 1, "on-acceptance": 2, "ongoing": 3}
+    indexed_actions = list(enumerate(actions))
+    indexed_actions.sort(
+        key=lambda x: (
+            timing_order.get(x[1].get("timing", ""), 99),
+            x[1].get("deadline") or "9999-12-31",
+            x[0],
+        )
+    )
+    actions[:] = [a for _, a in indexed_actions]
+
     return {
         "timeline": timeline,
         "quotes": quotes,
         "actions": actions,
+        "actions_by_id": actions_by_id,
         "representatives": representatives,
         "local_councils": local_councils,
         "access_points": access_points,

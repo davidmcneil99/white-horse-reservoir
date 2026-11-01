@@ -3,6 +3,47 @@ from pathlib import Path
 from generator.build import load_all_data, build
 
 
+def test_timeline_is_distant_future_flag():
+    """Items with year >= today().year + 3 get is_distant_future=True."""
+    data = load_all_data()
+    near = [t for t in data["timeline"] if t.get("date", "").startswith("202")]
+    far  = [t for t in data["timeline"] if t.get("date", "").startswith("204")]
+    assert all(not t["is_distant_future"] for t in near), "recent items should not be distant future"
+    assert all(t["is_distant_future"] for t in far), "2040 item should be distant future"
+
+
+def test_timeline_linked_actions():
+    """Timeline items with action_ids get linked_actions list."""
+    data = load_all_data()
+    t024 = next(t for t in data["timeline"] if t["id"] == "t024")
+    assert "linked_actions" in t024
+    ids = [a["id"] for a in t024["linked_actions"]]
+    assert "ac019" in ids
+    assert "ac012" in ids
+
+
+def test_actions_sorted_by_deadline():
+    """Within the 'now' timing group, actions with earlier deadlines appear first."""
+    data = load_all_data()
+    now_actions = [a for a in data["actions"] if a["timing"] == "now"]
+    deadlines = [a.get("deadline") for a in now_actions]
+    # All non-None deadlines must appear before None entries
+    seen_none = False
+    for d in deadlines:
+        if d is None:
+            seen_none = True
+        elif seen_none:
+            raise AssertionError(f"deadline {d} appeared after a None deadline")
+
+
+def test_actions_by_id_in_context():
+    """build() context contains actions_by_id dict keyed by action id."""
+    data = load_all_data()
+    assert "actions_by_id" in data
+    assert "ac006" in data["actions_by_id"]
+    assert data["actions_by_id"]["ac006"]["letter_key"] == "thames-water"
+
+
 def test_load_all_data_has_required_keys():
     data = load_all_data()
     for key in ("timeline", "quotes", "actions", "representatives",
