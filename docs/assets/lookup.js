@@ -49,40 +49,40 @@ window.WHRLookup = (function () {
     if (!postcode) return null;
     const clean = postcode.trim().toUpperCase().replace(/\s+/g, ' ');
 
-    // Fetch postcodes.io.
-    let pcData;
     try {
+      // Fetch postcodes.io.
       const res = await fetch(
         'https://api.postcodes.io/postcodes/' + encodeURIComponent(clean)
       );
       if (!res.ok) return null;
       const json = await res.json();
       if (json.status !== 200) return null;
-      pcData = json.result;
+      const pcData = json.result;
+
+      // Load static data (cached after first call).
+      const data = await _loadData();
+      const reps = data.representatives;
+      const aliases = data._aliases;
+
+      const constituency = pcData.parliamentary_constituency || '';
+      const rawWard = pcData.admin_ward || '';
+      const ward = aliases[rawWard.toLowerCase()] || rawWard;
+      const division = pcData.county_electoral_division || '';
+      const parish = pcData.parish || '';
+
+      return {
+        mp: _match(reps, 'area', constituency).find(function (r) { return r.tier === 'MP'; }) || null,
+        countyCouncillors: _match(reps, 'area', division).filter(function (r) { return r.tier === 'County'; }),
+        districtCouncillors: _match(reps, 'area', ward).filter(function (r) { return r.tier === 'District'; }),
+        parish: data.parishes.find(function (p) {
+          return parish && (p.name || '').toLowerCase() === parish.toLowerCase();
+        }) || null,
+        accessPoints: data.access_points,
+        raw: pcData
+      };
     } catch (e) {
       return null;
     }
-
-    const data = await _loadData();
-    const reps = data.representatives;
-    const aliases = data._aliases;
-
-    const constituency = pcData.parliamentary_constituency || '';
-    const rawWard = pcData.admin_ward || '';
-    const ward = aliases[rawWard.toLowerCase()] || rawWard;
-    const division = pcData.county_electoral_division || '';
-    const parish = pcData.parish || '';
-
-    return {
-      mp: _match(reps, 'area', constituency).find(function (r) { return r.tier === 'MP'; }) || null,
-      countyCouncillors: _match(reps, 'area', division).filter(function (r) { return r.tier === 'County'; }),
-      districtCouncillors: _match(reps, 'area', ward).filter(function (r) { return r.tier === 'District'; }),
-      parish: data.parishes.find(function (p) {
-        return parish && (p.name || '').toLowerCase().includes(parish.toLowerCase());
-      }) || null,
-      accessPoints: data.access_points,
-      raw: pcData
-    };
   }
 
   function _esc(str) {
