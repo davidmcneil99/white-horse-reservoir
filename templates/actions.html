@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Actions -- White Horse Reservoir{% endblock %}
+{% block title %}Actions | White Horse Reservoir{% endblock %}
 
 {% block content %}
 <h1>What you can do</h1>
@@ -11,7 +11,7 @@
   {% if timing_actions %}
   <section class="actions-group" id="actions-{{ timing_value }}">
     <h2>{{ timing_label }}</h2>
-    {% for action in actions if action.timing == timing_value %}
+    {% for action in timing_actions %}
     <article class="action-item" id="action-{{ action.id }}">
       <h3>{{ action.title }}</h3>
       <p>{{ action.description }}</p>

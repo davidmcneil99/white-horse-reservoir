@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}White Horse Reservoir -- Campaign Information{% endblock %}
+{% block title %}White Horse Reservoir | Campaign Information{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
@@ -8,7 +8,7 @@
 
 {% block content %}
 <div class="stage-banner stage-pre-application" role="alert">
-  <strong>DCO Stage: Pre-application</strong> -- the application has not yet been submitted.
+  <strong>DCO Stage: Pre-application</strong> - the application has not yet been submitted.
 </div>
 
 <section class="intro-section">
@@ -43,6 +43,7 @@
       <h3><a href="{{ item.url }}">{{ item.headline }}</a></h3>
       <p class="news-meta">
         <time datetime="{{ item.date }}">{{ item.date }}</time>
+        {% if item.ai_generated %}<span class="ai-label">AI summary</span>{% endif %}
       </p>
     </article>
     {% endfor %}
@@ -53,5 +54,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
 {% endblock %}

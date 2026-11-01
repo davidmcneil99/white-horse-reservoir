@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Facts -- White Horse Reservoir{% endblock %}
+{% block title %}Facts | White Horse Reservoir{% endblock %}
 
 {% block content %}
 <h1>Facts about the White Horse Reservoir project</h1>
@@ -19,7 +19,7 @@
         {% endif %}
       </div>
       {% if item.last_checked %}
-      <div class="timeline-checked">Last checked: {{ item.last_checked }}{% if item.last_checked_note %} -- {{ item.last_checked_note }}{% endif %}</div>
+      <div class="timeline-checked">Last checked: {{ item.last_checked }}{% if item.last_checked_note %} ({{ item.last_checked_note }}){% endif %}</div>
       {% endif %}
       {% if item._corrected_on is defined %}
       <span class="correction-note">Corrected {{ item._corrected_on }}: {{ item._correction_note }}</span>
