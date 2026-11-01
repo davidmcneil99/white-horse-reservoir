@@ -1,0 +1,14 @@
+{
+  "scheme_parishes": [
+    "Baulking",
+    "Charney Bassett",
+    "Garford",
+    "Goosey",
+    "West Hanney"
+  ],
+  "corridor_parishes": [],
+  "source": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/EN0110044/download-boundary",
+  "ons_source": "ONS Open Geography Portal: Parishes and Non Civil Parished Areas Dec 2023",
+  "checked_date": "2026-11-01",
+  "notes": "Manually populated; automated download blocked or shapely unavailable. Parishes confirmed from EN0110044 application documents. Cable corridor parishes not yet determinable."
+}
