@@ -199,3 +199,15 @@ def test_cearn_timeline_has_forecast_entries():
     data = json.loads(Path("data/cearn/content/timeline.json").read_text(encoding="utf-8"))
     forecasts = [e for e in data if e.get("status") == "forecast"]
     assert len(forecasts) >= 3, "Expected at least 3 forecast entries (Stage 2, DCO, decision)"
+
+
+def test_cearn_keys_in_context():
+    data = load_all_data()
+    for key in ["cearn_timeline", "cearn_quotes", "cearn_actions", "cearn_news_items"]:
+        assert key in data, f"Missing key: {key}"
+
+
+def test_cearn_timeline_forecast_flag():
+    data = load_all_data()
+    forecasts = [e for e in data["cearn_timeline"] if e.get("is_forecast")]
+    assert len(forecasts) >= 3

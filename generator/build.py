@@ -174,6 +174,8 @@ def load_all_data() -> dict:
         key=lambda a: a.get("featured_order", 99),
     )
 
+    cearn_data = load_cearn_data()
+
     return {
         "timeline": timeline,
         "quotes": quotes,
@@ -187,6 +189,47 @@ def load_all_data() -> dict:
         "corrections": corrections,
         "still_to_check": still_to_check,
         "built_on": date.today().isoformat(),
+        "cearn_timeline":   cearn_data["cearn_timeline"],
+        "cearn_quotes":     cearn_data["cearn_quotes"],
+        "cearn_actions":    cearn_data["cearn_actions"],
+        "cearn_news_items": cearn_data["cearn_news_items"],
+    }
+
+
+def load_cearn_data() -> dict:
+    """Load Cearn Solar Farm content data and return a context sub-dict."""
+    cearn_content = CEARN_DATA_DIR / "content"
+    timeline: list[dict] = json.loads((cearn_content / "timeline.json").read_text(encoding="utf-8"))
+    quotes: list[dict] = json.loads((cearn_content / "quotes.json").read_text(encoding="utf-8"))
+    actions: list[dict] = json.loads((cearn_content / "actions.json").read_text(encoding="utf-8"))
+    overrides_path = CEARN_DATA_DIR / "overrides.json"
+    overrides = json.loads(overrides_path.read_text(encoding="utf-8")) if overrides_path.exists() else []
+
+    timeline = apply_overrides(timeline, overrides, "timeline")
+    quotes   = apply_overrides(quotes,   overrides, "quote")
+    actions  = apply_overrides(actions,  overrides, "action")
+
+    for item in timeline:
+        item["date_display"] = format_date(item["date"], item.get("date_precision", "day"))
+        item["is_forecast"] = item.get("status") == "forecast"
+
+    for item in quotes:
+        item["date_display"] = format_date(item["date"], item.get("date_precision", "day"))
+
+    # Sort actions by timing order
+    timing_order = {"now": 0, "on-submission": 1, "on-acceptance": 2, "ongoing": 3}
+    indexed = list(enumerate(actions))
+    indexed.sort(key=lambda x: (timing_order.get(x[1].get("timing", ""), 99), x[1].get("deadline") or "9999-12-31", x[0]))
+    actions[:] = [a for _, a in indexed]
+
+    cearn_news_path = CEARN_DATA_DIR / "fetched" / "news_items.json"
+    cearn_news = json.loads(cearn_news_path.read_text(encoding="utf-8")) if cearn_news_path.exists() else []
+
+    return {
+        "cearn_timeline": timeline,
+        "cearn_quotes":   quotes,
+        "cearn_actions":  actions,
+        "cearn_news_items": cearn_news,
     }
 
 
@@ -252,6 +295,12 @@ def _build_lookup_data(data: dict) -> dict:
         "address": defra_fm.get("recipient_address", ""),
     }
 
+    desnz_recipient = {
+        "name": "Miatta Fahnbulleh MP",
+        "email": "",
+        "address": "Ministerial Correspondence Team, Level 3, 55 Whitehall, London SW1A 2HP",
+    }
+
     return {
         "representatives": reps,
         "parishes": parishes,
@@ -259,6 +308,7 @@ def _build_lookup_data(data: dict) -> dict:
         "letter_recipients": {
             "mp": mp_recipient,
             "defra": defra_recipient,
+            "desnz": desnz_recipient,
         },
     }
 
@@ -319,6 +369,18 @@ def build(output_dir: Path = Path("docs")) -> None:
         ("corrections.html", "corrections.html"),
         ("access-points.html", "access-points.html"),
     ]
+
+    solar_pages = [
+        ("solar-facts.html", "solar-facts.html"),
+        ("solar-actions.html", "solar-actions.html"),
+        ("solar-letters.html", "solar-letters.html"),
+        ("combined-impacts.html", "combined-impacts.html"),
+    ]
+
+    available_templates = env.list_templates()
+    for template_name, output_name in solar_pages:
+        if template_name in available_templates:
+            pages.append((template_name, output_name))
 
     for template_name, output_name in pages:
         template = env.get_template(template_name)
