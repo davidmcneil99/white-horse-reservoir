@@ -203,7 +203,7 @@ def test_cearn_timeline_has_forecast_entries():
 
 def test_cearn_keys_in_context():
     data = load_all_data()
-    for key in ["cearn_timeline", "cearn_quotes", "cearn_actions", "cearn_news_items"]:
+    for key in ["cearn_timeline", "cearn_quotes", "cearn_actions", "cearn_featured_actions", "cearn_news_items"]:
         assert key in data, f"Missing key: {key}"
 
 

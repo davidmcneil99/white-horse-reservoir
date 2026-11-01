@@ -189,10 +189,11 @@ def load_all_data() -> dict:
         "corrections": corrections,
         "still_to_check": still_to_check,
         "built_on": date.today().isoformat(),
-        "cearn_timeline":   cearn_data["cearn_timeline"],
-        "cearn_quotes":     cearn_data["cearn_quotes"],
-        "cearn_actions":    cearn_data["cearn_actions"],
-        "cearn_news_items": cearn_data["cearn_news_items"],
+        "cearn_timeline":          cearn_data["cearn_timeline"],
+        "cearn_quotes":            cearn_data["cearn_quotes"],
+        "cearn_actions":           cearn_data["cearn_actions"],
+        "cearn_featured_actions":  cearn_data["cearn_featured_actions"],
+        "cearn_news_items":        cearn_data["cearn_news_items"],
     }
 
 
@@ -225,10 +226,16 @@ def load_cearn_data() -> dict:
     cearn_news_path = CEARN_DATA_DIR / "fetched" / "news_items.json"
     cearn_news = json.loads(cearn_news_path.read_text(encoding="utf-8")) if cearn_news_path.exists() else []
 
+    cearn_featured_actions = sorted(
+        [a for a in actions if a.get("featured")],
+        key=lambda a: a.get("featured_order", 99),
+    )
+
     return {
         "cearn_timeline": timeline,
         "cearn_quotes":   quotes,
         "cearn_actions":  actions,
+        "cearn_featured_actions": cearn_featured_actions,
         "cearn_news_items": cearn_news,
     }
 
