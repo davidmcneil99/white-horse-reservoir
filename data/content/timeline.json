@@ -213,7 +213,8 @@
     "event": "DCO application submission expected. Not submitted as at 1 November 2026.",
     "source_url": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/WA010005",
     "source_label": "Planning Inspectorate: WA010005",
-    "last_checked": "2026-11-01"
+    "last_checked": "2026-11-01",
+    "action_ids": ["ac019", "ac012"]
   },
   {
     "id": "t025",
@@ -222,7 +223,8 @@
     "event": "RAPID gate four submission planned.",
     "source_url": "https://www.ofwat.gov.uk/",
     "source_label": "Ofwat: RAPID process",
-    "last_checked": "2026-11-01"
+    "last_checked": "2026-11-01",
+    "action_ids": ["ac019"]
   },
   {
     "id": "t026",
