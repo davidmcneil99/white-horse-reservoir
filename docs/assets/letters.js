@@ -12,7 +12,7 @@
  *   sender_constituency  -> lookupResult.raw.parliamentary_constituency
  *   current_date         -> today in "1 January 2026" format
  *   <frontmatter key>    -> filled frontmatter value (e.g. recipient_title)
- *   anything else        -> "[not found -- please fill in]"
+ *   anything else        -> "[not found - please fill in]"
  */
 window.WHRLetters = (function () {
   'use strict';
@@ -55,7 +55,7 @@ window.WHRLetters = (function () {
    */
   function _fill(template, lookupResult) {
     var r = lookupResult || {};
-    var NOT_FOUND = '[not found -- please fill in]';
+    var NOT_FOUND = '[not found - please fill in]';
 
     var map = {
       mp_name:             (r.mp && r.mp.name)  || NOT_FOUND,
@@ -188,7 +188,7 @@ window.WHRLetters = (function () {
 
           // Re-build the filled frontmatter to get recipient_email and subject.
           var r = _currentLookup || {};
-          var NOT_FOUND = '[not found -- please fill in]';
+          var NOT_FOUND = '[not found - please fill in]';
           var fmMap = {
             mp_name:             (r.mp && r.mp.name)  || NOT_FOUND,
             mp_email:            (r.mp && r.mp.email) || NOT_FOUND,
