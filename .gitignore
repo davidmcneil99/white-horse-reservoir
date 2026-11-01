@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# Generated site (committed, so exclude only local temp)
+docs/assets/lookup-data.json
+
+# Fetched cache (committed to track changes)
+# data/fetched/ is tracked
+
+# Secrets
+.env
+*.env
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db

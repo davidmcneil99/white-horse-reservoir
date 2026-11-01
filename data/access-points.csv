@@ -1,0 +1,18 @@
+id,roads,localities,purpose,status,peak_hgv_per_hr,peak_lgv_per_hr,figure_confidence
+A1,A415 Marcham Road,"Marcham, Frilford, Drayton side",Main construction compound; becomes permanent visitor access. About 60% of all construction movements,Permanent,51,6,read from map book
+A2,A338 (includes former A3),"Grove, West Hanney, East Hanney","Rail siding and materials handling facility, compounds, Steventon to East Hanney road diversion",Temporary,6,7,read from map book
+A4,A338,"Common Barn, Garford, Marcham, Landmead Farm",Eastern wetlands works,Temporary,16,16,"approximate, check map book"
+A5,Steventon to Hanney Road,"Steventon, Drayton, Milton Heights",Eastern end of the East Hanney to Steventon road realignment,Temporary,24,6,read from map book
+A6,"Drayton Road, Stonehill Lane, Peep-O-Day Lane","Sutton Courtenay, Culham, Drayton, Abingdon",Compound for the Thames intake and outfall structure,Temporary,21,4,read from map book
+A7,"A415 (east), The Burycroft","Sutton Courtenay, Caldecott, Abingdon",Berm on the east bank of the Thames,Temporary,8,3,read from map book
+A8,"A415 Kingston Road, Fyfield Wick, Hanney Road","East Hanney, Frilford, Southmoor, Kingston Bagpuize, Marcham, Fyfield, Garford","Habitat creation, species relocation, early environmental works",Temporary,1,6,read from map book
+A9,"A417, Ardington Lane",Ardington,Habitat and environmental works,Temporary,1,6,"approximate, check map book"
+A10,"A417, Wood's Farm Road","East Hendred, Steventon",Habitat and environmental works,Temporary,1,6,read from map book
+A11,"A417, Featherbed Lane (near A4130 and A34)","Rowstock, Harwell, East Hendred, Milton, Steventon",Habitat and environmental works,Temporary,1,6,read from map book
+A12,"A417/A338, Grove Park Drive (King Alfred Way)","Grove, Charlton (Wantage), Ardington",Habitat and environmental works,Temporary,5,3,"approximate, check map book"
+A13,A415 Marcham Road and road to Dalton Barracks,"Marcham, Shippon, Wildmoor, Dalton Barracks",Compound for A34 Marcham Interchange (west) and A415 roundabout,Temporary,4,3,read from map book
+A14,A415 Marcham Road,"Marcham, Shippon, Wildmoor, Caldecott",Compound for A34 Marcham Interchange (east),Temporary,14,11,read from map book
+A15,East Hanney to Steventon Road,"West Hanney, East Hanney","Western end of road realignment: trial embankment, ecology, archaeology, utilities, demolition",Temporary,12,3,"approximate, check map book"
+A16,Drayton Road,"Abingdon, Sutton Courtenay, Culham, Drayton",Compound for the river tunnel intermediate shaft,Temporary,3,3,"approximate, check map book (an earlier councillor newsletter quoted about 12)"
+A17,"A417 Faringdon Road plus Network Rail land (New Road, Circourt Road)",Goosey,Compound for railway works,Temporary,7,9,"approximate, check map book"
+A20,A338 plus Network Rail land,Not shown in map book extract,Compound for railway works,Temporary,,,listed in factsheet only
