@@ -44,6 +44,24 @@ def test_actions_by_id_in_context():
     assert data["actions_by_id"]["ac006"]["letter_key"] == "thames-water"
 
 
+def test_facts_page_has_details_element():
+    """facts.html output contains a <details> element for distant-future items."""
+    build()
+    facts_html = Path("docs/facts/index.html").read_text(encoding="utf-8")
+    assert "<details" in facts_html
+    assert "2040" in facts_html  # distant-future item appears somewhere
+
+
+def test_facts_page_action_links():
+    """facts.html output contains links to actions for timeline items with action_ids."""
+    build()
+    facts_html = Path("docs/facts/index.html").read_text(encoding="utf-8")
+    # t024 has action_ids linking to ac019 and ac012
+    assert 'href="../actions/#action-ac019"' in facts_html or \
+           'href="/actions/#action-ac019"' in facts_html or \
+           '#action-ac019' in facts_html
+
+
 def test_load_all_data_has_required_keys():
     data = load_all_data()
     for key in ("timeline", "quotes", "actions", "representatives",
@@ -60,8 +78,15 @@ def test_load_all_data_timeline_has_source():
 
 def test_build_creates_all_pages(tmp_path):
     build(output_dir=tmp_path)
-    expected = ["index.html", "about.html", "facts.html", "actions.html",
-                "letters.html", "corrections.html", "access-points.html"]
+    expected = [
+        "index.html",
+        "about/index.html",
+        "facts/index.html",
+        "actions/index.html",
+        "letters/index.html",
+        "corrections/index.html",
+        "access-points/index.html",
+    ]
     for page in expected:
         assert (tmp_path / page).exists(), f"Missing: {page}"
 
@@ -85,7 +110,7 @@ def test_letters_data_json_exists(tmp_path):
 
 
 def test_correction_note_appears_in_output(tmp_path):
-    # Write a temp override and verify it appears in facts.html
+    # Write a temp override and verify it appears in facts/index.html
     import json, shutil
     shutil.copy("data/overrides.json", tmp_path / "overrides_backup.json")
     overrides = [{"item_type": "quote", "item_id": "q001",
@@ -95,7 +120,7 @@ def test_correction_note_appears_in_output(tmp_path):
     Path("data/overrides.json").write_text(json.dumps(overrides))
     try:
         build(output_dir=tmp_path)
-        facts = (tmp_path / "facts.html").read_text()
+        facts = (tmp_path / "facts" / "index.html").read_text()
         assert "test correction" in facts
     finally:
         shutil.copy(tmp_path / "overrides_backup.json", "data/overrides.json")

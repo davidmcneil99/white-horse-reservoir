@@ -8,8 +8,55 @@
 <section class="timeline-section">
   <h2>Timeline</h2>
   <p>Events in reverse chronological order.</p>
+
+  {# Collect items into distant and normal groups (reversed) #}
+  {% set distant_items = [] %}
+  {% set normal_items = [] %}
+  {% for item in timeline | reverse %}
+    {% if item.is_distant_future %}
+      {% if distant_items.append(item) %}{% endif %}
+    {% else %}
+      {% if normal_items.append(item) %}{% endif %}
+    {% endif %}
+  {% endfor %}
+
+  {# Distant-future collapsible at top #}
+  {% if distant_items %}
+  <details class="distant-future-details">
+    <summary>Future milestones ({{ distant_items[-1].date[:4] }} and beyond)</summary>
+    <ol class="timeline-list" reversed>
+      {% for item in distant_items %}
+      <li class="timeline-item" id="tl-{{ item.id }}">
+        <div class="timeline-date">{{ item.date_display }}</div>
+        <div class="timeline-event">
+          {{ item.event }}
+          {% if item.source_url %}
+            <a class="source-link" href="{{ item.source_url }}" rel="external noopener">Source</a>
+          {% endif %}
+        </div>
+        {% if item.last_checked %}
+        <div class="timeline-checked">Last checked: {{ item.last_checked }}{% if item.last_checked_note %} ({{ item.last_checked_note }}){% endif %}</div>
+        {% endif %}
+        {% if item._corrected_on is defined %}
+        <span class="correction-note">Corrected on {{ item._corrected_on }}: {{ item._correction_note }}</span>
+        {% endif %}
+        {% if item.linked_actions %}
+        <div class="timeline-actions">
+          <strong>You can:</strong>
+          {% for la in item.linked_actions %}
+            <a href="../actions/#action-{{ la.id }}">{{ la.title }}</a>{% if not loop.last %}, {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ol>
+  </details>
+  {% endif %}
+
+  {# Normal (non-distant) items #}
   <ol class="timeline-list" reversed>
-    {% for item in timeline | reverse %}
+    {% for item in normal_items %}
     <li class="timeline-item" id="tl-{{ item.id }}">
       <div class="timeline-date">{{ item.date_display }}</div>
       <div class="timeline-event">
@@ -23,6 +70,14 @@
       {% endif %}
       {% if item._corrected_on is defined %}
       <span class="correction-note">Corrected on {{ item._corrected_on }}: {{ item._correction_note }}</span>
+      {% endif %}
+      {% if item.linked_actions %}
+      <div class="timeline-actions">
+        <strong>You can:</strong>
+        {% for la in item.linked_actions %}
+          <a href="../actions/#action-{{ la.id }}">{{ la.title }}</a>{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </div>
       {% endif %}
     </li>
     {% endfor %}

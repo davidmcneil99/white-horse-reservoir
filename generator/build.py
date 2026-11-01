@@ -302,22 +302,30 @@ def build(output_dir: Path = Path("docs")) -> None:
         autoescape=True,
     )
 
-    # Pages: (template_name, output_filename)
+    # Pages: (template_name, output_subdir, output_filename)
+    # Sub-pages are written as {subdir}/index.html for GitHub Pages pretty URLs.
+    # The home page is written directly as index.html.
     pages = [
-        ("index.html", "index.html"),
-        ("about.html", "about.html"),
-        ("facts.html", "facts.html"),
-        ("actions.html", "actions.html"),
-        ("letters.html", "letters.html"),
-        ("corrections.html", "corrections.html"),
-        ("access-points.html", "access-points.html"),
+        ("index.html", "", "index.html"),
+        ("about.html", "about", "index.html"),
+        ("facts.html", "facts", "index.html"),
+        ("actions.html", "actions", "index.html"),
+        ("letters.html", "letters", "index.html"),
+        ("corrections.html", "corrections", "index.html"),
+        ("access-points.html", "access-points", "index.html"),
     ]
 
-    for template_name, output_name in pages:
+    for template_name, subdir, output_name in pages:
         template = env.get_template(template_name)
         rendered = template.render(**data)
-        (output_dir / output_name).write_text(rendered, encoding="utf-8")
-        logging.info("Wrote %s", output_dir / output_name)
+        if subdir:
+            page_dir = output_dir / subdir
+            page_dir.mkdir(parents=True, exist_ok=True)
+            out_path = page_dir / output_name
+        else:
+            out_path = output_dir / output_name
+        out_path.write_text(rendered, encoding="utf-8")
+        logging.info("Wrote %s", out_path)
 
     # Write lookup-data.json.
     assets_dir = output_dir / "assets"
