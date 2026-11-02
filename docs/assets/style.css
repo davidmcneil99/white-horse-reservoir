@@ -537,3 +537,7 @@ caption {
   .nav-primary { display: none; }
   .nav-toggle-check:checked ~ .nav-primary { display: block; }
 }
+
+/* Cearn Solar Farm forecast entries */
+.forecast-label { color: var(--muted); font-style: italic; }
+.forecast-item { border-left: 3px solid var(--muted); }

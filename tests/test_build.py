@@ -219,3 +219,16 @@ def test_nav_contains_both_projects():
     assert "Solar Farm" in html
     assert "Reservoir" in html
     assert "Combined Impacts" in html
+
+
+def test_solar_facts_page_generated():
+    build()
+    html = Path("docs/solar-facts.html").read_text(encoding="utf-8")
+    assert "EN0110044" in html
+    assert "Cearn Solar Farm" in html
+
+
+def test_solar_facts_has_forecast_label():
+    build()
+    html = Path("docs/solar-facts.html").read_text(encoding="utf-8")
+    assert "forecast" in html.lower()
