@@ -128,3 +128,13 @@ def test_forecast_date_warning_logged(caplog):
     with caplog.at_level(logging.WARNING):
         check_forecast_dates(past_forecast)
     assert "forecast date" in caplog.text.lower() or "passed without confirmation" in caplog.text.lower()
+
+
+def test_forecast_date_warning_with_status_field(caplog):
+    from generator.fetch import check_forecast_dates
+    import logging
+    # Uses "status": "forecast" only (no is_forecast key) as raw timeline.json uses
+    past_forecast = [{"date": "2020-01", "event": "Past forecast", "status": "forecast"}]
+    with caplog.at_level(logging.WARNING):
+        check_forecast_dates(past_forecast)
+    assert "forecast date" in caplog.text.lower() or "passed without confirmation" in caplog.text.lower()

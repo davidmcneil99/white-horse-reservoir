@@ -1,7 +1,7 @@
 ---
 title: Write to your Oxfordshire County Council councillor
-recipient_name: "{{county_name}}"
-recipient_email: "{{county_email}}"
+recipient_name: "{{county_councillor_name}}"
+recipient_email: "{{county_councillor_email}}"
 project: cearn
 ---
 
@@ -12,7 +12,7 @@ Oxfordshire County Council
 County Hall, New Road
 Oxford OX1 1ND
 
-Dear Councillor {{county_name}},
+Dear Councillor {{county_councillor_name}},
 
 I am writing to you as a resident of {{sender_area}}, in {{sender_ward}}, regarding the proposed Cearn Solar Farm (Planning Inspectorate reference EN0110044).
 

@@ -1,7 +1,7 @@
 ---
 title: Write to your Vale of White Horse District councillor
-recipient_name: "{{district_name}}"
-recipient_email: "{{district_email}}"
+recipient_name: "{{district_councillor_name}}"
+recipient_email: "{{district_councillor_email}}"
 project: cearn
 ---
 
@@ -13,7 +13,7 @@ Vale of White Horse District Council
 Milton Park
 Abingdon OX14 4SB
 
-Dear Councillor {{district_name}},
+Dear Councillor {{district_councillor_name}},
 
 I am writing to you as a resident of {{sender_area}}, in {{sender_ward}}, regarding the proposed Cearn Solar Farm (Planning Inspectorate reference EN0110044).
 

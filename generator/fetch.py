@@ -284,8 +284,8 @@ def load_cearn_sources() -> list[dict]:
                 "url": url,
                 "project": "cearn",
             })
-        elif "json" in feed_info or "json api" in feed_info:
-            # Hansard and written questions
+        elif ("json" in feed_info or "json api" in feed_info) and "planninginspectorate.gov.uk" not in url:
+            # Hansard and written questions (HTML PINS pages are not JSON APIs)
             sources.append({
                 "name": name,
                 "type": "json_api",
@@ -296,6 +296,15 @@ def load_cearn_sources() -> list[dict]:
                 "summary_field": "summary",
                 "project": "cearn",
             })
+        elif ("json" in feed_info or "json api" in feed_info) and "planninginspectorate.gov.uk" in url:
+            # PINS project page is HTML, not a JSON API - use page_change detection.
+            if url.startswith("http"):
+                sources.append({
+                    "name": name,
+                    "type": "page_change",
+                    "url": url,
+                    "project": "cearn",
+                })
         elif "none" in feed_info or feed_info == "" or "email" in feed_info:
             # Page-change detection for key pages with no RSS feed.
             if "works" in status and url.startswith("http"):
@@ -330,7 +339,7 @@ def check_forecast_dates(timeline: list) -> None:
     """Warn if a forecast date has passed without confirmation."""
     today = date.today()
     for item in timeline:
-        if not item.get("is_forecast"):
+        if not (item.get("is_forecast") or item.get("status") == "forecast"):
             continue
         raw = str(item.get("date", ""))
         try:
@@ -398,22 +407,51 @@ if __name__ == "__main__":
     import json
 
     sources = load_sources()
-    hashes_path = RES_DATA_DIR / "fetched" / "page_hashes.json"
-    news_path = RES_DATA_DIR / "fetched" / "news_items.json"
 
-    hashes = json.loads(hashes_path.read_text(encoding="utf-8")) if hashes_path.exists() else {}
-    existing = json.loads(news_path.read_text(encoding="utf-8")) if news_path.exists() else []
+    # Build per-project hash dicts from their respective stored files.
+    res_hashes_path   = RES_DATA_DIR   / "fetched" / "page_hashes.json"
+    cearn_hashes_path = CEARN_DATA_DIR / "fetched" / "page_hashes.json"
+    res_news_path     = RES_DATA_DIR   / "fetched" / "news_items.json"
+    cearn_news_path   = CEARN_DATA_DIR / "fetched" / "news_items.json"
 
-    new_items, new_hashes = fetch_all(sources, hashes)
+    res_hashes   = json.loads(res_hashes_path.read_text(encoding="utf-8"))   if res_hashes_path.exists()   else {}
+    cearn_hashes = json.loads(cearn_hashes_path.read_text(encoding="utf-8")) if cearn_hashes_path.exists() else {}
 
-    existing_urls = {i["url"] for i in existing}
-    to_add = [i for i in new_items if i["url"] not in existing_urls]
-    all_items = (to_add + existing)[:500]  # max 500, newest first
+    # Merge hashes for fetch_all (it needs to see all existing hashes).
+    merged_hashes = {**res_hashes, **cearn_hashes}
 
-    news_path.parent.mkdir(parents=True, exist_ok=True)
-    news_path.write_text(json.dumps(all_items, indent=2, ensure_ascii=False), encoding="utf-8")
-    hashes_path.write_text(json.dumps(new_hashes, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"Fetched {len(to_add)} new items")
+    new_items, new_hashes = fetch_all(sources, merged_hashes)
+
+    # Determine which source URLs belong to cearn.
+    cearn_source_urls = {s["url"] for s in sources if s.get("project") == "cearn"}
+
+    # Split new items by project.
+    res_new_items   = [i for i in new_items if i.get("project") != "cearn"]
+    cearn_new_items = [i for i in new_items if i.get("project") == "cearn"]
+
+    # Write reservoir news.
+    res_existing     = json.loads(res_news_path.read_text(encoding="utf-8"))   if res_news_path.exists()   else []
+    res_existing_urls = {i["url"] for i in res_existing}
+    res_to_add       = [i for i in res_new_items if i["url"] not in res_existing_urls]
+    res_all          = (res_to_add + res_existing)[:500]
+    res_news_path.parent.mkdir(parents=True, exist_ok=True)
+    res_news_path.write_text(json.dumps(res_all, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    # Write cearn news.
+    cearn_existing      = json.loads(cearn_news_path.read_text(encoding="utf-8")) if cearn_news_path.exists() else []
+    cearn_existing_urls = {i["url"] for i in cearn_existing}
+    cearn_to_add        = [i for i in cearn_new_items if i["url"] not in cearn_existing_urls]
+    cearn_all           = (cearn_to_add + cearn_existing)[:500]
+    cearn_news_path.parent.mkdir(parents=True, exist_ok=True)
+    cearn_news_path.write_text(json.dumps(cearn_all, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    # Split hashes back by project (keyed by source URL).
+    res_hashes_out   = {url: h for url, h in new_hashes.items() if url not in cearn_source_urls}
+    cearn_hashes_out = {url: h for url, h in new_hashes.items() if url in cearn_source_urls}
+    res_hashes_path.write_text(json.dumps(res_hashes_out, indent=2, ensure_ascii=False), encoding="utf-8")
+    cearn_hashes_path.write_text(json.dumps(cearn_hashes_out, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    print(f"Fetched {len(res_to_add)} new reservoir items, {len(cearn_to_add)} new cearn items")
 
     cearn_timeline_path = CEARN_DATA_DIR / "content" / "timeline.json"
     if cearn_timeline_path.exists():
