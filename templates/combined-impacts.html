@@ -54,14 +54,14 @@ This page is independent of both GARD and Protect the Vale.</p>
   submitted with the Development Consent Order application, forecast for September 2027.</p>
 
   {% if links_to_reservoir.construction_overlap %}
-  <p class="source-note">Source: {{ links_to_reservoir.construction_overlap }}</p>
+  <p class="assessment-note">Assessment: {{ links_to_reservoir.construction_overlap }}</p>
   {% endif %}
 </section>
 
 <section class="combined-section" id="land-take">
   <h2>Combined land take</h2>
 
-  <p>Protect the Vale puts the combined land take of Cearn, the reservoir and its associated pipeline at at
+  <p>Protect the Vale puts the combined land take of Cearn, the reservoir and its associated pipeline at
   least 5,300 acres. <span class="label label--claimed-ptv">claimed (Protect the Vale figure, November 2026)</span></p>
 
   <p>This figure has not been independently verified and does not account for land that may overlap between
@@ -72,15 +72,7 @@ This page is independent of both GARD and Protect the Vale.</p>
   <h2>Who has raised the combined impact</h2>
 
   {% if links_to_reservoir.who_has_raised_it %}
-  <p>{{ links_to_reservoir.who_has_raised_it | replace("GARD has not linked the two", "GARD has not publicly linked the two projects") }}</p>
-  {% else %}
-  <ul class="raised-by-list">
-    <li>Vale Leader Bethia Thomas (23 October 2026)</li>
-    <li>Cllr Sally Whiteman's council question on combined impact (approximately 5,000 ha)</li>
-    <li>The amended Vale motion (cumulative impact with Botley West, West Oxfordshire Energy Park and the reservoir)</li>
-    <li>Herald Series coverage quoting county and district councillors</li>
-    <li>Protect the Vale (combined figure of at least 5,300 acres)</li>
-  </ul>
+  <p>{{ links_to_reservoir.who_has_raised_it }}</p>
   {% endif %}
 
   <p class="gard-note">GARD has not publicly linked the two projects.</p>

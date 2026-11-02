@@ -266,3 +266,5 @@ def test_combined_impacts_page_generated():
     html = Path("docs/combined-impacts.html").read_text(encoding="utf-8")
     assert "A338" in html
     assert "not yet confirmed" in html.lower() or "not established" in html.lower()
+    assert "GARD has not publicly linked the two projects" in html
+    assert "independent of both GARD and Protect the Vale" in html
