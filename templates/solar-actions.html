@@ -24,7 +24,7 @@
       <p class="action-deadline"><strong>Deadline:</strong> {{ action.deadline }}</p>
       {% endif %}
       {% if action.source_url %}
-      <p><a href="{{ action.source_url }}" rel="external noopener">{{ action.source_label if action.source_label else "More information" }}</a></p>
+      <p><a href="{{ action.source_url }}" rel="noopener noreferrer">{{ action.source_label if action.source_label else "More information" }}</a></p>
       {% endif %}
       {% if action.is_legal_info %}
       <p class="legal-disclaimer">This is general information, not legal advice.</p>

@@ -239,3 +239,6 @@ def test_solar_actions_page_generated():
     html = Path("docs/solar-actions.html").read_text(encoding="utf-8")
     assert "DESNZ" in html or "Energy Security" in html
     assert "statutory consultee" in html.lower()
+    # Verify actions actually rendered
+    assert "solar-letters.html" in html   # at least one letter link present
+    assert "now" in html.lower() or "on-submission" in html.lower()  # at least one timing section
