@@ -11,55 +11,28 @@
     cearn:     { color: '#d97706', label: 'Cearn Solar Farm (EN0110044)' }
   };
 
-  // DCO Order Limits polygon — Planning Inspectorate WA010005 (received 2026-09-03).
-  // Simplified from 3,197 points to 43 using Ramer-Douglas-Peucker (ε=0.002°).
-  // Source: https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/WA010005/download-boundary
-  // Note: this is the full project order limits (includes Thames intake/tunnel corridor
-  // east to Sutton Courtenay), not just the reservoir body.
-  var WHR_DCO_BOUNDARY = [
-    [51.670652, -1.308901],
-    [51.668359, -1.306466],
-    [51.666096, -1.311730],
-    [51.669668, -1.315432],
-    [51.664544, -1.315509],
-    [51.665006, -1.313044],
-    [51.657808, -1.316193],
-    [51.656313, -1.278573],
-    [51.658456, -1.273667],
-    [51.657081, -1.276341],
-    [51.652756, -1.274609],
-    [51.646856, -1.283651],
-    [51.652624, -1.306094],
-    [51.651868, -1.313465],
-    [51.649316, -1.310445],
-    [51.651792, -1.313647],
-    [51.648924, -1.319429],
-    [51.647134, -1.320489],
-    [51.644496, -1.313039],
-    [51.646983, -1.320505],
-    [51.634959, -1.316387],
-    [51.628793, -1.320505],
-    [51.627883, -1.334809],
-    [51.621441, -1.337980],
-    [51.620794, -1.331281],
-    [51.618215, -1.409411],
-    [51.634053, -1.395162],
-    [51.634806, -1.386873],
-    [51.637983, -1.391576],
-    [51.650638, -1.380497],
-    [51.653726, -1.354341],
-    [51.653873, -1.358707],
-    [51.655890, -1.356200],
-    [51.662087, -1.359646],
-    [51.661986, -1.352828],
-    [51.658830, -1.352354],
-    [51.653962, -1.338739],
-    [51.662030, -1.341855],
-    [51.666558, -1.334517],
-    [51.667743, -1.336666],
-    [51.670292, -1.311578],
-    [51.674823, -1.308143],
-    [51.670652, -1.308901]
+  // Approximate reservoir water body outline — derived from Thames Water reference
+  // maps and anchored against verified access-point coordinates (A4, A5, A12, A15, A2).
+  // This shows the expected reservoir body only, not the full DCO Order Limits.
+  // Full DCO Order Limits (Planning Inspectorate WA010005) also cover the Thames
+  // intake/tunnel corridor east to Sutton Courtenay.
+  var WHR_RESERVOIR_BODY = [
+    [51.659, -1.376],   // N (above A4 at 51.6561, -1.3757)
+    [51.656, -1.358],   // N-NE
+    [51.649, -1.344],   // NE
+    [51.640, -1.337],   // E-NE
+    [51.630, -1.337],   // E (near A5 at 51.6299, -1.3407)
+    [51.621, -1.341],   // E-SE
+    [51.614, -1.353],   // SE
+    [51.611, -1.369],   // S-SE
+    [51.609, -1.389],   // S (near A12 at 51.6103, -1.3899)
+    [51.611, -1.409],   // S-SW
+    [51.616, -1.422],   // SW
+    [51.626, -1.430],   // W (A2 at 51.6218, -1.4061 is nearby)
+    [51.638, -1.429],   // W-NW
+    [51.648, -1.418],   // NW (A15 at 51.6347, -1.3862 is on this edge)
+    [51.655, -1.401],   // N-NW
+    [51.659, -1.376]    // back to N
   ];
 
   // Access point coordinates.
@@ -92,13 +65,13 @@
     maxZoom: 18
   }).addTo(map);
 
-  var reservoirLayer = L.polygon(WHR_DCO_BOUNDARY, {
+  var reservoirLayer = L.polygon(WHR_RESERVOIR_BODY, {
     color: layers.reservoir.color, weight: 2, fillOpacity: 0.1, dashArray: '8 4'
   }).bindPopup(
-    'DCO Order Limits — Planning Inspectorate WA010005<br>' +
-    '<small>Official boundary (simplified). Includes reservoir site, Thames intake/tunnel ' +
-    'corridor east to Sutton Courtenay. Source: Planning Inspectorate download-boundary, ' +
-    'received 2026-09-03.</small>'
+    'Proposed Reservoir — Approximate water body<br>' +
+    '<small>Indicative outline based on Thames Water reference maps. ' +
+    'Full DCO Order Limits (Planning Inspectorate WA010005) cover a larger area ' +
+    'including the Thames intake/tunnel corridor to Sutton Courtenay.</small>'
   ).addTo(map);
 
   WHR_ACCESS_POINTS.forEach(function (ap) {
