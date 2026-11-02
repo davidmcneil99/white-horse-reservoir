@@ -115,14 +115,18 @@
       if (data) {
         cearnLayer = L.geoJSON(data, {
           style: { color: layers.cearn.color, weight: 2, fillOpacity: 0.1 }
-        }).addTo(map);
+        });
+        var cearnCheckbox = document.getElementById('show-cearn');
+        if (!cearnCheckbox || cearnCheckbox.checked) {
+          cearnLayer.addTo(map);
+        }
       } else {
         console.warn('Cearn boundary not available');
       }
     })
     .catch(function () { console.warn('Cearn boundary fetch failed'); });
 
-  // Layer toggle checkboxes — wire up after DOM ready.
+  // Layer toggle checkboxes - wire up after DOM ready.
   var reservoirToggle = document.getElementById('show-reservoir');
   var cearnToggle = document.getElementById('show-cearn');
 
