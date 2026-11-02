@@ -414,3 +414,8 @@ if __name__ == "__main__":
     news_path.write_text(json.dumps(all_items, indent=2, ensure_ascii=False), encoding="utf-8")
     hashes_path.write_text(json.dumps(new_hashes, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"Fetched {len(to_add)} new items")
+
+    cearn_timeline_path = CEARN_DATA_DIR / "content" / "timeline.json"
+    if cearn_timeline_path.exists():
+        cearn_timeline = json.loads(cearn_timeline_path.read_text(encoding="utf-8"))
+        check_forecast_dates(cearn_timeline)
