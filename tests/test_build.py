@@ -232,3 +232,10 @@ def test_solar_facts_has_forecast_label():
     build()
     html = Path("docs/solar-facts.html").read_text(encoding="utf-8")
     assert "forecast" in html.lower()
+
+
+def test_solar_actions_page_generated():
+    build()
+    html = Path("docs/solar-actions.html").read_text(encoding="utf-8")
+    assert "DESNZ" in html or "Energy Security" in html
+    assert "statutory consultee" in html.lower()
