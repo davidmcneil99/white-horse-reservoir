@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Write a letter | Cearn Solar Farm | White Horse Reservoir{% endblock %}
+
+{% block content %}
+<h1>Write to your representatives about Cearn Solar Farm</h1>
+<p class="letter-template-note">These are template letters -- you should review and adjust the wording before sending to make sure it reflects your own situation and views.</p>
+<p>Use the tools below to find your representatives and generate a letter you can send to them about the Cearn Solar Farm project (EN0110044).</p>
+
+<section class="lookup-section">
+  <h2>Step 1: Find your representatives</h2>
+  <div id="lookup-widget">
+    <label for="lookup-postcode">Enter your postcode to find your representatives</label>
+    <input id="lookup-postcode" type="text" autocomplete="postal-code" maxlength="8">
+    <button id="lookup-btn">Look up</button>
+    <div id="lookup-result"></div>
+  </div>
+</section>
+
+<section class="letter-section">
+  <h2>Step 2: Choose a letter type</h2>
+  <div class="letter-controls">
+    <label for="letter-type">Letter type</label>
+    <select id="letter-type">
+      <option value="">Select a letter type</option>
+      <option value="desnz-secretary-of-state" data-address="Ministerial Correspondence Team, Level 3, 55 Whitehall, London SW1A 2HP" data-postal-only="true">Secretary of State for Energy Security and Net Zero</option>
+      <option value="cearn-developer">Cearn Solar Farm Limited (developer)</option>
+      <option value="solar-mp">Your MP</option>
+      <option value="solar-county-councillor">Oxfordshire County Council councillor</option>
+      <option value="solar-district-councillor">Vale of White Horse District councillor</option>
+      <option value="solar-planning-inspectorate">Planning Inspectorate (EN0110044 - Relevant Representation)</option>
+    </select>
+  </div>
+
+  <div class="combined-impact-control" id="combined-impact-control" style="display:none">
+    <label>
+      <input type="checkbox" id="combined-impact-checkbox">
+      Include paragraph about the cumulative impact of Cearn Solar Farm and the White Horse Reservoir
+    </label>
+  </div>
+
+  <div id="letter-output"></div>
+
+  <div class="letter-actions">
+    <button id="copy-letter" style="display:none">Copy letter</button>
+    <button id="email-letter" style="display:none">Open in email client</button>
+    <button id="download-zip" style="display:none">Download all letters as ZIP</button>
+  </div>
+
+  <p class="correction-link-para">
+    <a href="https://github.com/davidmcneil99/white-horse-reservoir/issues/new?title=Correction+report&amp;body=What+is+wrong%3A%0AWhat+it+should+say%3A%0ASource+URL%3A" class="correction-link">Report an error in this letter</a>
+  </p>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}

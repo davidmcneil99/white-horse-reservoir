@@ -18,7 +18,9 @@ _HERE = Path(__file__).parent
 _ROOT = _HERE.parent
 
 DATA_DIR = _ROOT / "data"
-CONTENT_DIR = DATA_DIR / "content"
+RES_DATA_DIR   = DATA_DIR / "reservoir"
+CEARN_DATA_DIR = DATA_DIR / "cearn"
+CONTENT_DIR    = RES_DATA_DIR / "content"
 TEMPLATES_DIR = _ROOT / "templates"
 
 
@@ -75,30 +77,30 @@ def load_all_data() -> dict:
     )
 
     # --- CSV files ---
-    with (DATA_DIR / "representatives.csv").open(encoding="utf-8", newline="") as fh:
+    with (RES_DATA_DIR / "representatives.csv").open(encoding="utf-8", newline="") as fh:
         representatives: list[dict] = list(csv.DictReader(fh))
 
-    with (DATA_DIR / "local-councils.csv").open(encoding="utf-8", newline="") as fh:
+    with (RES_DATA_DIR / "local-councils.csv").open(encoding="utf-8", newline="") as fh:
         local_councils: list[dict] = list(csv.DictReader(fh))
 
-    with (DATA_DIR / "access-points.csv").open(encoding="utf-8", newline="") as fh:
+    with (RES_DATA_DIR / "access-points.csv").open(encoding="utf-8", newline="") as fh:
         access_points: list[dict] = list(csv.DictReader(fh))
 
     # --- Sources: still_to_check_by_hand ---
     sources_raw = json.loads(
-        (DATA_DIR / "white-horse-reservoir-sources.json").read_text(encoding="utf-8")
+        (RES_DATA_DIR / "white-horse-reservoir-sources.json").read_text(encoding="utf-8")
     )
     still_to_check: list[str] = sources_raw.get("still_to_check_by_hand", [])
 
     # --- Fetched news items ---
-    news_items_path = DATA_DIR / "fetched" / "news_items.json"
+    news_items_path = RES_DATA_DIR / "fetched" / "news_items.json"
     if news_items_path.exists():
         news_items: list[dict] = json.loads(news_items_path.read_text(encoding="utf-8"))
     else:
         news_items = []
 
     # --- Overrides ---
-    overrides_path = DATA_DIR / "overrides.json"
+    overrides_path = RES_DATA_DIR / "overrides.json"
     if overrides_path.exists():
         overrides: list[dict] = json.loads(overrides_path.read_text(encoding="utf-8"))
     else:
@@ -172,6 +174,8 @@ def load_all_data() -> dict:
         key=lambda a: a.get("featured_order", 99),
     )
 
+    cearn_data = load_cearn_data()
+
     return {
         "timeline": timeline,
         "quotes": quotes,
@@ -185,6 +189,59 @@ def load_all_data() -> dict:
         "corrections": corrections,
         "still_to_check": still_to_check,
         "built_on": date.today().isoformat(),
+        "cearn_timeline":          cearn_data["cearn_timeline"],
+        "cearn_quotes":            cearn_data["cearn_quotes"],
+        "cearn_actions":           cearn_data["cearn_actions"],
+        "cearn_featured_actions":  cearn_data["cearn_featured_actions"],
+        "cearn_news_items":        cearn_data["cearn_news_items"],
+        "links_to_reservoir":      cearn_data["links_to_reservoir"],
+    }
+
+
+def load_cearn_data() -> dict:
+    """Load Cearn Solar Farm content data and return a context sub-dict."""
+    cearn_content = CEARN_DATA_DIR / "content"
+    timeline: list[dict] = json.loads((cearn_content / "timeline.json").read_text(encoding="utf-8"))
+    quotes: list[dict] = json.loads((cearn_content / "quotes.json").read_text(encoding="utf-8"))
+    actions: list[dict] = json.loads((cearn_content / "actions.json").read_text(encoding="utf-8"))
+    overrides_path = CEARN_DATA_DIR / "overrides.json"
+    overrides = json.loads(overrides_path.read_text(encoding="utf-8")) if overrides_path.exists() else []
+
+    timeline = apply_overrides(timeline, overrides, "timeline")
+    quotes   = apply_overrides(quotes,   overrides, "quote")
+    actions  = apply_overrides(actions,  overrides, "action")
+
+    for item in timeline:
+        item["date_display"] = format_date(item["date"], item.get("date_precision", "day"))
+        item["is_forecast"] = item.get("status") == "forecast"
+
+    for item in quotes:
+        item["date_display"] = format_date(item["date"], item.get("date_precision", "day"))
+
+    # Sort actions by timing order
+    timing_order = {"now": 0, "on-submission": 1, "on-acceptance": 2, "ongoing": 3}
+    indexed = list(enumerate(actions))
+    indexed.sort(key=lambda x: (timing_order.get(x[1].get("timing", ""), 99), x[1].get("deadline") or "9999-12-31", x[0]))
+    actions[:] = [a for _, a in indexed]
+
+    cearn_news_path = CEARN_DATA_DIR / "fetched" / "news_items.json"
+    cearn_news = json.loads(cearn_news_path.read_text(encoding="utf-8")) if cearn_news_path.exists() else []
+
+    cearn_featured_actions = sorted(
+        [a for a in actions if a.get("featured")],
+        key=lambda a: a.get("featured_order", 99),
+    )
+
+    cearn_sources = json.loads((CEARN_DATA_DIR / "cearn-solar-farm-sources.json").read_text(encoding="utf-8"))
+    links_to_reservoir = cearn_sources.get("links_to_reservoir", {})
+
+    return {
+        "cearn_timeline": timeline,
+        "cearn_quotes":   quotes,
+        "cearn_actions":  actions,
+        "cearn_featured_actions": cearn_featured_actions,
+        "cearn_news_items": cearn_news,
+        "links_to_reservoir": links_to_reservoir,
     }
 
 
@@ -207,6 +264,7 @@ def _build_lookup_data(data: dict) -> dict:
             "profile_url": r.get("profile_url", ""),
             "places": r.get("places", ""),
             "stance": r.get("stance", ""),
+            "projects": r.get("projects", "reservoir"),
         }
         for r in data["representatives"]
     ]
@@ -250,6 +308,12 @@ def _build_lookup_data(data: dict) -> dict:
         "address": defra_fm.get("recipient_address", ""),
     }
 
+    desnz_recipient = {
+        "name": "Miatta Fahnbulleh MP",
+        "email": "",
+        "address": "Ministerial Correspondence Team, Level 3, 55 Whitehall, London SW1A 2HP",
+    }
+
     return {
         "representatives": reps,
         "parishes": parishes,
@@ -257,6 +321,7 @@ def _build_lookup_data(data: dict) -> dict:
         "letter_recipients": {
             "mp": mp_recipient,
             "defra": defra_recipient,
+            "desnz": desnz_recipient,
         },
     }
 
@@ -264,28 +329,40 @@ def _build_lookup_data(data: dict) -> dict:
 def _build_letters_data() -> dict:
     """Read all letter template .md files and return a dict for letters-data.json.
 
-    Each entry key is the filename stem (e.g. ``mp.md`` -> ``"mp"``).  Each
-    value is the flat frontmatter dict with an added ``"body"`` key containing
-    the template body text (plain text with ``{{placeholder}}`` tokens).
+    Reads from both ``data/reservoir/content/letters/`` and
+    ``data/cearn/content/letters/``.  Each entry key is the filename stem
+    (e.g. ``mp.md`` -> ``"mp"``).  Each value is the flat frontmatter dict
+    with an added ``"body"`` key containing the template body text (plain text
+    with ``{{placeholder}}`` tokens) and a ``"project"`` key (``"reservoir"``
+    or ``"cearn"``).
 
     Returns:
         Dict mapping template key -> entry dict.
     """
-    letters_dir = CONTENT_DIR / "letters"
+    letters_dirs = [
+        (CONTENT_DIR / "letters", "reservoir"),
+        (CEARN_DATA_DIR / "content" / "letters", "cearn"),
+    ]
     result: dict = {}
-    for path in sorted(letters_dir.glob("*.md")):
-        text = path.read_text(encoding="utf-8")
-        fm = _parse_frontmatter(text)
-        # Extract body: everything after the second '---' delimiter.
-        lines = text.splitlines()
-        delimiters = [i for i, ln in enumerate(lines) if ln.strip() == "---"]
-        if len(delimiters) >= 2:
-            body = "\n".join(lines[delimiters[1] + 1 :]).strip()
-        else:
-            body = text.strip()
-        entry = dict(fm)
-        entry["body"] = body
-        result[path.stem] = entry
+    for letters_dir, default_project in letters_dirs:
+        if not letters_dir.exists():
+            continue
+        for path in sorted(letters_dir.glob("*.md")):
+            text = path.read_text(encoding="utf-8")
+            fm = _parse_frontmatter(text)
+            # Extract body: everything after the second '---' delimiter.
+            lines = text.splitlines()
+            delimiters = [i for i, ln in enumerate(lines) if ln.strip() == "---"]
+            if len(delimiters) >= 2:
+                body = "\n".join(lines[delimiters[1] + 1 :]).strip()
+            else:
+                body = text.strip()
+            entry = dict(fm)
+            entry["body"] = body
+            # Tag with project; use frontmatter value if present, else default.
+            if "project" not in entry:
+                entry["project"] = default_project
+            result[path.stem] = entry
     return result
 
 
@@ -309,18 +386,30 @@ def build(output_dir: Path = Path("docs")) -> None:
     )
 
     pages = [
-        ("index.html", "index.html"),
-        ("about.html", "about.html"),
-        ("facts.html", "facts.html"),
-        ("actions.html", "actions.html"),
-        ("letters.html", "letters.html"),
-        ("corrections.html", "corrections.html"),
-        ("access-points.html", "access-points.html"),
+        ("index.html", "index.html", "home"),
+        ("about.html", "about.html", "about"),
+        ("facts.html", "facts.html", "res-facts"),
+        ("actions.html", "actions.html", "res-actions"),
+        ("letters.html", "letters.html", "res-letters"),
+        ("corrections.html", "corrections.html", ""),
+        ("access-points.html", "access-points.html", "access-points"),
     ]
 
-    for template_name, output_name in pages:
+    solar_pages = [
+        ("solar-facts.html", "solar-facts.html", "solar-facts"),
+        ("solar-actions.html", "solar-actions.html", "solar-actions"),
+        ("solar-letters.html", "solar-letters.html", "solar-letters"),
+        ("combined-impacts.html", "combined-impacts.html", "combined"),
+    ]
+
+    available_templates = env.list_templates()
+    for template_name, output_name, page_id in solar_pages:
+        if template_name in available_templates:
+            pages.append((template_name, output_name, page_id))
+
+    for template_name, output_name, page_id in pages:
         template = env.get_template(template_name)
-        rendered = template.render(**data)
+        rendered = template.render(**data, page_id=page_id)
         out_path = output_dir / output_name
         out_path.write_text(rendered, encoding="utf-8")
         logging.info("Wrote %s", out_path)
