@@ -11,32 +11,17 @@
     cearn:     { color: '#d97706', label: 'Cearn Solar Farm (EN0110044)' }
   };
 
-  // DCO project boundary — traces the red DCO Order Limits line from the
-  // Thames Water reference map. Covers the full main project area: reservoir body,
-  // NW and N wetlands, southern rail siding, and all associated access corridors.
-  // Excludes the eastern Thames intake/tunnel corridor to Sutton Courtenay.
-  // Clockwise from NW; anchored against verified access-point coordinates.
+  // DCO project boundary — OSM-anchored coordinates supplied by David, clockwise from NE.
+  // Starting set of 8 points; further refinement points to be added.
   var WHR_RESERVOIR_BODY = [
-    [51.658, -1.445],   // NW corner — west of A8 (Kingston Bagpuize area)
-    [51.663, -1.425],   // N-NW
-    [51.669, -1.400],   // N — above reservoir body
-    [51.673, -1.372],   // N-NE
-    [51.674, -1.345],   // NE plateau
-    [51.671, -1.318],   // NE — near A1 (51.6694, -1.313) / A13 (51.6705, -1.3178)
-    [51.663, -1.305],   // E-N — near A14 (51.6682, -1.3041) / A6 (51.6572, -1.3027)
-    [51.648, -1.298],   // E
-    [51.628, -1.312],   // E-SE
-    [51.612, -1.322],   // SE — near A11 (51.6064, -1.326)
-    [51.602, -1.340],   // SE — near A10 (51.6017, -1.3395)
-    [51.595, -1.368],   // S — near A9 (51.5981, -1.3766)
-    [51.594, -1.400],   // S-SW
-    [51.600, -1.435],   // SW
-    [51.608, -1.490],   // SW — near A17 (51.6124, -1.4877) rail siding
-    [51.622, -1.492],   // W-SW
-    [51.630, -1.455],   // W
-    [51.636, -1.440],   // W-NW
-    [51.649, -1.440],   // W-NW — near A8 (51.6496, -1.4132)
-    [51.658, -1.445]    // back to NW
+    [51.66862, -1.31201],   // NE
+    [51.63858, -1.31544],   // E (going south)
+    [51.62990, -1.31930],   // E
+    [51.62873, -1.32823],   // E-SE
+    [51.62404, -1.33192],   // SE
+    [51.60701, -1.33128],   // S (SE corner)
+    [51.61389, -1.41273],   // SW corner
+    [51.66925, -1.36213]    // N/NW
   ];
 
   // Access point coordinates.
