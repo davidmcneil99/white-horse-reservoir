@@ -13,18 +13,32 @@
   <header class="site-header">
     <div class="container header-inner">
       <a href="/white-horse-reservoir/" class="site-title">White Horse Reservoir</a>
-      <button class="nav-toggle-btn" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation">
-        <span></span><span></span><span></span>
-      </button>
-      <nav class="site-nav" id="site-nav" aria-label="Main navigation">
-        <ul>
-          <li><a href="/white-horse-reservoir/">Home</a></li>
-          <li><a href="/white-horse-reservoir/facts.html">Facts</a></li>
-          <li><a href="/white-horse-reservoir/actions.html">Actions</a></li>
-          <li><a href="/white-horse-reservoir/letters.html">Letters</a></li>
-          <li><a href="/white-horse-reservoir/about.html">About</a></li>
-        </ul>
-      </nav>
+      <nav aria-label="Site navigation">
+  <input type="checkbox" id="nav-toggle" class="nav-toggle-check" aria-hidden="true">
+  <label for="nav-toggle" class="nav-toggle-label">Menu</label>
+  <ul class="nav-primary">
+    <li><a href="index.html" aria-current="page">Home</a></li>
+    <li class="has-dropdown">
+      <a href="facts.html" >Reservoir</a>
+      <ul class="nav-dropdown">
+        <li><a href="facts.html" >Facts &amp; timeline</a></li>
+        <li><a href="actions.html" >What you can do</a></li>
+        <li><a href="letters.html" >Write letters</a></li>
+        <li><a href="access-points.html" >Access points</a></li>
+      </ul>
+    </li>
+    <li class="has-dropdown">
+      <a href="solar-facts.html" >Solar Farm</a>
+      <ul class="nav-dropdown">
+        <li><a href="solar-facts.html" >Facts &amp; timeline</a></li>
+        <li><a href="solar-actions.html" >What you can do</a></li>
+        <li><a href="solar-letters.html" >Write letters</a></li>
+      </ul>
+    </li>
+    <li><a href="combined-impacts.html" >Combined Impacts</a></li>
+    <li><a href="about.html" >About</a></li>
+  </ul>
+</nav>
     </div>
   </header>
 
@@ -113,6 +127,10 @@
 
 <section class="map-section">
   <h2>Reservoir location and access points</h2>
+  <div class="map-layer-toggles">
+    <label><input type="checkbox" id="show-reservoir" checked> Reservoir (WA010005)</label>
+    <label><input type="checkbox" id="show-cearn" checked> Solar Farm (EN0110044)</label>
+  </div>
   <div id="reservoir-map" aria-label="Map showing reservoir location and access points" style="height:400px"></div>
 </section>
 
@@ -167,7 +185,7 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p>Built by volunteers in support of GARD's campaign. Independent of GARD. Last updated: 2026-11-01.</p>
+      <p>Built by volunteers in support of GARD's campaign. Independent of GARD. Last updated: 2026-11-02.</p>
     </div>
   </footer>
 
@@ -179,12 +197,11 @@
 
   <script>
     (function () {
-      var btn = document.querySelector('.nav-toggle-btn');
-      var nav = document.getElementById('site-nav');
-      if (btn && nav) {
-        btn.addEventListener('click', function () {
-          var open = nav.classList.toggle('is-open');
-          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      var toggle = document.getElementById('nav-toggle');
+      var navPrimary = document.querySelector('.nav-primary');
+      if (toggle && navPrimary) {
+        toggle.addEventListener('change', function () {
+          navPrimary.classList.toggle('is-open', toggle.checked);
         });
       }
     }());

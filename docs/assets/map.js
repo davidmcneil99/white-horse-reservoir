@@ -5,6 +5,12 @@
   var container = document.getElementById('reservoir-map');
   if (!container) return;   // <-- Ruling 7: guard
 
+  // Layer definitions for both Planning Inspectorate projects.
+  var layers = {
+    reservoir: { color: '#2563eb', label: 'White Horse Reservoir (WA010005)' },
+    cearn:     { color: '#d97706', label: 'Cearn Solar Farm (EN0110044)' }
+  };
+
   // DCO Order Limits polygon — Planning Inspectorate WA010005 (received 2026-09-03).
   // Simplified from 3,197 points to 43 using Ramer-Douglas-Peucker (ε=0.002°).
   // Source: https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/WA010005/download-boundary
@@ -86,8 +92,8 @@
     maxZoom: 18
   }).addTo(map);
 
-  L.polygon(WHR_DCO_BOUNDARY, {
-    color: '#c0392b', weight: 2, fillOpacity: 0.1, dashArray: '8 4'
+  var reservoirLayer = L.polygon(WHR_DCO_BOUNDARY, {
+    color: layers.reservoir.color, weight: 2, fillOpacity: 0.1, dashArray: '8 4'
   }).bindPopup(
     'DCO Order Limits — Planning Inspectorate WA010005<br>' +
     '<small>Official boundary (simplified). Includes reservoir site, Thames intake/tunnel ' +
@@ -100,4 +106,45 @@
       .bindPopup('<strong>' + ap.id + '</strong><br>' + ap.label + '<br><em>Position estimated from road/locality description</em>')
       .addTo(map);
   });
+
+  // Fetch EN0110044 (Cearn Solar Farm) boundary at runtime with a graceful fallback.
+  var cearnLayer = null;
+  fetch('assets/cearn-boundary.geojson')
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+      if (data) {
+        cearnLayer = L.geoJSON(data, {
+          style: { color: layers.cearn.color, weight: 2, fillOpacity: 0.1 }
+        }).addTo(map);
+      } else {
+        console.warn('Cearn boundary not available');
+      }
+    })
+    .catch(function () { console.warn('Cearn boundary fetch failed'); });
+
+  // Layer toggle checkboxes — wire up after DOM ready.
+  var reservoirToggle = document.getElementById('show-reservoir');
+  var cearnToggle = document.getElementById('show-cearn');
+
+  if (reservoirToggle) {
+    reservoirToggle.addEventListener('change', function () {
+      if (this.checked) {
+        map.addLayer(reservoirLayer);
+      } else {
+        map.removeLayer(reservoirLayer);
+      }
+    });
+  }
+
+  if (cearnToggle) {
+    cearnToggle.addEventListener('change', function () {
+      if (cearnLayer) {
+        if (this.checked) {
+          map.addLayer(cearnLayer);
+        } else {
+          map.removeLayer(cearnLayer);
+        }
+      }
+    });
+  }
 }());
