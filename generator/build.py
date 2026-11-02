@@ -194,6 +194,7 @@ def load_all_data() -> dict:
         "cearn_actions":           cearn_data["cearn_actions"],
         "cearn_featured_actions":  cearn_data["cearn_featured_actions"],
         "cearn_news_items":        cearn_data["cearn_news_items"],
+        "links_to_reservoir":      cearn_data["links_to_reservoir"],
     }
 
 
@@ -231,12 +232,16 @@ def load_cearn_data() -> dict:
         key=lambda a: a.get("featured_order", 99),
     )
 
+    cearn_sources = json.loads((CEARN_DATA_DIR / "cearn-solar-farm-sources.json").read_text(encoding="utf-8"))
+    links_to_reservoir = cearn_sources.get("links_to_reservoir", {})
+
     return {
         "cearn_timeline": timeline,
         "cearn_quotes":   quotes,
         "cearn_actions":  actions,
         "cearn_featured_actions": cearn_featured_actions,
         "cearn_news_items": cearn_news,
+        "links_to_reservoir": links_to_reservoir,
     }
 
 

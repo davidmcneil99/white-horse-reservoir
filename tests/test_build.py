@@ -259,3 +259,10 @@ def test_desnz_letter_has_postal_address():
 def test_combined_impact_placeholder_in_solar_letter():
     data = _build_letters_data()
     assert "{{combined_impact_para}}" in data.get("desnz-secretary-of-state", {}).get("body", "")
+
+
+def test_combined_impacts_page_generated():
+    build()
+    html = Path("docs/combined-impacts.html").read_text(encoding="utf-8")
+    assert "A338" in html
+    assert "not yet confirmed" in html.lower() or "not established" in html.lower()
