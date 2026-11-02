@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% set page_id = 'solar-actions' %}
+
+{% block title %}What You Can Do | Cearn Solar Farm | White Horse Reservoir{% endblock %}
+
+{% block content %}
+<h1>Cearn Solar Farm: What You Can Do</h1>
+
+<div class="notice-banner" role="note">
+  <p>The Vale of White Horse is a statutory consultee for this application, not the decision-maker. Write to your Vale councillors asking them to strengthen the Vale's Local Impact Report -- not to block the scheme. The decision is made by the Secretary of State for Energy Security and Net Zero (DESNZ), not Defra.</p>
+</div>
+
+{% for timing_value, timing_label in [("now", "Act now"), ("on-submission", "After DCO submission"), ("on-acceptance", "After DCO acceptance"), ("ongoing", "Ongoing")] %}
+  {% set timing_actions = cearn_actions | selectattr("timing", "equalto", timing_value) | list %}
+  {% if timing_actions %}
+  <section class="actions-group" id="solar-actions-{{ timing_value }}">
+    <h2>{{ timing_label }}</h2>
+    {% for action in timing_actions %}
+    <article class="action-item" id="action-{{ action.id }}">
+      <h3>{{ action.title }}</h3>
+      <p>{{ action.description }}</p>
+      <p class="action-who"><strong>Who can do this:</strong> {{ action.who_can }}</p>
+      {% if action.deadline is defined and action.deadline %}
+      <p class="action-deadline"><strong>Deadline:</strong> {{ action.deadline }}</p>
+      {% endif %}
+      {% if action.source_url %}
+      <p><a href="{{ action.source_url }}" rel="noopener noreferrer">{{ action.source_label if action.source_label else "More information" }}</a></p>
+      {% endif %}
+      {% if action.is_legal_info %}
+      <p class="legal-disclaimer">This is general information, not legal advice.</p>
+      {% endif %}
+      {% if action.letter_key %}
+      <p><a class="action-letter-btn" href="solar-letters.html#{{ action.letter_key }}">Generate letter</a></p>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+{% endfor %}
+{% endblock %}

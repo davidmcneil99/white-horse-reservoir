@@ -1,11 +1,12 @@
 """Feed fetcher for the White Horse Reservoir campaign site.
 
 Fetches RSS feeds, JSON APIs, and monitors pages for changes.
-Run as a script (python3 generator/fetch.py) to update data/fetched/.
+Run as a script (python3 generator/fetch.py) to update data/reservoir/fetched/.
 """
 
 import csv
 import hashlib
+import json
 import logging
 import urllib.robotparser
 from datetime import date
@@ -19,6 +20,11 @@ USER_AGENT = "WHReservoir/1.0 (+https://github.com/davidmcneil99/white-horse-res
 _HEADERS = {"User-Agent": USER_AGENT}
 
 logger = logging.getLogger(__name__)
+
+_HERE = Path(__file__).parent
+_ROOT = _HERE.parent
+RES_DATA_DIR = _ROOT / "data" / "reservoir"
+CEARN_DATA_DIR = _ROOT / "data" / "cearn"
 
 _robots_cache: dict[str, urllib.robotparser.RobotFileParser] = {}
 
@@ -204,18 +210,152 @@ def detect_page_change(url: str, old_hashes: dict) -> tuple[bool, str]:
 
 
 def load_sources() -> list[dict]:
-    """Load sources from data/national-and-other-sources.csv."""
-    csv_path = Path("data/national-and-other-sources.csv")
+    """Load sources from both reservoir CSV and cearn JSON, merged into one list."""
+    csv_path = RES_DATA_DIR / "national-and-other-sources.csv"
+    reservoir_sources: list[dict] = []
     if not csv_path.exists():
         logging.warning("load_sources: CSV not found at %s", csv_path)
+    else:
+        with csv_path.open(encoding="utf-8", newline="") as fh:
+            reader = csv.DictReader(fh)
+            for row in reader:
+                entry = dict(row)
+                entry.setdefault("project", "reservoir")
+                reservoir_sources.append(entry)
+
+    cearn_sources = load_cearn_sources()
+    return reservoir_sources + cearn_sources
+
+
+# Names of cearn local-council sources with no online presence that require
+# manual monitoring only.
+_CEARN_UNMONITORABLE = [
+    "Goosey",
+    "Baulking",
+    "Denchworth",
+    "Garford",
+    "Lyford",
+    "Frilford",
+    "Hatford",
+    "Besselsleigh",
+]
+
+
+def load_cearn_sources() -> list[dict]:
+    """Load monitoring sources from data/cearn/cearn-solar-farm-sources.json.
+
+    Returns a list of source dicts tagged project: cearn.
+    Sources with no online presence are logged once per run; they are not
+    returned because there is nothing to poll automatically.
+    """
+    json_path = CEARN_DATA_DIR / "cearn-solar-farm-sources.json"
+    if not json_path.exists():
+        logging.warning("load_cearn_sources: JSON not found at %s", json_path)
         return []
 
-    sources = []
-    with csv_path.open(encoding="utf-8", newline="") as fh:
-        reader = csv.DictReader(fh)
-        for row in reader:
-            sources.append(dict(row))
+    with json_path.open(encoding="utf-8") as fh:
+        data = json.load(fh)
+
+    # Log unmonitorable sources once per call.
+    for name in _CEARN_UNMONITORABLE:
+        logging.info(
+            "No automated monitoring for %s: no online presence; manual check required.",
+            name,
+        )
+
+    sources: list[dict] = []
+
+    # --- National and other sources from the JSON ---
+    for item in data.get("national_and_other_sources", []):
+        url = item.get("url", "").strip()
+        name = item.get("name", "").strip()
+        feed_info = item.get("feed", "").strip().lower()
+        status = item.get("status", "").lower()
+
+        if not url or not name:
+            continue
+        if "mirror only" in item.get("notes", "").lower():
+            continue
+
+        if "rss" in feed_info or "atom" in feed_info:
+            sources.append({
+                "name": name,
+                "type": "rss",
+                "url": url,
+                "project": "cearn",
+            })
+        elif ("json" in feed_info or "json api" in feed_info) and "planninginspectorate.gov.uk" not in url:
+            # Hansard and written questions (HTML PINS pages are not JSON APIs)
+            sources.append({
+                "name": name,
+                "type": "json_api",
+                "url": url,
+                "title_field": "title",
+                "url_field": "url",
+                "date_field": "date",
+                "summary_field": "summary",
+                "project": "cearn",
+            })
+        elif ("json" in feed_info or "json api" in feed_info) and "planninginspectorate.gov.uk" in url:
+            # PINS project page is HTML, not a JSON API - use page_change detection.
+            if url.startswith("http"):
+                sources.append({
+                    "name": name,
+                    "type": "page_change",
+                    "url": url,
+                    "project": "cearn",
+                })
+        elif "none" in feed_info or feed_info == "" or "email" in feed_info:
+            # Page-change detection for key pages with no RSS feed.
+            if "works" in status and url.startswith("http"):
+                sources.append({
+                    "name": name,
+                    "type": "page_change",
+                    "url": url,
+                    "project": "cearn",
+                })
+
+    # --- Local council RSS feeds ---
+    for council in data.get("local_councils", []):
+        council_name = council.get("name", "").strip()
+        for feed_entry in council.get("feeds", []):
+            feed_url = feed_entry.get("url", "").strip()
+            feed_status = feed_entry.get("status", "").lower()
+            if not feed_url:
+                continue
+            if "works" not in feed_status:
+                continue
+            sources.append({
+                "name": f"{council_name} feed",
+                "type": "rss",
+                "url": feed_url,
+                "project": "cearn",
+            })
+
     return sources
+
+
+def check_forecast_dates(timeline: list) -> None:
+    """Warn if a forecast date has passed without confirmation."""
+    today = date.today()
+    for item in timeline:
+        if not (item.get("is_forecast") or item.get("status") == "forecast"):
+            continue
+        raw = str(item.get("date", ""))
+        try:
+            if len(raw) == 7:  # YYYY-MM
+                item_date = date.fromisoformat(raw + "-01")
+            elif len(raw) == 10:
+                item_date = date.fromisoformat(raw)
+            else:
+                continue
+        except ValueError:
+            continue
+        if item_date < today:
+            logging.warning(
+                "Forecast date %s passed without confirmation: %s",
+                raw, item.get("event", "")
+            )
 
 
 def fetch_all(sources: list[dict], hashes: dict) -> tuple[list[dict], dict]:
@@ -235,8 +375,12 @@ def fetch_all(sources: list[dict], hashes: dict) -> tuple[list[dict], dict]:
         if not url:
             continue
 
+        project = source.get("project", "reservoir")
+
         if source_type == "rss":
             items = fetch_rss(url, name)
+            for item in items:
+                item.setdefault("project", project)
             new_items.extend(items)
 
         elif source_type in ("json_api", "json api"):
@@ -245,6 +389,8 @@ def fetch_all(sources: list[dict], hashes: dict) -> tuple[list[dict], dict]:
             date_field = source.get("date_field", "date")
             summary_field = source.get("summary_field", "summary")
             items = fetch_json_api(url, name, title_field, url_field, date_field, summary_field)
+            for item in items:
+                item.setdefault("project", project)
             new_items.extend(items)
 
         elif source_type in ("page_change", "page change"):
@@ -258,6 +404,7 @@ def fetch_all(sources: list[dict], hashes: dict) -> tuple[list[dict], dict]:
                     "source_name": name,
                     "summary": "",
                     "ai_generated": False,
+                    "project": project,
                 })
 
     return new_items, updated_hashes
@@ -267,19 +414,53 @@ if __name__ == "__main__":
     import json
 
     sources = load_sources()
-    hashes_path = Path("data/fetched/page_hashes.json")
-    news_path = Path("data/fetched/news_items.json")
 
-    hashes = json.loads(hashes_path.read_text(encoding="utf-8")) if hashes_path.exists() else {}
-    existing = json.loads(news_path.read_text(encoding="utf-8")) if news_path.exists() else []
+    # Build per-project hash dicts from their respective stored files.
+    res_hashes_path   = RES_DATA_DIR   / "fetched" / "page_hashes.json"
+    cearn_hashes_path = CEARN_DATA_DIR / "fetched" / "page_hashes.json"
+    res_news_path     = RES_DATA_DIR   / "fetched" / "news_items.json"
+    cearn_news_path   = CEARN_DATA_DIR / "fetched" / "news_items.json"
 
-    new_items, new_hashes = fetch_all(sources, hashes)
+    res_hashes   = json.loads(res_hashes_path.read_text(encoding="utf-8"))   if res_hashes_path.exists()   else {}
+    cearn_hashes = json.loads(cearn_hashes_path.read_text(encoding="utf-8")) if cearn_hashes_path.exists() else {}
 
-    existing_urls = {i["url"] for i in existing}
-    to_add = [i for i in new_items if i["url"] not in existing_urls]
-    all_items = (to_add + existing)[:500]  # max 500, newest first
+    # Merge hashes for fetch_all (it needs to see all existing hashes).
+    merged_hashes = {**res_hashes, **cearn_hashes}
 
-    news_path.parent.mkdir(parents=True, exist_ok=True)
-    news_path.write_text(json.dumps(all_items, indent=2, ensure_ascii=False), encoding="utf-8")
-    hashes_path.write_text(json.dumps(new_hashes, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"Fetched {len(to_add)} new items")
+    new_items, new_hashes = fetch_all(sources, merged_hashes)
+
+    # Determine which source URLs belong to cearn.
+    cearn_source_urls = {s["url"] for s in sources if s.get("project") == "cearn"}
+
+    # Split new items by project.
+    res_new_items   = [i for i in new_items if i.get("project") != "cearn"]
+    cearn_new_items = [i for i in new_items if i.get("project") == "cearn"]
+
+    # Write reservoir news.
+    res_existing     = json.loads(res_news_path.read_text(encoding="utf-8"))   if res_news_path.exists()   else []
+    res_existing_urls = {i["url"] for i in res_existing}
+    res_to_add       = [i for i in res_new_items if i["url"] not in res_existing_urls]
+    res_all          = (res_to_add + res_existing)[:500]
+    res_news_path.parent.mkdir(parents=True, exist_ok=True)
+    res_news_path.write_text(json.dumps(res_all, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    # Write cearn news.
+    cearn_existing      = json.loads(cearn_news_path.read_text(encoding="utf-8")) if cearn_news_path.exists() else []
+    cearn_existing_urls = {i["url"] for i in cearn_existing}
+    cearn_to_add        = [i for i in cearn_new_items if i["url"] not in cearn_existing_urls]
+    cearn_all           = (cearn_to_add + cearn_existing)[:500]
+    cearn_news_path.parent.mkdir(parents=True, exist_ok=True)
+    cearn_news_path.write_text(json.dumps(cearn_all, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    # Split hashes back by project (keyed by source URL).
+    res_hashes_out   = {url: h for url, h in new_hashes.items() if url not in cearn_source_urls}
+    cearn_hashes_out = {url: h for url, h in new_hashes.items() if url in cearn_source_urls}
+    res_hashes_path.write_text(json.dumps(res_hashes_out, indent=2, ensure_ascii=False), encoding="utf-8")
+    cearn_hashes_path.write_text(json.dumps(cearn_hashes_out, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    print(f"Fetched {len(res_to_add)} new reservoir items, {len(cearn_to_add)} new cearn items")
+
+    cearn_timeline_path = CEARN_DATA_DIR / "content" / "timeline.json"
+    if cearn_timeline_path.exists():
+        cearn_timeline = json.loads(cearn_timeline_path.read_text(encoding="utf-8"))
+        check_forecast_dates(cearn_timeline)

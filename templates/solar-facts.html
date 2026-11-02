@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% set page_id = 'solar-facts' %}
+
+{% block title %}Facts &amp; Timeline | Cearn Solar Farm | White Horse Reservoir{% endblock %}
+
+{% block content %}
+<h1>Cearn Solar Farm (EN0110044)</h1>
+
+<p>A Nationally Significant Infrastructure Project (NSIP) proposed south of Garford in the Vale of White Horse.
+See also the <a href="combined-impacts.html">Combined Impacts</a> page for how this scheme interacts with the reservoir proposal.</p>
+
+<section class="scheme-summary-section">
+  <h2>Scheme summary</h2>
+  <table class="scheme-summary-table">
+    <tbody>
+      <tr>
+        <th scope="row">Applicant</th>
+        <td>Cearn Solar Farm Limited (wholly owned subsidiary of Telis Energy UK)</td>
+      </tr>
+      <tr>
+        <th scope="row">Size</th>
+        <td>Up to 500&nbsp;MW, approximately 2,800 acres</td>
+      </tr>
+      <tr>
+        <th scope="row">Location</th>
+        <td>South of Garford, east of Charney Bassett, north of West Hanney, south of Goosey, north-east of Baulking (Vale of White Horse district)</td>
+      </tr>
+      <tr>
+        <th scope="row">Decision-maker</th>
+        <td>Secretary of State for Energy Security and Net Zero (DESNZ)</td>
+      </tr>
+      <tr>
+        <th scope="row">Planning Inspectorate reference</th>
+        <td>EN0110044</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="scheme-note">The Vale of White Horse is a statutory consultee, not the planning authority for this application.</p>
+</section>
+
+<section class="timeline-section">
+  <h2>Timeline</h2>
+  <p>Events in reverse chronological order. Forecast dates are indicative.</p>
+
+  <ol class="timeline-list" reversed>
+    {% for item in cearn_timeline | reverse %}
+    <li class="timeline-item{% if item.is_forecast %} forecast-item{% endif %}" id="ct-{{ item.id }}">
+      <div class="timeline-date">{{ item.date_display }}{% if item.is_forecast %} <span class="forecast-label">(forecast)</span>{% endif %}</div>
+      <div class="timeline-event">
+        {{ item.event }}
+        {% if item.source_url %}
+          <a class="source-link" href="{{ item.source_url }}" rel="external noopener">Source</a>
+        {% endif %}
+      </div>
+      {% if item.last_checked %}
+      <div class="timeline-checked">Last checked: {{ item.last_checked }}</div>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="positions-section">
+  <h2>Positions and statements</h2>
+  <p>Statements from public figures, organisations and bodies about the Cearn Solar Farm proposal.</p>
+
+  {% for q in cearn_quotes %}
+  <blockquote class="quote-item" id="cq-{{ q.id }}">
+    <p>{{ q.quote }}</p>
+    <footer>
+      <cite>{{ q.speaker }}{% if q.role %}, {{ q.role }}{% endif %}</cite>
+      {% if q.date %}
+        <span class="quote-date">{{ q.date_display }}</span>
+      {% endif %}
+      {% if q.source_url %}
+        <a class="source-link" href="{{ q.source_url }}" rel="external noopener">Source</a>
+      {% endif %}
+    </footer>
+    {% if q.note %}
+    <p class="quote-note">Note: {{ q.note }}</p>
+    {% endif %}
+  </blockquote>
+  {% endfor %}
+</section>
+
+<section class="links-section">
+  <h2>Further information</h2>
+  <ul>
+    <li><a href="https://infrastructure.planninginspectorate.gov.uk/projects/south-east/cearn-solar-farm/" rel="external noopener">Planning Inspectorate: Cearn Solar Farm (EN0110044)</a></li>
+    <li><a href="https://protect-the-vale.org.uk/" rel="external noopener">Protect the Vale</a></li>
+    <li><a href="https://cearnsolarfarm.co.uk/" rel="external noopener">Cearn Solar Farm developer site</a></li>
+  </ul>
+</section>
+{% endblock %}

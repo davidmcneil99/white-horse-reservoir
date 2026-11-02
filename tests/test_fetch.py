@@ -112,3 +112,45 @@ def test_robots_allowed_404_allows():
         result = _robots_allowed("https://example.com/any/page")
     assert result is True
     _robots_cache.clear()
+
+
+def test_cearn_sources_loaded():
+    from generator.fetch import load_sources
+    sources = load_sources()
+    cearn_sources = [s for s in sources if s.get("project") == "cearn"]
+    assert len(cearn_sources) >= 5, "Expected at least 5 cearn monitoring sources"
+
+
+def test_fetch_all_stamps_project_on_items():
+    from generator.fetch import fetch_all
+    rss = """<?xml version="1.0"?><rss version="2.0"><channel>
+    <item><title>Cearn news</title><link>https://cearn.example.com/1</link>
+    <pubDate>Mon, 01 Nov 2026 00:00:00 GMT</pubDate></item></channel></rss>"""
+    mock_resp = Mock(ok=True, text=rss)
+    mock_resp.raise_for_status = Mock()
+    cearn_source = {"name": "Cearn Test", "type": "rss", "url": "https://cearn.example.com/feed", "project": "cearn"}
+    with patch("generator.fetch._robots_allowed", _allow_robots), \
+         patch("generator.fetch.requests") as mock_req:
+        mock_req.get.return_value = mock_resp
+        items, _ = fetch_all([cearn_source], {})
+    assert len(items) == 1
+    assert items[0].get("project") == "cearn"
+
+
+def test_forecast_date_warning_logged(caplog):
+    from generator.fetch import check_forecast_dates
+    import logging
+    past_forecast = [{"date": "2020-01", "event": "Past forecast", "status": "forecast", "is_forecast": True}]
+    with caplog.at_level(logging.WARNING):
+        check_forecast_dates(past_forecast)
+    assert "forecast date" in caplog.text.lower() or "passed without confirmation" in caplog.text.lower()
+
+
+def test_forecast_date_warning_with_status_field(caplog):
+    from generator.fetch import check_forecast_dates
+    import logging
+    # Uses "status": "forecast" only (no is_forecast key) as raw timeline.json uses
+    past_forecast = [{"date": "2020-01", "event": "Past forecast", "status": "forecast"}]
+    with caplog.at_level(logging.WARNING):
+        check_forecast_dates(past_forecast)
+    assert "forecast date" in caplog.text.lower() or "passed without confirmation" in caplog.text.lower()

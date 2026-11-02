@@ -1,0 +1,50 @@
+[
+  {
+    "id": "cq001",
+    "speaker": "Vale of White Horse District Council",
+    "role": "Statutory consultee; local planning authority",
+    "date": "2026-10-21",
+    "date_precision": "day",
+    "quote": "Motion passed with amendments: solar should go on non-agricultural land first and avoid high-grade farmland; local shared ownership or benefit schemes and biodiversity gain; the Vale should not bear NSIP harms while benefits leave the district; cumulative impact with Botley West, the West Oxfordshire Energy Park and the reservoir must be considered.",
+    "source_url": "https://democratic.whitehorsedc.gov.uk/mgAi.aspx?ID=38803",
+    "source_label": "Vale of White Horse: Cearn motion documents, 21 October 2026",
+    "last_checked": "2026-11-01",
+    "note": "The motion asks for a letter to Defra, but the decision-maker for Cearn is the DESNZ Secretary of State."
+  },
+  {
+    "id": "cq002",
+    "speaker": "Vale of White Horse District Council",
+    "role": "Statutory consultee; local planning authority",
+    "date": "2026-10-21",
+    "date_precision": "day",
+    "quote": "Written answers: Cearn is decided by the Secretary of State; the council is working with the Oxfordshire Association of Local Councils so parishes can input; officers are taking a programme-wide approach to cumulative impacts through the Joint Local Plan.",
+    "source_url": "https://democratic.whitehorsedc.gov.uk/documents/b10841/Written%20responses%20to%20questions%20Wednesday%2021-Oct-2026%2019.00%20Council.pdf?T=9",
+    "source_label": "Vale of White Horse: written responses to questions, 21 October 2026",
+    "last_checked": "2026-11-01",
+    "note": ""
+  },
+  {
+    "id": "cq003",
+    "speaker": "Oxfordshire County Council",
+    "role": "Statutory consultee; highways and flood authority",
+    "date": "",
+    "date_precision": "",
+    "quote": "No Cabinet decision, highways response or motion on Cearn found.",
+    "source_url": "",
+    "source_label": "",
+    "last_checked": "2026-11-01",
+    "note": "Watch for the scoping response from OCC as highways and flood authority."
+  },
+  {
+    "id": "cq004",
+    "speaker": "CPRE Oxfordshire",
+    "role": "Campaign group; statutory consultee",
+    "date": "2026-10-15",
+    "date_precision": "day",
+    "quote": "Monitoring Cearn and attended initial events; no formal position yet. Its 2023 position paper wants Grades 1, 2 and 3a land avoided, rooftops and brownfield first, and treats cumulative impact as critical.",
+    "source_url": "https://www.cpreoxon.org.uk/news/local-plans-an-update-on-the-districts/",
+    "source_label": "CPRE Oxfordshire: local plans update",
+    "last_checked": "2026-11-01",
+    "note": ""
+  }
+]

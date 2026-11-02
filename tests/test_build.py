@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from generator.build import load_all_data, build
+from generator.build import load_all_data, build, _build_letters_data
 
 
 def test_timeline_is_distant_future_flag():
@@ -134,18 +134,18 @@ def test_letters_data_json_exists(tmp_path):
 def test_correction_note_appears_in_output(tmp_path):
     # Write a temp override and verify it appears in facts/index.html
     import json, shutil
-    shutil.copy("data/overrides.json", tmp_path / "overrides_backup.json")
+    shutil.copy("data/reservoir/overrides.json", tmp_path / "overrides_backup.json")
     overrides = [{"item_type": "quote", "item_id": "q001",
                   "corrected_on": "2026-11-15", "corrected_by": "test",
                   "correction_note": "test correction", "field": "quote",
                   "new_value": "corrected text"}]
-    Path("data/overrides.json").write_text(json.dumps(overrides))
+    Path("data/reservoir/overrides.json").write_text(json.dumps(overrides))
     try:
         build(output_dir=tmp_path)
         facts = (tmp_path / "facts.html").read_text()
         assert "test correction" in facts
     finally:
-        shutil.copy(tmp_path / "overrides_backup.json", "data/overrides.json")
+        shutil.copy(tmp_path / "overrides_backup.json", "data/reservoir/overrides.json")
 
 
 def test_featured_actions_in_context():
@@ -187,3 +187,84 @@ def test_home_page_has_most_urgent_actions():
     html = Path("docs/index.html").read_text(encoding="utf-8")
     assert "Most urgent actions" in html
     assert "home-actions" in html
+
+
+def test_cearn_content_files_exist():
+    for name in ["timeline.json", "quotes.json", "actions.json"]:
+        p = Path("data/cearn/content") / name
+        assert p.exists(), f"Missing: {p}"
+
+
+def test_cearn_timeline_has_forecast_entries():
+    data = json.loads(Path("data/cearn/content/timeline.json").read_text(encoding="utf-8"))
+    forecasts = [e for e in data if e.get("status") == "forecast"]
+    assert len(forecasts) >= 3, "Expected at least 3 forecast entries (Stage 2, DCO, decision)"
+
+
+def test_cearn_keys_in_context():
+    data = load_all_data()
+    for key in ["cearn_timeline", "cearn_quotes", "cearn_actions", "cearn_featured_actions", "cearn_news_items"]:
+        assert key in data, f"Missing key: {key}"
+
+
+def test_cearn_timeline_forecast_flag():
+    data = load_all_data()
+    forecasts = [e for e in data["cearn_timeline"] if e.get("is_forecast")]
+    assert len(forecasts) >= 3
+
+
+def test_nav_contains_both_projects():
+    build()
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    assert "Solar Farm" in html
+    assert "Reservoir" in html
+    assert "Combined Impacts" in html
+
+
+def test_solar_facts_page_generated():
+    build()
+    html = Path("docs/solar-facts.html").read_text(encoding="utf-8")
+    assert "EN0110044" in html
+    assert "Cearn Solar Farm" in html
+
+
+def test_solar_facts_has_forecast_label():
+    build()
+    html = Path("docs/solar-facts.html").read_text(encoding="utf-8")
+    assert "forecast" in html.lower()
+
+
+def test_solar_actions_page_generated():
+    build()
+    html = Path("docs/solar-actions.html").read_text(encoding="utf-8")
+    assert "DESNZ" in html or "Energy Security" in html
+    assert "statutory consultee" in html.lower()
+    assert 'href="solar-letters.html#desnz-secretary-of-state"' in html
+    assert "action-item" in html  # actions actually rendered
+
+
+def test_solar_letters_page_generated():
+    build()
+    html = Path("docs/solar-letters.html").read_text(encoding="utf-8")
+    assert "DESNZ" in html or "Energy Security" in html
+    assert "desnz-secretary-of-state" in html
+
+
+def test_desnz_letter_has_postal_address():
+    build()
+    html = Path("docs/solar-letters.html").read_text(encoding="utf-8")
+    assert "55 Whitehall" in html
+
+
+def test_combined_impact_placeholder_in_solar_letter():
+    data = _build_letters_data()
+    assert "{{combined_impact_para}}" in data.get("desnz-secretary-of-state", {}).get("body", "")
+
+
+def test_combined_impacts_page_generated():
+    build()
+    html = Path("docs/combined-impacts.html").read_text(encoding="utf-8")
+    assert "A338" in html
+    assert "not yet confirmed" in html.lower() or "not established" in html.lower()
+    assert "GARD has not publicly linked the two projects" in html
+    assert "independent of both GARD and Protect the Vale" in html

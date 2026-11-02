@@ -27,6 +27,7 @@ window.WHRLetters = (function () {
   var _cache = null;
   var _currentKey = null;
   var _currentLookup = null;
+  var _combinedImpactPara = '';
 
   function _esc(str) {
     return String(str == null ? '' : str)
@@ -76,6 +77,7 @@ window.WHRLetters = (function () {
       current_date: new Date().toLocaleDateString('en-GB', {
         day: 'numeric', month: 'long', year: 'numeric'
       }),
+      combined_impact_para: _combinedImpactPara,
     };
 
     function subst(str) {
@@ -139,15 +141,24 @@ window.WHRLetters = (function () {
 
     if (!select || !output) return;
 
+    var combinedImpactControl = document.getElementById('combined-impact-control');
+    var combinedImpactCheck = document.getElementById('combined-impact-checkbox');
+    var COMBINED_IMPACT_PARA = "I also wish to draw your attention to the cumulative impact of the proposed Cearn Solar Farm and the Thames Water White Horse Reservoir (WA010005). Both schemes would affect roads including the A338 through the Hanneys, the A417 and the A415 during overlapping construction periods estimated from 2029 onwards. No combined traffic or cumulative impact assessment has been published.";
+
     async function renderCurrent() {
       var key = select.value;
       if (!key) {
         output.innerHTML = '';
         if (copyBtn)  copyBtn.style.display  = 'none';
         if (emailBtn) emailBtn.style.display = 'none';
+        if (combinedImpactControl) combinedImpactControl.style.display = 'none';
+        _combinedImpactPara = '';
         _currentKey = null;
         return;
       }
+
+      if (combinedImpactControl) combinedImpactControl.style.display = '';
+      _combinedImpactPara = (combinedImpactCheck && combinedImpactCheck.checked) ? COMBINED_IMPACT_PARA : '';
 
       // Re-run postcode lookup using current input value so the letter is
       // freshly personalised after the user has looked up their postcode.
@@ -178,6 +189,10 @@ window.WHRLetters = (function () {
     }
 
     select.addEventListener('change', renderCurrent);
+
+    if (combinedImpactCheck) {
+      combinedImpactCheck.addEventListener('change', renderCurrent);
+    }
 
     // Copy button: writes the letter plain text to the clipboard.
     if (copyBtn) {
@@ -223,6 +238,7 @@ window.WHRLetters = (function () {
             current_date: new Date().toLocaleDateString('en-GB', {
               day: 'numeric', month: 'long', year: 'numeric'
             }),
+            combined_impact_para: _combinedImpactPara,
           };
           function substFm(str) {
             return String(str == null ? '' : str).replace(/\{\{([^}]+)\}\}/g, function (_, token) {

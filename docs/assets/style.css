@@ -509,3 +509,35 @@ caption {
   color: var(--muted);
   margin-bottom: 1rem;
 }
+
+/* --- Two-tier navigation dropdowns --- */
+.has-dropdown .nav-dropdown { display: none; }
+.has-dropdown:hover .nav-dropdown,
+.has-dropdown:focus-within .nav-dropdown {
+  display: block;
+  position: absolute;
+  background: var(--color-bg, #fff);
+  list-style: none;
+  padding: 0.5rem 0;
+  min-width: 12rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 100;
+}
+
+/* Mobile nav toggle (checkbox-hack) */
+.nav-toggle-check { display: none; }
+.nav-toggle-label {
+  display: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+@media (max-width: 640px) {
+  .nav-toggle-label { display: block; }
+  .nav-primary { display: none; }
+  .nav-toggle-check:checked ~ .nav-primary { display: block; }
+}
+
+/* Cearn Solar Farm forecast entries */
+.forecast-label { color: var(--muted); font-style: italic; }
+.forecast-item { border-left: 3px solid var(--muted); }
