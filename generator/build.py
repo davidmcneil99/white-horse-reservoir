@@ -324,28 +324,40 @@ def _build_lookup_data(data: dict) -> dict:
 def _build_letters_data() -> dict:
     """Read all letter template .md files and return a dict for letters-data.json.
 
-    Each entry key is the filename stem (e.g. ``mp.md`` -> ``"mp"``).  Each
-    value is the flat frontmatter dict with an added ``"body"`` key containing
-    the template body text (plain text with ``{{placeholder}}`` tokens).
+    Reads from both ``data/reservoir/content/letters/`` and
+    ``data/cearn/content/letters/``.  Each entry key is the filename stem
+    (e.g. ``mp.md`` -> ``"mp"``).  Each value is the flat frontmatter dict
+    with an added ``"body"`` key containing the template body text (plain text
+    with ``{{placeholder}}`` tokens) and a ``"project"`` key (``"reservoir"``
+    or ``"cearn"``).
 
     Returns:
         Dict mapping template key -> entry dict.
     """
-    letters_dir = CONTENT_DIR / "letters"
+    letters_dirs = [
+        (CONTENT_DIR / "letters", "reservoir"),
+        (CEARN_DATA_DIR / "content" / "letters", "cearn"),
+    ]
     result: dict = {}
-    for path in sorted(letters_dir.glob("*.md")):
-        text = path.read_text(encoding="utf-8")
-        fm = _parse_frontmatter(text)
-        # Extract body: everything after the second '---' delimiter.
-        lines = text.splitlines()
-        delimiters = [i for i, ln in enumerate(lines) if ln.strip() == "---"]
-        if len(delimiters) >= 2:
-            body = "\n".join(lines[delimiters[1] + 1 :]).strip()
-        else:
-            body = text.strip()
-        entry = dict(fm)
-        entry["body"] = body
-        result[path.stem] = entry
+    for letters_dir, default_project in letters_dirs:
+        if not letters_dir.exists():
+            continue
+        for path in sorted(letters_dir.glob("*.md")):
+            text = path.read_text(encoding="utf-8")
+            fm = _parse_frontmatter(text)
+            # Extract body: everything after the second '---' delimiter.
+            lines = text.splitlines()
+            delimiters = [i for i, ln in enumerate(lines) if ln.strip() == "---"]
+            if len(delimiters) >= 2:
+                body = "\n".join(lines[delimiters[1] + 1 :]).strip()
+            else:
+                body = text.strip()
+            entry = dict(fm)
+            entry["body"] = body
+            # Tag with project; use frontmatter value if present, else default.
+            if "project" not in entry:
+                entry["project"] = default_project
+            result[path.stem] = entry
     return result
 
 

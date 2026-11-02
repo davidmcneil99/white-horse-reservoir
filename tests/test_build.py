@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from generator.build import load_all_data, build
+from generator.build import load_all_data, build, _build_letters_data
 
 
 def test_timeline_is_distant_future_flag():
@@ -241,3 +241,21 @@ def test_solar_actions_page_generated():
     assert "statutory consultee" in html.lower()
     assert 'href="solar-letters.html#desnz-secretary-of-state"' in html
     assert "action-item" in html  # actions actually rendered
+
+
+def test_solar_letters_page_generated():
+    build()
+    html = Path("docs/solar-letters.html").read_text(encoding="utf-8")
+    assert "DESNZ" in html or "Energy Security" in html
+    assert "desnz-secretary-of-state" in html
+
+
+def test_desnz_letter_has_postal_address():
+    build()
+    html = Path("docs/solar-letters.html").read_text(encoding="utf-8")
+    assert "55 Whitehall" in html
+
+
+def test_combined_impact_placeholder_in_solar_letter():
+    data = _build_letters_data()
+    assert "{{combined_impact_para}}" in data.get("desnz-secretary-of-state", {}).get("body", "")

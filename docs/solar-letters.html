@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Write a letter | Cearn Solar Farm | White Horse Reservoir</title>
+  <link rel="stylesheet" href="/white-horse-reservoir/assets/style.css">
+  
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/white-horse-reservoir/" class="site-title">White Horse Reservoir</a>
+      <nav aria-label="Site navigation">
+  <input type="checkbox" id="nav-toggle" class="nav-toggle-check" aria-hidden="true">
+  <label for="nav-toggle" class="nav-toggle-label">Menu</label>
+  <ul class="nav-primary">
+    <li><a href="index.html" >Home</a></li>
+    <li class="has-dropdown">
+      <a href="facts.html" >Reservoir</a>
+      <ul class="nav-dropdown">
+        <li><a href="facts.html" >Facts &amp; timeline</a></li>
+        <li><a href="actions.html" >What you can do</a></li>
+        <li><a href="letters.html" >Write letters</a></li>
+        <li><a href="access-points.html" >Access points</a></li>
+      </ul>
+    </li>
+    <li class="has-dropdown">
+      <a href="solar-facts.html" aria-current="true">Solar Farm</a>
+      <ul class="nav-dropdown">
+        <li><a href="solar-facts.html" >Facts &amp; timeline</a></li>
+        <li><a href="solar-actions.html" >What you can do</a></li>
+        <li><a href="solar-letters.html" aria-current="page">Write letters</a></li>
+      </ul>
+    </li>
+    <li><a href="combined-impacts.html" >Combined Impacts</a></li>
+    <li><a href="about.html" >About</a></li>
+  </ul>
+</nav>
+    </div>
+  </header>
+
+  <main class="container">
+    
+<h1>Write to your representatives about Cearn Solar Farm</h1>
+<p class="letter-template-note">These are template letters -- you should review and adjust the wording before sending to make sure it reflects your own situation and views.</p>
+<p>Use the tools below to find your representatives and generate a letter you can send to them about the Cearn Solar Farm project (EN0110044).</p>
+
+<section class="lookup-section">
+  <h2>Step 1: Find your representatives</h2>
+  <div id="lookup-widget">
+    <label for="lookup-postcode">Enter your postcode to find your representatives</label>
+    <input id="lookup-postcode" type="text" autocomplete="postal-code" maxlength="8">
+    <button id="lookup-btn">Look up</button>
+    <div id="lookup-result"></div>
+  </div>
+</section>
+
+<section class="letter-section">
+  <h2>Step 2: Choose a letter type</h2>
+  <div class="letter-controls">
+    <label for="letter-type">Letter type</label>
+    <select id="letter-type">
+      <option value="">Select a letter type</option>
+      <option value="desnz-secretary-of-state" data-address="Ministerial Correspondence Team, Level 3, 55 Whitehall, London SW1A 2HP" data-postal-only="true">Secretary of State for Energy Security and Net Zero</option>
+      <option value="cearn-developer">Cearn Solar Farm Limited (developer)</option>
+      <option value="solar-mp">Your MP</option>
+      <option value="solar-county-councillor">Oxfordshire County Council councillor</option>
+      <option value="solar-district-councillor">Vale of White Horse District councillor</option>
+      <option value="solar-planning-inspectorate">Planning Inspectorate (EN0110044 - Relevant Representation)</option>
+    </select>
+  </div>
+
+  <div class="combined-impact-control" id="combined-impact-control" style="display:none">
+    <label>
+      <input type="checkbox" id="combined-impact-checkbox">
+      Include paragraph about the cumulative impact of Cearn Solar Farm and the White Horse Reservoir
+    </label>
+  </div>
+
+  <div id="letter-output"></div>
+
+  <div class="letter-actions">
+    <button id="copy-letter" style="display:none">Copy letter</button>
+    <button id="email-letter" style="display:none">Open in email client</button>
+    <button id="download-zip" style="display:none">Download all letters as ZIP</button>
+  </div>
+
+  <p class="correction-link-para">
+    <a href="https://github.com/davidmcneil99/white-horse-reservoir/issues/new?title=Correction+report&amp;body=What+is+wrong%3A%0AWhat+it+should+say%3A%0ASource+URL%3A" class="correction-link">Report an error in this letter</a>
+  </p>
+</section>
+
+<script>
+(function () {
+  'use strict';
+
+  var COMBINED_IMPACT_PARA = "I also wish to draw your attention to the cumulative impact of the proposed Cearn Solar Farm and the Thames Water White Horse Reservoir (WA010005). Both schemes would affect roads including the A338 through the Hanneys, the A417 and the A415 during overlapping construction periods estimated from 2029 onwards. No combined traffic or cumulative impact assessment has been published.";
+
+  var letterType = document.getElementById('letter-type');
+  var combinedControl = document.getElementById('combined-impact-control');
+  var combinedCheckbox = document.getElementById('combined-impact-checkbox');
+  var letterOutput = document.getElementById('letter-output');
+  var copyBtn = document.getElementById('copy-letter');
+  var emailBtn = document.getElementById('email-letter');
+
+  var lettersData = {};
+  var currentEntry = null;
+  var currentRendered = '';
+
+  fetch('assets/letters-data.json')
+    .then(function (r) { return r.json(); })
+    .then(function (data) { lettersData = data; })
+    .catch(function () {});
+
+  function renderLetter() {
+    if (!currentEntry) return;
+    var body = currentEntry.body || '';
+    if (combinedCheckbox.checked) {
+      body = body.replace(/\{\{combined_impact_para\}\}/g, COMBINED_IMPACT_PARA);
+    } else {
+      body = body.replace(/\{\{combined_impact_para\}\}\n?/g, '');
+    }
+    currentRendered = body;
+    letterOutput.textContent = body;
+    copyBtn.style.display = 'inline-block';
+    if (currentEntry.recipient_email) {
+      emailBtn.style.display = 'inline-block';
+    } else {
+      emailBtn.style.display = 'none';
+    }
+  }
+
+  letterType.addEventListener('change', function () {
+    var key = letterType.value;
+    if (!key) {
+      currentEntry = null;
+      letterOutput.textContent = '';
+      combinedControl.style.display = 'none';
+      copyBtn.style.display = 'none';
+      emailBtn.style.display = 'none';
+      return;
+    }
+    currentEntry = lettersData[key] || null;
+    if (currentEntry) {
+      combinedControl.style.display = 'block';
+      renderLetter();
+    }
+  });
+
+  combinedCheckbox.addEventListener('change', function () {
+    renderLetter();
+  });
+
+  copyBtn.addEventListener('click', function () {
+    if (currentRendered) {
+      navigator.clipboard.writeText(currentRendered).catch(function () {
+        var ta = document.createElement('textarea');
+        ta.value = currentRendered;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      });
+    }
+  });
+
+  emailBtn.addEventListener('click', function () {
+    if (!currentEntry) return;
+    var subject = encodeURIComponent(currentEntry.title || 'Letter');
+    var body = encodeURIComponent(currentRendered || '');
+    var email = currentEntry.recipient_email || '';
+    window.location.href = 'mailto:' + email + '?subject=' + subject + '&body=' + body;
+  });
+}());
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Built by volunteers in support of GARD's campaign. Independent of GARD. Last updated: 2026-11-02.</p>
+    </div>
+  </footer>
+
+  <script src="/white-horse-reservoir/assets/lookup.js" defer></script>
+  <script src="/white-horse-reservoir/assets/letters.js" defer></script>
+  <script src="/white-horse-reservoir/assets/map.js" defer></script>
+  
+  <script>
+    (function () {
+      var toggle = document.getElementById('nav-toggle');
+      var navPrimary = document.querySelector('.nav-primary');
+      if (toggle && navPrimary) {
+        toggle.addEventListener('change', function () {
+          navPrimary.classList.toggle('is-open', toggle.checked);
+        });
+      }
+    }());
+  </script>
+</body>
+</html>
