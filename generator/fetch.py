@@ -6,6 +6,7 @@ Run as a script (python3 generator/fetch.py) to update data/reservoir/fetched/.
 
 import csv
 import hashlib
+import json
 import logging
 import urllib.robotparser
 from datetime import date
@@ -23,6 +24,7 @@ logger = logging.getLogger(__name__)
 _HERE = Path(__file__).parent
 _ROOT = _HERE.parent
 RES_DATA_DIR = _ROOT / "data" / "reservoir"
+CEARN_DATA_DIR = _ROOT / "data" / "cearn"
 
 _robots_cache: dict[str, urllib.robotparser.RobotFileParser] = {}
 
@@ -208,18 +210,143 @@ def detect_page_change(url: str, old_hashes: dict) -> tuple[bool, str]:
 
 
 def load_sources() -> list[dict]:
-    """Load sources from data/reservoir/national-and-other-sources.csv."""
+    """Load sources from both reservoir CSV and cearn JSON, merged into one list."""
     csv_path = RES_DATA_DIR / "national-and-other-sources.csv"
+    reservoir_sources: list[dict] = []
     if not csv_path.exists():
         logging.warning("load_sources: CSV not found at %s", csv_path)
+    else:
+        with csv_path.open(encoding="utf-8", newline="") as fh:
+            reader = csv.DictReader(fh)
+            for row in reader:
+                entry = dict(row)
+                entry.setdefault("project", "reservoir")
+                reservoir_sources.append(entry)
+
+    cearn_sources = load_cearn_sources()
+    return reservoir_sources + cearn_sources
+
+
+# Names of cearn local-council sources with no online presence that require
+# manual monitoring only.
+_CEARN_UNMONITORABLE = [
+    "Goosey",
+    "Baulking",
+    "Denchworth",
+    "Garford",
+    "Lyford",
+    "Frilford",
+    "Hatford",
+    "Besselsleigh",
+]
+
+
+def load_cearn_sources() -> list[dict]:
+    """Load monitoring sources from data/cearn/cearn-solar-farm-sources.json.
+
+    Returns a list of source dicts tagged project: cearn.
+    Sources with no online presence are logged once per run; they are not
+    returned because there is nothing to poll automatically.
+    """
+    json_path = CEARN_DATA_DIR / "cearn-solar-farm-sources.json"
+    if not json_path.exists():
+        logging.warning("load_cearn_sources: JSON not found at %s", json_path)
         return []
 
-    sources = []
-    with csv_path.open(encoding="utf-8", newline="") as fh:
-        reader = csv.DictReader(fh)
-        for row in reader:
-            sources.append(dict(row))
+    with json_path.open(encoding="utf-8") as fh:
+        data = json.load(fh)
+
+    # Log unmonitorable sources once per call.
+    for name in _CEARN_UNMONITORABLE:
+        logging.info(
+            "No automated monitoring for %s: no online presence; manual check required.",
+            name,
+        )
+
+    sources: list[dict] = []
+
+    # --- National and other sources from the JSON ---
+    for item in data.get("national_and_other_sources", []):
+        url = item.get("url", "").strip()
+        name = item.get("name", "").strip()
+        feed_info = item.get("feed", "").strip().lower()
+        status = item.get("status", "").lower()
+
+        if not url or not name:
+            continue
+        if "mirror only" in item.get("notes", "").lower():
+            continue
+
+        if "rss" in feed_info or "atom" in feed_info:
+            sources.append({
+                "name": name,
+                "type": "rss",
+                "url": url,
+                "project": "cearn",
+            })
+        elif "json" in feed_info or "json api" in feed_info:
+            # Hansard and written questions
+            sources.append({
+                "name": name,
+                "type": "json_api",
+                "url": url,
+                "title_field": "title",
+                "url_field": "url",
+                "date_field": "date",
+                "summary_field": "summary",
+                "project": "cearn",
+            })
+        elif "none" in feed_info or feed_info == "" or "email" in feed_info:
+            # Page-change detection for key pages with no RSS feed.
+            if "works" in status and url.startswith("http"):
+                sources.append({
+                    "name": name,
+                    "type": "page_change",
+                    "url": url,
+                    "project": "cearn",
+                })
+
+    # --- Local council RSS feeds ---
+    for council in data.get("local_councils", []):
+        council_name = council.get("name", "").strip()
+        for feed_entry in council.get("feeds", []):
+            feed_url = feed_entry.get("url", "").strip()
+            feed_status = feed_entry.get("status", "").lower()
+            if not feed_url:
+                continue
+            if "works" not in feed_status:
+                continue
+            sources.append({
+                "name": f"{council_name} feed",
+                "type": "rss",
+                "url": feed_url,
+                "project": "cearn",
+            })
+
     return sources
+
+
+def check_forecast_dates(timeline: list) -> None:
+    """Warn if a forecast date has passed without confirmation."""
+    today = date.today()
+    for item in timeline:
+        if not item.get("is_forecast"):
+            continue
+        raw = str(item.get("date", ""))
+        try:
+            if len(raw) == 7:  # YYYY-MM
+                item_date = date.fromisoformat(raw + "-01")
+            elif len(raw) == 10:
+                item_date = date.fromisoformat(raw)
+            else:
+                continue
+        except ValueError:
+            continue
+        if item_date < today:
+            logging.warning(
+                "Forecast date %s passed without confirmation: %s",
+                raw, item.get("event", "")
+            )
 
 
 def fetch_all(sources: list[dict], hashes: dict) -> tuple[list[dict], dict]:

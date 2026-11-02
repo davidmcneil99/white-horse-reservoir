@@ -112,3 +112,19 @@ def test_robots_allowed_404_allows():
         result = _robots_allowed("https://example.com/any/page")
     assert result is True
     _robots_cache.clear()
+
+
+def test_cearn_sources_loaded():
+    from generator.fetch import load_sources
+    sources = load_sources()
+    cearn_sources = [s for s in sources if s.get("project") == "cearn"]
+    assert len(cearn_sources) >= 5, "Expected at least 5 cearn monitoring sources"
+
+
+def test_forecast_date_warning_logged(caplog):
+    from generator.fetch import check_forecast_dates
+    import logging
+    past_forecast = [{"date": "2020-01", "event": "Past forecast", "status": "forecast", "is_forecast": True}]
+    with caplog.at_level(logging.WARNING):
+        check_forecast_dates(past_forecast)
+    assert "forecast date" in caplog.text.lower() or "passed without confirmation" in caplog.text.lower()
