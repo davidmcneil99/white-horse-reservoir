@@ -62,8 +62,8 @@
   var WHR_ACCESS_POINTS = [
     {id: 'A1',  lat: 51.6689, lon: -1.3107, label: 'A415 Marcham Road (main entrance / A34 interchange)'},
     {id: 'A2',  lat: 51.6302, lon: -1.4490, label: 'A338 near East Hanney (rail siding)'},
-    {id: 'A4',  lat: 51.6368, lon: -1.4680, label: 'A338 near Garford (eastern wetlands)'},
-    {id: 'A5',  lat: 51.6063, lon: -1.3890, label: 'Steventon to Hanney Road (east end, Steventon)'},
+    {id: 'A4',  lat: 51.6561, lon: -1.3757, label: 'A338 near Garford (eastern wetlands)'},
+    {id: 'A5',  lat: 51.6299, lon: -1.3407, label: 'Steventon to Hanney Road (east end, Steventon)'},
     {id: 'A6',  lat: 51.6492, lon: -1.2911, label: 'Drayton Road / Stonehill Lane, Sutton Courtenay'},
     {id: 'A7',  lat: 51.6472, lon: -1.2813, label: 'A415 east / The Burycroft, Caldecott (Thames berm)'},
     {id: 'A8',  lat: 51.6758, lon: -1.3879, label: 'A415 Kingston Road near Frilford / Hanney Road'},
@@ -71,12 +71,12 @@
     {id: 'A10', lat: 51.5936, lon: -1.3752, label: "A417 / Wood's Farm Road near East Hendred"},
     {id: 'A11', lat: 51.6143, lon: -1.3141, label: 'A417 Featherbed Lane near A4130/A34 (Rowstock)'},
     {id: 'A12', lat: 51.6112, lon: -1.3935, label: 'A417/A338 Grove Park Drive (King Alfred Way), Grove'},
-    {id: 'A13', lat: 51.6315, lon: -1.3900, label: 'A415 / road to Dalton Barracks, Shippon / Marcham'},
+    {id: 'A13', lat: 51.6705, lon: -1.3178, label: 'A415 / road to Dalton Barracks, Shippon / Marcham'},
     {id: 'A14', lat: 51.6210, lon: -1.4012, label: 'A415 Marcham Road (east of A34 interchange)'},
-    {id: 'A15', lat: 51.6278, lon: -1.4368, label: 'East Hanney to Steventon Road (west end, E. Hanney)'},
+    {id: 'A15', lat: 51.6347, lon: -1.3862, label: 'East Hanney to Steventon Road (west end, E. Hanney)'},
     {id: 'A16', lat: 51.6404, lon: -1.3098, label: 'Drayton Road, Drayton (river tunnel shaft access)'},
-    {id: 'A17', lat: 51.6168, lon: -1.4879, label: 'A417 Faringdon Road / Network Rail, near Goosey'},
-    {id: 'A20', lat: 51.6132, lon: -1.4155, label: 'A338 / Network Rail near Grove'}
+    {id: 'A17', lat: 51.6124, lon: -1.4877, label: 'A417 Faringdon Road / Network Rail, near Goosey'},
+    {id: 'A20', lat: 51.619, lon: -1.4085, label: 'A338 / Network Rail near Grove'}
   ];  // 17 entries total (A18/A19 dropped per plan)
 
   var map = L.map('reservoir-map').setView([51.630, -1.370], 11);
