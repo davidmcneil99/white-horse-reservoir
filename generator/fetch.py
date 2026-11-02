@@ -375,8 +375,12 @@ def fetch_all(sources: list[dict], hashes: dict) -> tuple[list[dict], dict]:
         if not url:
             continue
 
+        project = source.get("project", "reservoir")
+
         if source_type == "rss":
             items = fetch_rss(url, name)
+            for item in items:
+                item.setdefault("project", project)
             new_items.extend(items)
 
         elif source_type in ("json_api", "json api"):
@@ -385,6 +389,8 @@ def fetch_all(sources: list[dict], hashes: dict) -> tuple[list[dict], dict]:
             date_field = source.get("date_field", "date")
             summary_field = source.get("summary_field", "summary")
             items = fetch_json_api(url, name, title_field, url_field, date_field, summary_field)
+            for item in items:
+                item.setdefault("project", project)
             new_items.extend(items)
 
         elif source_type in ("page_change", "page change"):
@@ -398,6 +404,7 @@ def fetch_all(sources: list[dict], hashes: dict) -> tuple[list[dict], dict]:
                     "source_name": name,
                     "summary": "",
                     "ai_generated": False,
+                    "project": project,
                 })
 
     return new_items, updated_hashes

@@ -121,6 +121,22 @@ def test_cearn_sources_loaded():
     assert len(cearn_sources) >= 5, "Expected at least 5 cearn monitoring sources"
 
 
+def test_fetch_all_stamps_project_on_items():
+    from generator.fetch import fetch_all
+    rss = """<?xml version="1.0"?><rss version="2.0"><channel>
+    <item><title>Cearn news</title><link>https://cearn.example.com/1</link>
+    <pubDate>Mon, 01 Nov 2026 00:00:00 GMT</pubDate></item></channel></rss>"""
+    mock_resp = Mock(ok=True, text=rss)
+    mock_resp.raise_for_status = Mock()
+    cearn_source = {"name": "Cearn Test", "type": "rss", "url": "https://cearn.example.com/feed", "project": "cearn"}
+    with patch("generator.fetch._robots_allowed", _allow_robots), \
+         patch("generator.fetch.requests") as mock_req:
+        mock_req.get.return_value = mock_resp
+        items, _ = fetch_all([cearn_source], {})
+    assert len(items) == 1
+    assert items[0].get("project") == "cearn"
+
+
 def test_forecast_date_warning_logged(caplog):
     from generator.fetch import check_forecast_dates
     import logging
