@@ -378,4 +378,4 @@ def test_reservoir_home_has_map():
 def test_reservoir_home_has_news_section():
     build()
     html = Path("docs/reservoir/index.html").read_text(encoding="utf-8")
-    assert 'class="news-list"' in html or 'id="news"' in html or 'Latest news' in html
+    assert 'class="news-list"' in html
