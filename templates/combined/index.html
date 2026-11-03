@@ -15,7 +15,13 @@
       <p>{{ action.description }}</p>
       <div class="featured-action-links">
         {% if action.source_url %}<a class="btn-primary" href="{{ action.source_url }}" rel="external noopener">Take action</a>{% endif %}
-        {% if action.letter_key %}<a class="action-letter-btn" href="/white-horse-reservoir/combined/letters.html#{{ action.letter_key }}">Generate letter</a>{% endif %}
+        {% if action.letter_key %}
+          {% if action.letter_key.startswith("solar-") or action.letter_key in ["desnz-secretary-of-state", "cearn-developer", "solar-mp", "solar-planning-inspectorate"] %}
+            <a class="action-letter-btn" href="/white-horse-reservoir/solar/letters.html#{{ action.letter_key }}">Generate letter</a>
+          {% else %}
+            <a class="action-letter-btn" href="/white-horse-reservoir/reservoir/letters.html#{{ action.letter_key }}">Generate letter</a>
+          {% endif %}
+        {% endif %}
       </div>
     </li>
     {% endfor %}
