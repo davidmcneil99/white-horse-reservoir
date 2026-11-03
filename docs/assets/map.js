@@ -1,9 +1,10 @@
-// Guard: only run on index.html which has #reservoir-map
+// Guard: only run on pages that have #map with a data-section attribute.
 (function () {
   'use strict';
 
-  var container = document.getElementById('reservoir-map');
-  if (!container) return;   // <-- Ruling 7: guard
+  var mapEl = document.getElementById('map');
+  if (!mapEl) return;   // <-- Ruling 7: guard
+  var SECTION = (mapEl.dataset && mapEl.dataset.section) || 'combined';
 
   // Layer definitions for both Planning Inspectorate projects.
   var layers = {
@@ -104,7 +105,7 @@
     {id: 'A20', lat: 51.619, lon: -1.4085, label: 'A338 / Network Rail near Grove'}
   ];  // 17 entries total (A18/A19 dropped per plan)
 
-  var map = L.map('reservoir-map').setView([51.630, -1.370], 11);
+  var map = L.map('map').setView([51.630, -1.370], 11);
 
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -126,6 +127,13 @@
       .addTo(map);
   });
 
+  // Section filter: remove reservoir layer if this is the solar section.
+  if (SECTION === 'solar') {
+    map.removeLayer(reservoirLayer);
+    var resToggle = document.getElementById('show-reservoir');
+    if (resToggle && resToggle.parentNode) resToggle.parentNode.style.display = 'none';
+  }
+
   // Fetch EN0110044 (Cearn Solar Farm) boundary at runtime with a graceful fallback.
   var cearnLayer = null;
   fetch('assets/cearn-boundary.geojson')
@@ -138,6 +146,11 @@
         var cearnCheckbox = document.getElementById('show-cearn');
         if (!cearnCheckbox || cearnCheckbox.checked) {
           cearnLayer.addTo(map);
+        }
+        // Section filter: remove cearn layer if this is the reservoir section.
+        if (SECTION === 'reservoir') {
+          map.removeLayer(cearnLayer);
+          if (cearnCheckbox && cearnCheckbox.parentNode) cearnCheckbox.parentNode.style.display = 'none';
         }
       } else {
         console.warn('Cearn boundary not available');

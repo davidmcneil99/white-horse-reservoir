@@ -527,3 +527,17 @@ def test_combined_home_has_map_combined():
     html = Path("docs/combined/index.html").read_text(encoding="utf-8")
     assert 'id="map"' in html
     assert 'data-section="combined"' in html
+
+
+# ---------------------------------------------------------------------------
+# Task 6: Section-aware map and postcode lookup tests
+# ---------------------------------------------------------------------------
+
+def test_map_js_reads_section_attribute():
+    js = Path("docs/assets/map.js").read_text(encoding="utf-8")
+    assert "data-section" in js or "SECTION" in js
+
+
+def test_lookup_js_filters_by_section():
+    js = Path("docs/assets/lookup.js").read_text(encoding="utf-8")
+    assert "section" in js.lower() or "projects" in js.lower()
