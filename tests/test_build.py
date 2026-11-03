@@ -226,7 +226,7 @@ def test_nav_contains_both_projects():
     html = Path("docs/reservoir/index.html").read_text(encoding="utf-8")
     assert "Solar Farm" in html
     assert "Reservoir" in html
-    assert "Combined Impacts" in html
+    assert "Combined Concerns" in html
 
 
 def test_solar_facts_page_generated():
@@ -304,3 +304,29 @@ def test_section_key_in_reservoir_page():
     # section key must reach the template — check via a sentinel comment
     # added to base.html in Task 1; for now assert the file exists at new path
     assert Path("docs/reservoir/facts.html").exists()
+
+
+def test_reservoir_home_has_active_section_tab():
+    build()
+    html = Path("docs/reservoir/index.html").read_text(encoding="utf-8")
+    # The Reservoir tab must carry aria-current="true" or active class
+    assert 'aria-current' in html
+
+
+def test_combined_facts_has_both_nav_actives():
+    build()
+    html = Path("docs/combined/facts.html").read_text(encoding="utf-8")
+    assert "Combined Concerns" in html
+    assert "Facts" in html
+
+
+def test_vale_watch_wordmark_present():
+    build()
+    html = Path("docs/reservoir/index.html").read_text(encoding="utf-8")
+    assert "Vale Watch" in html
+
+
+def test_secondary_nav_about_links_to_root():
+    build()
+    html = Path("docs/reservoir/index.html").read_text(encoding="utf-8")
+    assert "/white-horse-reservoir/about.html" in html
