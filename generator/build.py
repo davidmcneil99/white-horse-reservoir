@@ -376,7 +376,13 @@ def build(output_dir: Path = Path("docs")) -> None:
         output_dir: Destination directory. Created if it does not exist.
     """
     output_dir = Path(output_dir)
+    docs_res_dir   = output_dir / "reservoir"
+    docs_solar_dir = output_dir / "solar"
+    docs_comb_dir  = output_dir / "combined"
+
     output_dir.mkdir(parents=True, exist_ok=True)
+    for d in [docs_res_dir, docs_solar_dir, docs_comb_dir]:
+        d.mkdir(parents=True, exist_ok=True)
 
     data = load_all_data()
 
@@ -386,33 +392,32 @@ def build(output_dir: Path = Path("docs")) -> None:
     )
 
     pages = [
-        ("index.html", "index.html", "home"),
-        ("about.html", "about.html", "about"),
-        ("facts.html", "facts.html", "res-facts"),
-        ("actions.html", "actions.html", "res-actions"),
-        ("letters.html", "letters.html", "res-letters"),
-        ("corrections.html", "corrections.html", ""),
-        ("access-points.html", "access-points.html", "access-points"),
+        # Root
+        ("root-redirect.html",                output_dir / "index.html",              None,         None),
+        ("about.html",                         output_dir / "about.html",              None,         "about"),
+        # Reservoir
+        ("reservoir/index.html",               docs_res_dir / "index.html",            "reservoir",  "reservoir-home"),
+        ("reservoir/facts.html",               docs_res_dir / "facts.html",            "reservoir",  "reservoir-facts"),
+        ("reservoir/actions.html",             docs_res_dir / "actions.html",          "reservoir",  "reservoir-actions"),
+        ("reservoir/letters.html",             docs_res_dir / "letters.html",          "reservoir",  "reservoir-letters"),
+        ("reservoir/access-points.html",       docs_res_dir / "access-points.html",    "reservoir",  "reservoir-access"),
+        # Solar
+        ("solar/index.html",                   docs_solar_dir / "index.html",          "solar",      "solar-home"),
+        ("solar/facts.html",                   docs_solar_dir / "facts.html",          "solar",      "solar-facts"),
+        ("solar/actions.html",                 docs_solar_dir / "actions.html",        "solar",      "solar-actions"),
+        ("solar/letters.html",                 docs_solar_dir / "letters.html",        "solar",      "solar-letters"),
+        # Combined
+        ("combined/index.html",                docs_comb_dir / "index.html",           "combined",   "combined-home"),
+        ("combined/facts.html",                docs_comb_dir / "facts.html",           "combined",   "combined-facts"),
+        ("combined/actions.html",              docs_comb_dir / "actions.html",         "combined",   "combined-actions"),
+        ("combined/letters.html",              docs_comb_dir / "letters.html",         "combined",   "combined-letters"),
     ]
 
-    solar_pages = [
-        ("solar-facts.html", "solar-facts.html", "solar-facts"),
-        ("solar-actions.html", "solar-actions.html", "solar-actions"),
-        ("solar-letters.html", "solar-letters.html", "solar-letters"),
-        ("combined-impacts.html", "combined-impacts.html", "combined"),
-    ]
-
-    available_templates = env.list_templates()
-    for template_name, output_name, page_id in solar_pages:
-        if template_name in available_templates:
-            pages.append((template_name, output_name, page_id))
-
-    for template_name, output_name, page_id in pages:
-        template = env.get_template(template_name)
-        rendered = template.render(**data, page_id=page_id)
-        out_path = output_dir / output_name
-        out_path.write_text(rendered, encoding="utf-8")
-        logging.info("Wrote %s", out_path)
+    for template_name, output_path, section, page_id in pages:
+        tmpl = env.get_template(template_name)
+        html = tmpl.render(**data, section=section, page_id=page_id)
+        output_path.write_text(html, encoding="utf-8")
+        logging.info("Wrote %s", output_path)
 
     # Write lookup-data.json.
     assets_dir = output_dir / "assets"
