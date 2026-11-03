@@ -559,8 +559,9 @@ def test_about_page_mentions_both_projects():
 def test_about_page_title_has_vale_watch():
     build()
     html = Path("docs/about.html").read_text(encoding="utf-8")
-    assert "Vale Watch" in html
-    assert "White Horse Reservoir" not in html.split("<title>")[1].split("</title>")[0]
+    title = html.split("<title>")[1].split("</title>")[0]
+    assert "Vale Watch" in title
+    assert "White Horse Reservoir" not in title
 
 
 def test_corrections_page_generated():
