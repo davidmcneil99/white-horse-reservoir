@@ -176,6 +176,12 @@ def load_all_data() -> dict:
 
     cearn_data = load_cearn_data()
 
+    res_data = {
+        "timeline": timeline,
+        "actions": actions,
+    }
+    combined_data = build_combined_data(res_data, cearn_data)
+
     return {
         "timeline": timeline,
         "quotes": quotes,
@@ -200,6 +206,10 @@ def load_all_data() -> dict:
         "cearn_featured_actions_intro": cearn_data["cearn_featured_actions_intro"],
         "cearn_news_items":             cearn_data["cearn_news_items"],
         "links_to_reservoir":           cearn_data["links_to_reservoir"],
+        "combined_timeline":            combined_data["combined_timeline"],
+        "combined_actions":             combined_data["combined_actions"],
+        "combined_featured_actions":    combined_data["combined_featured_actions"],
+        "combined_featured_actions_intro": combined_data["combined_featured_actions_intro"],
     }
 
 
@@ -251,6 +261,48 @@ def load_cearn_data() -> dict:
         ),
         "cearn_news_items": cearn_news,
         "links_to_reservoir": links_to_reservoir,
+    }
+
+
+def build_combined_data(res_data: dict, cearn_data: dict) -> dict:
+    """Merge reservoir and cearn data for the combined section.
+
+    Args:
+        res_data: The reservoir portion of the context (keys: timeline, actions, …).
+        cearn_data: The cearn portion (keys: cearn_timeline, cearn_actions, …).
+
+    Returns:
+        Dict with combined_timeline, combined_actions, combined_featured_actions,
+        combined_featured_actions_intro.
+    """
+    # Merged timeline: each entry gains a 'projects' tag list
+    res_timeline = [dict(e, projects=["reservoir"]) for e in res_data["timeline"]]
+    solar_timeline = [dict(e, projects=["solar"]) for e in cearn_data["cearn_timeline"]]
+    combined_timeline = sorted(
+        res_timeline + solar_timeline,
+        key=lambda e: e.get("date", ""),
+        reverse=True,
+    )
+
+    # Merged actions
+    res_actions = [dict(a, projects=["reservoir"]) for a in res_data["actions"]]
+    solar_actions = [dict(a, projects=["solar"]) for a in cearn_data["cearn_actions"]]
+    combined_actions = res_actions + solar_actions
+
+    # Combined featured actions from featured-actions.json
+    feat_path = DATA_DIR / "combined" / "content" / "featured-actions.json"
+    combined_featured = (
+        json.loads(feat_path.read_text(encoding="utf-8")) if feat_path.exists() else []
+    )
+
+    return {
+        "combined_timeline": combined_timeline,
+        "combined_actions": combined_actions,
+        "combined_featured_actions": combined_featured,
+        "combined_featured_actions_intro": (
+            "Both projects are in active pre-application consultation. "
+            "These actions address their shared impacts."
+        ),
     }
 
 

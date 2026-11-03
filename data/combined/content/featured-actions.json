@@ -1,0 +1,24 @@
+[
+  {
+    "id": "cb001",
+    "featured_order": 1,
+    "title": "Write to your MP about both projects",
+    "description": "Ask your MP to call for a joint cumulative impact assessment covering the reservoir and solar farm construction together.",
+    "who_can": "Any resident",
+    "timing": "now",
+    "letter_key": "mp",
+    "source_url": "",
+    "projects": ["reservoir", "solar"]
+  },
+  {
+    "id": "cb002",
+    "featured_order": 2,
+    "title": "Ask your Vale councillor for a combined traffic assessment",
+    "description": "Ask your Vale district councillor to press for a single assessment covering HGV routes for both the reservoir and solar farm construction.",
+    "who_can": "Vale of White Horse residents",
+    "timing": "now",
+    "letter_key": "solar-district-councillor",
+    "source_url": "",
+    "projects": ["reservoir", "solar"]
+  }
+]

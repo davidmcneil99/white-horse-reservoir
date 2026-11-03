@@ -1,3 +1,77 @@
 {% extends "base.html" %}
-{% block title %}Combined Letters | White Horse Reservoir &amp; Cearn Solar Farm{% endblock %}
-{% block content %}{% endblock %}
+
+{% block title %}Write a letter — Combined Concerns — Vale Watch{% endblock %}
+
+{% block content %}
+<h1>Write to your representatives about both projects</h1>
+<p class="letter-template-note">These are template letters — you should review and adjust the wording before sending to make sure it reflects your own situation and views.</p>
+<p>Both projects are nationally significant infrastructure projects with separate decision-makers. Use the letter tools below to engage with each project directly.</p>
+
+<section class="lookup-section">
+  <h2>Step 1: Find your representatives</h2>
+  <div id="lookup-widget">
+    <label for="lookup-postcode">Enter your postcode to find your representatives</label>
+    <input id="lookup-postcode" type="text" autocomplete="postal-code" maxlength="8">
+    <button id="lookup-btn">Look up</button>
+    <div id="lookup-result"></div>
+  </div>
+</section>
+
+<section class="letter-section" id="reservoir-letters">
+  <h2><span class="tag-reservoir">Reservoir</span> White Horse Reservoir letters</h2>
+  <p>Write to decision-makers and representatives about the White Horse Reservoir (WA010005).</p>
+  <div class="letter-controls">
+    <label for="letter-type-reservoir">Letter type</label>
+    <select id="letter-type-reservoir">
+      <option value="">Select a letter type</option>
+      <option value="county-councillor">County councillor</option>
+      <option value="defra-secretary-of-state">Secretary of State (Emma Reynolds MP)</option>
+      <option value="district-councillor">District councillor</option>
+      <option value="mp">Your MP</option>
+      <option value="parish-clerk">Parish clerk</option>
+      <option value="planning-inspectorate-relevant-representation">Planning Inspectorate (Relevant Representation)</option>
+      <option value="thames-water">Thames Water</option>
+    </select>
+  </div>
+  <div id="letter-output-reservoir"></div>
+  <div class="letter-actions">
+    <button id="copy-letter-reservoir" style="display:none">Copy letter</button>
+    <button id="email-letter-reservoir" style="display:none">Open in email client</button>
+  </div>
+</section>
+
+<section class="letter-section" id="solar-letters">
+  <h2><span class="tag-solar">Solar Farm</span> Cearn Solar Farm letters</h2>
+  <p>Write to decision-makers and representatives about the Cearn Solar Farm (EN0110044).</p>
+  <div class="letter-controls">
+    <label for="letter-type-solar">Letter type</label>
+    <select id="letter-type-solar">
+      <option value="">Select a letter type</option>
+      <option value="desnz-secretary-of-state" data-address="Ministerial Correspondence Team, Level 3, 55 Whitehall, London SW1A 2HP" data-postal-only="true">Secretary of State for Energy Security and Net Zero</option>
+      <option value="cearn-developer">Cearn Solar Farm Limited (developer)</option>
+      <option value="solar-mp">Your MP</option>
+      <option value="solar-county-councillor">Oxfordshire County Council councillor</option>
+      <option value="solar-district-councillor">Vale of White Horse District councillor</option>
+      <option value="solar-planning-inspectorate">Planning Inspectorate (EN0110044 - Relevant Representation)</option>
+    </select>
+  </div>
+
+  <div class="combined-impact-control" id="combined-impact-control" style="display:none">
+    <label>
+      <input type="checkbox" id="combined-impact-checkbox">
+      Include paragraph about the cumulative impact of Cearn Solar Farm and the White Horse Reservoir
+    </label>
+  </div>
+
+  <div id="letter-output-solar"></div>
+  <div class="letter-actions">
+    <button id="copy-letter-solar" style="display:none">Copy letter</button>
+    <button id="email-letter-solar" style="display:none">Open in email client</button>
+  </div>
+</section>
+
+<p class="correction-link-para">
+  <a href="https://github.com/davidmcneil99/white-horse-reservoir/issues/new?title=Correction+report&amp;body=What+is+wrong%3A%0AWhat+it+should+say%3A%0ASource+URL%3A" class="correction-link">Report an error in a letter</a>
+</p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}

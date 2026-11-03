@@ -451,3 +451,79 @@ def test_reservoir_home_has_news_section():
     build()
     html = Path("docs/reservoir/index.html").read_text(encoding="utf-8")
     assert 'class="news-list"' in html
+
+
+# ---------------------------------------------------------------------------
+# Task 5: Combined section tests
+# ---------------------------------------------------------------------------
+
+def test_combined_timeline_has_both_tags():
+    build()
+    html = Path("docs/combined/facts.html").read_text(encoding="utf-8")
+    assert "tag-reservoir" in html
+    assert "tag-solar" in html
+
+
+def test_combined_actions_has_both_projects():
+    build()
+    html = Path("docs/combined/actions.html").read_text(encoding="utf-8")
+    assert "tag-reservoir" in html
+    assert "tag-solar" in html
+
+
+def test_combined_home_has_featured_actions():
+    build()
+    html = Path("docs/combined/index.html").read_text(encoding="utf-8")
+    assert "cumulative" in html.lower() or "combined" in html.lower()
+
+
+def test_combined_letters_has_both_project_sections():
+    build()
+    html = Path("docs/combined/letters.html").read_text(encoding="utf-8")
+    assert "Reservoir" in html
+    assert "Solar" in html
+
+
+def test_build_combined_data_returns_required_keys():
+    from generator.build import build_combined_data
+    data = load_all_data()
+    res_data = {"timeline": data["timeline"], "actions": data["actions"]}
+    cearn_data = {k: data[k] for k in ["cearn_timeline", "cearn_actions"]}
+    result = build_combined_data(res_data, cearn_data)
+    for key in ["combined_timeline", "combined_actions", "combined_featured_actions", "combined_featured_actions_intro"]:
+        assert key in result, f"Missing key: {key}"
+
+
+def test_combined_timeline_is_reverse_sorted():
+    data = load_all_data()
+    dates = [e.get("date", "") for e in data["combined_timeline"]]
+    assert dates == sorted(dates, reverse=True), "combined_timeline should be sorted reverse-chronologically"
+
+
+def test_combined_timeline_has_project_tags():
+    data = load_all_data()
+    projects = {proj for e in data["combined_timeline"] for proj in e.get("projects", [])}
+    assert "reservoir" in projects
+    assert "solar" in projects
+
+
+def test_combined_featured_actions_loaded():
+    data = load_all_data()
+    assert "combined_featured_actions" in data
+    assert len(data["combined_featured_actions"]) >= 2
+    ids = [a["id"] for a in data["combined_featured_actions"]]
+    assert "cb001" in ids
+    assert "cb002" in ids
+
+
+def test_combined_featured_actions_intro_text():
+    data = load_all_data()
+    intro = data.get("combined_featured_actions_intro", "")
+    assert "pre-application consultation" in intro
+
+
+def test_combined_home_has_map_combined():
+    build()
+    html = Path("docs/combined/index.html").read_text(encoding="utf-8")
+    assert 'id="map"' in html
+    assert 'data-section="combined"' in html
