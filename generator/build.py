@@ -419,6 +419,28 @@ def build(output_dir: Path = Path("docs")) -> None:
         output_path.write_text(html, encoding="utf-8")
         logging.info("Wrote %s", output_path)
 
+    # Old flat-URL redirect stubs: keep pre-restructure links from hard-404ing.
+    # Written inline (not via Jinja) because each is a bare meta-refresh page.
+    redirect_stubs = [
+        (output_dir / "facts.html",            "/white-horse-reservoir/reservoir/facts.html"),
+        (output_dir / "actions.html",          "/white-horse-reservoir/reservoir/actions.html"),
+        (output_dir / "letters.html",          "/white-horse-reservoir/reservoir/letters.html"),
+        (output_dir / "access-points.html",    "/white-horse-reservoir/reservoir/access-points.html"),
+        (output_dir / "solar-facts.html",      "/white-horse-reservoir/solar/facts.html"),
+        (output_dir / "solar-actions.html",    "/white-horse-reservoir/solar/actions.html"),
+        (output_dir / "solar-letters.html",    "/white-horse-reservoir/solar/letters.html"),
+        (output_dir / "combined-impacts.html", "/white-horse-reservoir/combined/"),
+    ]
+    for stub_path, target_url in redirect_stubs:
+        stub_path.write_text(
+            f'<!doctype html><html lang="en"><head><meta charset="utf-8">'
+            f'<meta http-equiv="refresh" content="0;url={target_url}">'
+            f'<title>Redirecting — Vale Watch</title></head>'
+            f'<body><p><a href="{target_url}">Redirecting…</a></p></body></html>',
+            encoding="utf-8",
+        )
+        logging.info("Wrote redirect stub %s", stub_path)
+
     # Write lookup-data.json.
     assets_dir = output_dir / "assets"
     assets_dir.mkdir(parents=True, exist_ok=True)

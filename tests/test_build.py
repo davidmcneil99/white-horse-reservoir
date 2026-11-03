@@ -336,3 +336,20 @@ def test_secondary_nav_about_links_to_root():
     build()
     html = Path("docs/reservoir/index.html").read_text(encoding="utf-8")
     assert "/white-horse-reservoir/about.html" in html
+
+
+def test_old_flat_urls_are_stubs():
+    build()
+    stubs = {
+        "docs/facts.html":           "reservoir/facts",
+        "docs/actions.html":         "reservoir/actions",
+        "docs/letters.html":         "reservoir/letters",
+        "docs/access-points.html":   "reservoir/access-points",
+        "docs/solar-facts.html":     "solar/facts",
+        "docs/solar-actions.html":   "solar/actions",
+        "docs/solar-letters.html":   "solar/letters",
+        "docs/combined-impacts.html": "combined/",
+    }
+    for path, target in stubs.items():
+        html = Path(path).read_text(encoding="utf-8")
+        assert target in html, f"{path} does not redirect to {target}"
