@@ -1,6 +1,6 @@
 ---
 title: Write to the Secretary of State for Energy Security and Net Zero
-recipient_name: Miatta Fahnbulleh MP
+recipient_name: "Ed Miliband MP"
 recipient_address: "Ministerial Correspondence Team, Level 3, 55 Whitehall, London SW1A 2HP"
 recipient_email: ""
 note: "There is no published ministerial email address. This letter must be sent by post."
@@ -9,13 +9,13 @@ project: cearn
 
 {{current_date}}
 
-Miatta Fahnbulleh MP
+Ed Miliband MP
 Secretary of State for Energy Security and Net Zero
 Ministerial Correspondence Team
 Level 3, 55 Whitehall
 London SW1A 2HP
 
-Dear Ms Fahnbulleh,
+Dear Mr Miliband,
 
 I am writing to you as a resident of {{sender_area}}, in {{sender_constituency}}, regarding the proposed Cearn Solar Farm (Planning Inspectorate reference EN0110044).
 

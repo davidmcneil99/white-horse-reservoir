@@ -1,3 +1,44 @@
 {% extends "base.html" %}
-{% block title %}Solar Farm | White Horse Reservoir &amp; Cearn Solar Farm{% endblock %}
-{% block content %}{% endblock %}
+{% block title %}Cearn Solar Farm — Vale Watch{% endblock %}
+{% block content %}
+<h1>Cearn Solar Farm (EN0110044)</h1>
+<p class="section-blurb">Telis Energy UK proposes a 500 MW solar and battery storage scheme covering around 2,800 acres near Garford, Charney Bassett, West Hanney, Goosey and Baulking. This is a nationally significant infrastructure project (EN0110044). The Secretary of State for Energy Security and Net Zero decides.</p>
+
+{% if cearn_featured_actions %}
+<section class="featured-actions" aria-label="Priority actions">
+  <h2>Most urgent actions</h2>
+  <p class="featured-actions-intro">{{ cearn_featured_actions_intro }}</p>
+  <ol class="featured-actions-list">
+    {% for action in cearn_featured_actions %}
+    <li>
+      <h3><a href="/white-horse-reservoir/solar/actions.html#action-{{ action.id }}">{{ action.title }}</a></h3>
+      <p>{{ action.description }}</p>
+      <div class="featured-action-links">
+        {% if action.source_url %}<a class="btn-primary" href="{{ action.source_url }}" rel="external noopener">Take action</a>{% endif %}
+        {% if action.letter_key %}<a class="action-letter-btn" href="/white-horse-reservoir/solar/letters.html#{{ action.letter_key }}">Generate letter</a>{% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+{% endif %}
+
+<section class="map-section" aria-label="Map">
+  <h2>Map</h2>
+  <div id="map" data-section="solar" style="height:400px"></div>
+</section>
+
+{% if cearn_news_items %}
+<section class="news-section" aria-label="Latest news">
+  <h2>Latest news</h2>
+  <ul class="news-list">
+    {% for item in cearn_news_items[:5] %}
+    <li>
+      <a href="{{ item.url }}" rel="external noopener">{{ item.title }}</a>
+      <span class="news-date">{{ item.date }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endblock %}

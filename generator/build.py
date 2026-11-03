@@ -193,12 +193,13 @@ def load_all_data() -> dict:
         "corrections": corrections,
         "still_to_check": still_to_check,
         "built_on": date.today().isoformat(),
-        "cearn_timeline":          cearn_data["cearn_timeline"],
-        "cearn_quotes":            cearn_data["cearn_quotes"],
-        "cearn_actions":           cearn_data["cearn_actions"],
-        "cearn_featured_actions":  cearn_data["cearn_featured_actions"],
-        "cearn_news_items":        cearn_data["cearn_news_items"],
-        "links_to_reservoir":      cearn_data["links_to_reservoir"],
+        "cearn_timeline":               cearn_data["cearn_timeline"],
+        "cearn_quotes":                 cearn_data["cearn_quotes"],
+        "cearn_actions":                cearn_data["cearn_actions"],
+        "cearn_featured_actions":       cearn_data["cearn_featured_actions"],
+        "cearn_featured_actions_intro": cearn_data["cearn_featured_actions_intro"],
+        "cearn_news_items":             cearn_data["cearn_news_items"],
+        "links_to_reservoir":           cearn_data["links_to_reservoir"],
     }
 
 
@@ -244,6 +245,10 @@ def load_cearn_data() -> dict:
         "cearn_quotes":   quotes,
         "cearn_actions":  actions,
         "cearn_featured_actions": cearn_featured_actions,
+        "cearn_featured_actions_intro": (
+            "These are the most time-sensitive actions right now. "
+            "The Vale's scoping response is due 23 November 2026."
+        ),
         "cearn_news_items": cearn_news,
         "links_to_reservoir": links_to_reservoir,
     }
@@ -313,7 +318,7 @@ def _build_lookup_data(data: dict) -> dict:
     }
 
     desnz_recipient = {
-        "name": "Miatta Fahnbulleh MP",
+        "name": "Ed Miliband MP",
         "email": "",
         "address": "Ministerial Correspondence Team, Level 3, 55 Whitehall, London SW1A 2HP",
     }

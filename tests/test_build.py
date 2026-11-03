@@ -3,6 +3,78 @@ from pathlib import Path
 from generator.build import load_all_data, build, _build_letters_data
 
 
+def test_solar_home_has_blurb():
+    build()
+    html = Path("docs/solar/index.html").read_text(encoding="utf-8")
+    assert "EN0110044" in html
+    assert "Telis Energy" in html
+
+
+def test_solar_home_has_featured_actions():
+    build()
+    html = Path("docs/solar/index.html").read_text(encoding="utf-8")
+    assert "Most urgent actions" in html
+    assert "Planning Inspectorate" in html
+
+
+def test_solar_actions_json_has_featured_fields():
+    data = json.loads(Path("data/cearn/content/actions.json").read_text(encoding="utf-8"))
+    featured = [a for a in data if a.get("featured")]
+    assert len(featured) == 3
+    orders = sorted(a["featured_order"] for a in featured)
+    assert orders == [1, 2, 3]
+
+
+def test_solar_home_has_map():
+    build()
+    html = Path("docs/solar/index.html").read_text(encoding="utf-8")
+    assert 'id="map"' in html
+    assert 'data-section="solar"' in html
+
+
+def test_solar_home_has_featured_actions_intro():
+    build()
+    html = Path("docs/solar/index.html").read_text(encoding="utf-8")
+    assert "23 November 2026" in html
+
+
+def test_cearn_featured_actions_intro_in_context():
+    data = load_all_data()
+    assert "cearn_featured_actions_intro" in data
+    assert "23 November 2026" in data["cearn_featured_actions_intro"]
+
+
+def test_solar_facts_title_has_vale_watch():
+    build()
+    html = Path("docs/solar/facts.html").read_text(encoding="utf-8")
+    assert "Vale Watch" in html
+
+
+def test_solar_actions_title_has_vale_watch():
+    build()
+    html = Path("docs/solar/actions.html").read_text(encoding="utf-8")
+    assert "Vale Watch" in html
+
+
+def test_solar_letters_title_has_vale_watch():
+    build()
+    html = Path("docs/solar/letters.html").read_text(encoding="utf-8")
+    assert "Vale Watch" in html
+
+
+def test_desnz_sos_name_is_ed_miliband():
+    data = _build_letters_data()
+    fm = data.get("desnz-secretary-of-state", {})
+    assert fm.get("recipient_name") == "Ed Miliband MP"
+
+
+def test_solar_facts_combined_link_root_relative():
+    build()
+    html = Path("docs/solar/facts.html").read_text(encoding="utf-8")
+    assert "/white-horse-reservoir/combined/" in html
+    assert 'href="combined-impacts.html"' not in html
+
+
 def test_timeline_is_distant_future_flag():
     """Items with year >= today().year + 3 get is_distant_future=True."""
     data = load_all_data()
