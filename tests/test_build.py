@@ -540,4 +540,4 @@ def test_map_js_reads_section_attribute():
 
 def test_lookup_js_filters_by_section():
     js = Path("docs/assets/lookup.js").read_text(encoding="utf-8")
-    assert "requiredProject" in js or "repMatchesSection" in js
+    assert "requiredProject" in js
