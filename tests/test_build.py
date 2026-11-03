@@ -341,15 +341,21 @@ def test_secondary_nav_about_links_to_root():
 def test_old_flat_urls_are_stubs():
     build()
     stubs = {
-        "docs/facts.html":           "reservoir/facts",
-        "docs/actions.html":         "reservoir/actions",
-        "docs/letters.html":         "reservoir/letters",
-        "docs/access-points.html":   "reservoir/access-points",
-        "docs/solar-facts.html":     "solar/facts",
-        "docs/solar-actions.html":   "solar/actions",
-        "docs/solar-letters.html":   "solar/letters",
-        "docs/combined-impacts.html": "combined/",
+        "docs/facts.html":           "/white-horse-reservoir/reservoir/facts.html",
+        "docs/actions.html":         "/white-horse-reservoir/reservoir/actions.html",
+        "docs/letters.html":         "/white-horse-reservoir/reservoir/letters.html",
+        "docs/access-points.html":   "/white-horse-reservoir/reservoir/access-points.html",
+        "docs/solar-facts.html":     "/white-horse-reservoir/solar/facts.html",
+        "docs/solar-actions.html":   "/white-horse-reservoir/solar/actions.html",
+        "docs/solar-letters.html":   "/white-horse-reservoir/solar/letters.html",
+        "docs/combined-impacts.html": "/white-horse-reservoir/combined/",
     }
     for path, target in stubs.items():
         html = Path(path).read_text(encoding="utf-8")
         assert target in html, f"{path} does not redirect to {target}"
+
+
+def test_root_redirect_targets_reservoir():
+    build()
+    html = Path("docs/index.html").read_text(encoding="utf-8")
+    assert "/white-horse-reservoir/reservoir/" in html
