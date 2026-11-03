@@ -3,42 +3,52 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}White Horse Reservoir{% endblock %}</title>
+  <title>{% block title %}Vale Watch{% endblock %}</title>
   <link rel="stylesheet" href="/white-horse-reservoir/assets/style.css">
   {% block extra_head %}{% endblock %}
 </head>
 <body>
   <header class="site-header">
-    <div class="container header-inner">
-      <a href="/white-horse-reservoir/" class="site-title">White Horse Reservoir</a>
-      <nav aria-label="Site navigation">
-  <input type="checkbox" id="nav-toggle" class="nav-toggle-check" aria-hidden="true">
-  <label for="nav-toggle" class="nav-toggle-label">Menu</label>
-  <ul class="nav-primary">
-    <li><a href="index.html" {% if page_id == 'home' %}aria-current="page"{% endif %}>Home</a></li>
-    <li class="has-dropdown">
-      <a href="facts.html" {% if page_id in ('res-facts','res-actions','res-letters','access-points') %}aria-current="true"{% endif %}>Reservoir</a>
-      <ul class="nav-dropdown">
-        <li><a href="facts.html" {% if page_id == 'res-facts' %}aria-current="page"{% endif %}>Facts &amp; timeline</a></li>
-        <li><a href="actions.html" {% if page_id == 'res-actions' %}aria-current="page"{% endif %}>What you can do</a></li>
-        <li><a href="letters.html" {% if page_id == 'res-letters' %}aria-current="page"{% endif %}>Write letters</a></li>
-        <li><a href="access-points.html" {% if page_id == 'access-points' %}aria-current="page"{% endif %}>Access points</a></li>
-      </ul>
-    </li>
-    <li class="has-dropdown">
-      <a href="solar-facts.html" {% if page_id in ('solar-facts','solar-actions','solar-letters') %}aria-current="true"{% endif %}>Solar Farm</a>
-      <ul class="nav-dropdown">
-        <li><a href="solar-facts.html" {% if page_id == 'solar-facts' %}aria-current="page"{% endif %}>Facts &amp; timeline</a></li>
-        <li><a href="solar-actions.html" {% if page_id == 'solar-actions' %}aria-current="page"{% endif %}>What you can do</a></li>
-        <li><a href="solar-letters.html" {% if page_id == 'solar-letters' %}aria-current="page"{% endif %}>Write letters</a></li>
-      </ul>
-    </li>
-    <li><a href="combined-impacts.html" {% if page_id == 'combined' %}aria-current="page"{% endif %}>Combined Impacts</a></li>
-    <li><a href="about.html" {% if page_id == 'about' %}aria-current="page"{% endif %}>About</a></li>
-  </ul>
-</nav>
-    </div>
+    <a class="wordmark" href="/white-horse-reservoir/reservoir/">Vale Watch</a>
+    <nav class="section-nav" aria-label="Project sections">
+      <a href="/white-horse-reservoir/reservoir/"
+         {% if section == 'reservoir' %}aria-current="true" class="active"{% endif %}>
+        White Horse Reservoir
+      </a>
+      <a href="/white-horse-reservoir/combined/"
+         {% if section == 'combined' %}aria-current="true" class="active"{% endif %}>
+        Combined Concerns
+      </a>
+      <a href="/white-horse-reservoir/solar/"
+         {% if section == 'solar' %}aria-current="true" class="active"{% endif %}>
+        Solar Farm
+      </a>
+    </nav>
   </header>
+
+  {% set res  = "/white-horse-reservoir/reservoir" %}
+  {% set sol  = "/white-horse-reservoir/solar" %}
+  {% set comb = "/white-horse-reservoir/combined" %}
+  {% if section == 'reservoir' %}{% set base = res %}{% elif section == 'solar' %}{% set base = sol %}{% elif section == 'combined' %}{% set base = comb %}{% else %}{% set base = res %}{% endif %}
+
+  <div class="secondary-nav-wrapper">
+    <nav class="secondary-nav" aria-label="Section navigation">
+      <a href="{{ base }}/"
+         {% if page_id in ('reservoir-home','solar-home','combined-home') %}aria-current="page"{% endif %}>Home</a>
+      <a href="{{ base }}/facts.html"
+         {% if page_id in ('reservoir-facts','solar-facts','combined-facts') %}aria-current="page"{% endif %}>Facts &amp; Timeline</a>
+      <a href="{{ base }}/actions.html"
+         {% if page_id in ('reservoir-actions','solar-actions','combined-actions') %}aria-current="page"{% endif %}>Actions</a>
+      <a href="{{ base }}/letters.html"
+         {% if page_id in ('reservoir-letters','solar-letters','combined-letters') %}aria-current="page"{% endif %}>Letters</a>
+      {% if section == 'reservoir' %}
+      <a href="{{ res }}/access-points.html"
+         {% if page_id == 'reservoir-access' %}aria-current="page"{% endif %}>Access Points</a>
+      {% endif %}
+      <a href="/white-horse-reservoir/about.html"
+         {% if page_id == 'about' %}aria-current="page"{% endif %}>About</a>
+    </nav>
+  </div>
 
   <main class="container">
     {% block content %}{% endblock %}
@@ -46,7 +56,7 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p>Built by volunteers in support of GARD's campaign. Independent of GARD. Last updated: {{ built_on }}.</p>
+      <p>Built by volunteers as an independent community resource. Last updated: {{ built_on }}.</p>
     </div>
   </footer>
 
@@ -54,16 +64,5 @@
   <script src="/white-horse-reservoir/assets/letters.js" defer></script>
   <script src="/white-horse-reservoir/assets/map.js" defer></script>
   {% block extra_scripts %}{% endblock %}
-  <script>
-    (function () {
-      var toggle = document.getElementById('nav-toggle');
-      var navPrimary = document.querySelector('.nav-primary');
-      if (toggle && navPrimary) {
-        toggle.addEventListener('change', function () {
-          navPrimary.classList.toggle('is-open', toggle.checked);
-        });
-      }
-    }());
-  </script>
 </body>
 </html>

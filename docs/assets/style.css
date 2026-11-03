@@ -106,6 +106,14 @@ a:hover {
   flex: 1;
 }
 
+.wordmark {
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--accent);
+  margin-right: 1.5rem;
+}
+
 .site-title:hover {
   text-decoration: underline;
 }
@@ -510,6 +518,26 @@ caption {
   margin-bottom: 1rem;
 }
 
+/* Three-tab section nav */
+.section-nav { display: flex; gap: 0; }
+.section-nav a { padding: 0.5rem 1.25rem; text-decoration: none; border-bottom: 3px solid transparent; }
+.section-nav a.active, .section-nav a[aria-current="true"] {
+  border-bottom-color: var(--color-primary, var(--accent)); font-weight: 600;
+}
+/* Secondary nav */
+.secondary-nav-wrapper { background: var(--color-surface-alt, #f3f4f6); border-bottom: 1px solid var(--color-border, var(--border)); }
+.secondary-nav { display: flex; gap: 0; max-width: 60rem; margin: 0 auto; padding: 0 1rem; }
+.secondary-nav a { padding: 0.5rem 1rem; text-decoration: none; font-size: 0.9rem; border-bottom: 2px solid transparent; }
+.secondary-nav a[aria-current="page"] { border-bottom-color: var(--color-primary, var(--accent)); font-weight: 600; }
+/* Project colour tags */
+.tag-reservoir { background: #2563eb; color: #fff; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.75rem; }
+.tag-solar     { background: #d97706; color: #fff; padding: 0.1rem 0.4rem; border-radius: 3px; font-size: 0.75rem; }
+/* Mobile: stack section tabs */
+@media (max-width: 640px) {
+  .section-nav { flex-direction: column; }
+  .secondary-nav { flex-wrap: wrap; }
+}
+
 /* --- Two-tier navigation dropdowns --- */
 .has-dropdown .nav-dropdown { display: none; }
 .has-dropdown:hover .nav-dropdown,
@@ -524,19 +552,6 @@ caption {
   z-index: 1100;
 }
 
-/* Mobile nav toggle (checkbox-hack) */
-.nav-toggle-check { display: none; }
-.nav-toggle-label {
-  display: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  font-size: 1rem;
-}
-@media (max-width: 640px) {
-  .nav-toggle-label { display: block; }
-  .nav-primary { display: none; }
-  .nav-toggle-check:checked ~ .nav-primary { display: block; }
-}
 
 /* Cearn Solar Farm forecast entries */
 .forecast-label { color: var(--muted); font-style: italic; }

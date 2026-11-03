@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Facts | White Horse Reservoir{% endblock %}
+{% block title %}Facts &amp; Timeline — White Horse Reservoir — Vale Watch{% endblock %}
 
 {% block content %}
 <h1>Facts about the White Horse Reservoir project</h1>
@@ -44,7 +44,7 @@
         <div class="timeline-actions">
           <strong>You can:</strong>
           {% for la in item.linked_actions %}
-            <a href="../actions/#action-{{ la.id }}">{{ la.title }}</a>{% if not loop.last %}, {% endif %}
+            <a href="/white-horse-reservoir/reservoir/actions.html#action-{{ la.id }}">{{ la.title }}</a>{% if not loop.last %}, {% endif %}
           {% endfor %}
         </div>
         {% endif %}
@@ -75,7 +75,7 @@
       <div class="timeline-actions">
         <strong>You can:</strong>
         {% for la in item.linked_actions %}
-          <a href="../actions/#action-{{ la.id }}">{{ la.title }}</a>{% if not loop.last %}, {% endif %}
+          <a href="/white-horse-reservoir/reservoir/actions.html#action-{{ la.id }}">{{ la.title }}</a>{% if not loop.last %}, {% endif %}
         {% endfor %}
       </div>
       {% endif %}

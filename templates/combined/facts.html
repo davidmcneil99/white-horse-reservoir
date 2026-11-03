@@ -1,10 +1,9 @@
 {% extends "base.html" %}
-{% set page_id = 'combined' %}
 
-{% block title %}Combined Impacts | White Horse Reservoir &amp; Cearn Solar Farm{% endblock %}
+{% block title %}Facts &amp; Timeline — Combined Concerns — Vale Watch{% endblock %}
 
 {% block content %}
-<h1>Combined Impacts</h1>
+<h1>Combined Concerns: Facts &amp; Timeline</h1>
 
 <p>The <strong>White Horse Reservoir</strong> (PINS WA010005, decided by the Secretary of State for Environment,
 Food and Rural Affairs) and the <strong>Cearn Solar Farm</strong> (PINS EN0110044, decided by the Secretary of
@@ -49,7 +48,7 @@ This page is independent of both GARD and Protect the Vale.</p>
 
   <p>Construction traffic for both projects is likely to use some of the same roads. Probable shared corridors
   include the <strong>A338</strong> through the Hanneys, the <strong>A417</strong> and the
-  <strong>A415</strong>. <span class="label label--not-confirmed">not yet confirmed</span> -- Cearn
+  <strong>A415</strong>. <span class="label label--not-confirmed">not yet confirmed</span> — Cearn
   construction routes have not been published. They are expected to be set out in the Environmental Statement
   submitted with the Development Consent Order application, forecast for September 2027.</p>
 
@@ -82,5 +81,30 @@ This page is independent of both GARD and Protect the Vale.</p>
   <h2>Note on GARD</h2>
   <p>GARD's campaign focuses on the White Horse Reservoir only.
   This page is independent of both GARD and Protect the Vale.</p>
+</section>
+
+<section class="timeline-section" id="combined-timeline">
+  <h2>Combined Timeline</h2>
+  <p>Events from both projects in reverse chronological order. Items are colour-coded by project.</p>
+
+  <ol class="timeline-list" reversed>
+    {% for entry in combined_timeline %}
+    <li class="timeline-item{% if entry.is_forecast %} forecast-item{% endif %}" id="ct-{{ entry.id }}">
+      <div class="timeline-date">{{ entry.date_display }}</div>
+      <div class="timeline-tags">
+        {% for proj in entry.projects %}
+        <span class="tag-{{ proj }}">{{ "Reservoir" if proj == "reservoir" else "Solar Farm" }}</span>
+        {% endfor %}
+        {% if entry.is_forecast %}<span class="forecast-label">(forecast)</span>{% endif %}
+      </div>
+      <div class="timeline-event">
+        {{ entry.event }}
+        {% if entry.source_url %}
+          <a class="source-link" href="{{ entry.source_url }}" rel="external noopener">Source</a>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ol>
 </section>
 {% endblock %}

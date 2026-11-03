@@ -9,7 +9,9 @@
     "source_url": "https://www.whitehorsedc.gov.uk/vale-of-white-horse-district-council/planning-and-development/nationally-significant-infrastructure-projects-nsips/cearn-solar-farm/",
     "source_label": "Vale of White Horse: Cearn Solar Farm page",
     "is_legal_info": false,
-    "note": "The Vale is a statutory consultee, not the decision-maker. Its planning committee has no vote on the application. Ask it to strengthen its Local Impact Report."
+    "note": "The Vale is a statutory consultee, not the decision-maker. Its planning committee has no vote on the application. Ask it to strengthen its Local Impact Report.",
+    "featured": true,
+    "featured_order": 1
   },
   {
     "id": "ca002",
@@ -19,7 +21,9 @@
     "who_can": "Anyone",
     "source_url": "https://national-infrastructure-consenting.planninginspectorate.gov.uk/projects/EN0110044/get-updates/start",
     "source_label": "Planning Inspectorate: Cearn Solar Farm email updates (EN0110044)",
-    "is_legal_info": false
+    "is_legal_info": false,
+    "featured": true,
+    "featured_order": 2
   },
   {
     "id": "ca003",
@@ -29,7 +33,9 @@
     "who_can": "Anyone",
     "source_url": "https://protect-the-vale.org.uk/",
     "source_label": "Protect the Vale",
-    "is_legal_info": false
+    "is_legal_info": false,
+    "featured": true,
+    "featured_order": 3
   },
   {
     "id": "ca004",

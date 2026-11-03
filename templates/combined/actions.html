@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Actions — Combined Concerns — Vale Watch{% endblock %}
+
+{% block content %}
+<h1>Combined Concerns: What You Can Do</h1>
+<p>Actions addressing the shared impacts of the White Horse Reservoir and the Cearn Solar Farm. Each project has its own decision-maker; actions for each project are tagged accordingly.</p>
+
+{% for timing_value, timing_label in [("now", "Act now"), ("on-submission", "After DCO submission"), ("on-acceptance", "After DCO acceptance"), ("ongoing", "Ongoing")] %}
+  {% set timing_actions = combined_actions | selectattr("timing", "equalto", timing_value) | list %}
+  {% if timing_actions %}
+  <section class="actions-group" id="combined-actions-{{ timing_value }}">
+    <h2>{{ timing_label }}</h2>
+    {% for action in timing_actions %}
+    <article class="action-item" id="action-{{ action.id }}">
+      <h3>{{ action.title }}</h3>
+      <div class="action-tags">
+        {% for proj in action.projects %}
+        <span class="tag-{{ proj }}">{{ "Reservoir" if proj == "reservoir" else "Solar Farm" }}</span>
+        {% endfor %}
+      </div>
+      <p>{{ action.description }}</p>
+      {% if action.who_can %}
+      <p class="action-who"><strong>Who can do this:</strong> {{ action.who_can }}</p>
+      {% endif %}
+      {% if action.deadline_display is defined %}
+      <p class="action-deadline"><strong>Complete by:</strong> {{ action.deadline_display }}</p>
+      {% elif action.deadline is defined and action.deadline %}
+      <p class="action-deadline"><strong>Deadline:</strong> {{ action.deadline }}</p>
+      {% endif %}
+      {% if action.source_url %}
+      <p><a href="{{ action.source_url }}" rel="external noopener">{{ action.source_label if action.source_label else "More information" }}</a></p>
+      {% endif %}
+      {% if action.is_legal_info %}
+      <p class="legal-disclaimer">This is general information, not legal advice.</p>
+      {% endif %}
+      {% if action.letter_key %}
+        {% if "solar" in action.projects %}
+        <p><a class="action-letter-btn" href="/white-horse-reservoir/solar/letters.html#{{ action.letter_key }}">Generate letter (Solar Farm)</a></p>
+        {% else %}
+        <p><a class="action-letter-btn" href="/white-horse-reservoir/reservoir/letters.html#{{ action.letter_key }}">Generate letter (Reservoir)</a></p>
+        {% endif %}
+      {% endif %}
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+{% endfor %}
+{% endblock %}

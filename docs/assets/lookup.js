@@ -66,7 +66,17 @@ window.WHRLookup = (function () {
 
       // Load static data (cached after first call).
       const data = await _loadData();
-      const reps = data.representatives;
+      const allReps = data.representatives;
+
+      // Section-aware filtering: only show reps relevant to this section.
+      const mapSection = document.getElementById('map')?.dataset?.section || 'combined';
+      const _projectMap = { reservoir: 'reservoir', solar: 'cearn', combined: null };
+      const requiredProject = _projectMap.hasOwnProperty(mapSection) ? _projectMap[mapSection] : null;
+      const reps = allReps.filter(function (rep) {
+        if (!requiredProject) return true; // combined: show all
+        const projects = (rep.projects || 'reservoir').split(',').map(function (s) { return s.trim(); });
+        return projects.includes(requiredProject);
+      });
       const aliases = data._aliases;
 
       const constituency = pcData.parliamentary_constituency || '';

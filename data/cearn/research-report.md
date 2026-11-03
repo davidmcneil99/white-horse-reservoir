@@ -12,7 +12,7 @@ This is the original research report from 1 November 2026. A verification pass r
 - **Parish types:** Denchworth, Goosey, Baulking, Garford, Lyford, Frilford, Hatford and Besselsleigh are parish meetings with no website.
 - **Protect the Vale:** verified. It has a group mailbox, an update sign-up, no named organisers, no petition and no working feed.
 - **Developer site:** its feed is empty. The register-for-updates link points to a different project's domain.
-- **Decision-maker:** the DESNZ Secretary of State is Miatta Fahnbulleh.
+- **Decision-maker:** the DESNZ Secretary of State is Ed Miliband.
 - **Olly Glover's contact:** use his parliamentary address (olly.glover.mp@parliament.uk) rather than the party address quoted below.
 - **Manor Solar Farm:** appeal reference APP/V3120/W/24/3356504, allowed 3 April 2025. It must start by 3 April 2028 and has a 40-year consent.
 - **Vale press release:** the Leader writes to the Defra Secretary of State as the motion requires. The decision-maker for Cearn is DESNZ.

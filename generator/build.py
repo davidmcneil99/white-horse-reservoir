@@ -3,6 +3,7 @@
 import csv
 import json
 import logging
+import re
 import shutil
 from datetime import date, datetime
 from pathlib import Path
@@ -176,12 +177,22 @@ def load_all_data() -> dict:
 
     cearn_data = load_cearn_data()
 
+    res_data = {
+        "timeline": timeline,
+        "actions": actions,
+    }
+    combined_data = build_combined_data(res_data, cearn_data)
+
     return {
         "timeline": timeline,
         "quotes": quotes,
         "actions": actions,
         "actions_by_id": actions_by_id,
         "featured_actions": featured_actions,
+        "featured_actions_intro": (
+            "These are the most time-sensitive actions. "
+            "This is a nationally significant infrastructure project at a critical stage."
+        ),
         "representatives": representatives,
         "local_councils": local_councils,
         "access_points": access_points,
@@ -189,12 +200,17 @@ def load_all_data() -> dict:
         "corrections": corrections,
         "still_to_check": still_to_check,
         "built_on": date.today().isoformat(),
-        "cearn_timeline":          cearn_data["cearn_timeline"],
-        "cearn_quotes":            cearn_data["cearn_quotes"],
-        "cearn_actions":           cearn_data["cearn_actions"],
-        "cearn_featured_actions":  cearn_data["cearn_featured_actions"],
-        "cearn_news_items":        cearn_data["cearn_news_items"],
-        "links_to_reservoir":      cearn_data["links_to_reservoir"],
+        "cearn_timeline":               cearn_data["cearn_timeline"],
+        "cearn_quotes":                 cearn_data["cearn_quotes"],
+        "cearn_actions":                cearn_data["cearn_actions"],
+        "cearn_featured_actions":       cearn_data["cearn_featured_actions"],
+        "cearn_featured_actions_intro": cearn_data["cearn_featured_actions_intro"],
+        "cearn_news_items":             cearn_data["cearn_news_items"],
+        "links_to_reservoir":           cearn_data["links_to_reservoir"],
+        "combined_timeline":            combined_data["combined_timeline"],
+        "combined_actions":             combined_data["combined_actions"],
+        "combined_featured_actions":    combined_data["combined_featured_actions"],
+        "combined_featured_actions_intro": combined_data["combined_featured_actions_intro"],
     }
 
 
@@ -240,8 +256,59 @@ def load_cearn_data() -> dict:
         "cearn_quotes":   quotes,
         "cearn_actions":  actions,
         "cearn_featured_actions": cearn_featured_actions,
+        "cearn_featured_actions_intro": (
+            "These are the most time-sensitive actions right now. "
+            "The Vale's scoping response is due 23 November 2026."
+        ),
         "cearn_news_items": cearn_news,
         "links_to_reservoir": links_to_reservoir,
+    }
+
+
+def build_combined_data(res_data: dict, cearn_data: dict) -> dict:
+    """Merge reservoir and cearn data for the combined section.
+
+    Args:
+        res_data: The reservoir portion of the context (keys: timeline, actions, …).
+        cearn_data: The cearn portion (keys: cearn_timeline, cearn_actions, …).
+
+    Returns:
+        Dict with combined_timeline, combined_actions, combined_featured_actions,
+        combined_featured_actions_intro.
+    """
+    # Merged timeline: each entry gains a 'projects' tag list
+    res_timeline = [dict(e, projects=["reservoir"]) for e in res_data["timeline"]]
+    solar_timeline = [dict(e, projects=["solar"]) for e in cearn_data["cearn_timeline"]]
+    def _sort_key(entry):
+        d = entry.get('date', '')
+        m = re.search(r'\d{4}', d)
+        return (m.group() if m else '0000', d)
+
+    combined_timeline = sorted(
+        res_timeline + solar_timeline,
+        key=_sort_key,
+        reverse=True,
+    )
+
+    # Merged actions
+    res_actions = [dict(a, projects=["reservoir"]) for a in res_data["actions"]]
+    solar_actions = [dict(a, projects=["solar"]) for a in cearn_data["cearn_actions"]]
+    combined_actions = res_actions + solar_actions
+
+    # Combined featured actions from featured-actions.json
+    feat_path = DATA_DIR / "combined" / "content" / "featured-actions.json"
+    combined_featured = (
+        json.loads(feat_path.read_text(encoding="utf-8")) if feat_path.exists() else []
+    )
+
+    return {
+        "combined_timeline": combined_timeline,
+        "combined_actions": combined_actions,
+        "combined_featured_actions": combined_featured,
+        "combined_featured_actions_intro": (
+            "Both projects are in active pre-application consultation. "
+            "These actions address their shared impacts."
+        ),
     }
 
 
@@ -309,7 +376,7 @@ def _build_lookup_data(data: dict) -> dict:
     }
 
     desnz_recipient = {
-        "name": "Miatta Fahnbulleh MP",
+        "name": "Ed Miliband MP",
         "email": "",
         "address": "Ministerial Correspondence Team, Level 3, 55 Whitehall, London SW1A 2HP",
     }
@@ -376,7 +443,13 @@ def build(output_dir: Path = Path("docs")) -> None:
         output_dir: Destination directory. Created if it does not exist.
     """
     output_dir = Path(output_dir)
+    docs_res_dir   = output_dir / "reservoir"
+    docs_solar_dir = output_dir / "solar"
+    docs_comb_dir  = output_dir / "combined"
+
     output_dir.mkdir(parents=True, exist_ok=True)
+    for d in [docs_res_dir, docs_solar_dir, docs_comb_dir]:
+        d.mkdir(parents=True, exist_ok=True)
 
     data = load_all_data()
 
@@ -386,33 +459,55 @@ def build(output_dir: Path = Path("docs")) -> None:
     )
 
     pages = [
-        ("index.html", "index.html", "home"),
-        ("about.html", "about.html", "about"),
-        ("facts.html", "facts.html", "res-facts"),
-        ("actions.html", "actions.html", "res-actions"),
-        ("letters.html", "letters.html", "res-letters"),
-        ("corrections.html", "corrections.html", ""),
-        ("access-points.html", "access-points.html", "access-points"),
+        # Root
+        ("root-redirect.html",                output_dir / "index.html",              None,         None),
+        ("about.html",                         output_dir / "about.html",              None,         "about"),
+        ("corrections.html",                   output_dir / "corrections.html",        None,         "corrections"),
+        # Reservoir
+        ("reservoir/index.html",               docs_res_dir / "index.html",            "reservoir",  "reservoir-home"),
+        ("reservoir/facts.html",               docs_res_dir / "facts.html",            "reservoir",  "reservoir-facts"),
+        ("reservoir/actions.html",             docs_res_dir / "actions.html",          "reservoir",  "reservoir-actions"),
+        ("reservoir/letters.html",             docs_res_dir / "letters.html",          "reservoir",  "reservoir-letters"),
+        ("reservoir/access-points.html",       docs_res_dir / "access-points.html",    "reservoir",  "reservoir-access"),
+        # Solar
+        ("solar/index.html",                   docs_solar_dir / "index.html",          "solar",      "solar-home"),
+        ("solar/facts.html",                   docs_solar_dir / "facts.html",          "solar",      "solar-facts"),
+        ("solar/actions.html",                 docs_solar_dir / "actions.html",        "solar",      "solar-actions"),
+        ("solar/letters.html",                 docs_solar_dir / "letters.html",        "solar",      "solar-letters"),
+        # Combined
+        ("combined/index.html",                docs_comb_dir / "index.html",           "combined",   "combined-home"),
+        ("combined/facts.html",                docs_comb_dir / "facts.html",           "combined",   "combined-facts"),
+        ("combined/actions.html",              docs_comb_dir / "actions.html",         "combined",   "combined-actions"),
+        ("combined/letters.html",              docs_comb_dir / "letters.html",         "combined",   "combined-letters"),
     ]
 
-    solar_pages = [
-        ("solar-facts.html", "solar-facts.html", "solar-facts"),
-        ("solar-actions.html", "solar-actions.html", "solar-actions"),
-        ("solar-letters.html", "solar-letters.html", "solar-letters"),
-        ("combined-impacts.html", "combined-impacts.html", "combined"),
+    for template_name, output_path, section, page_id in pages:
+        tmpl = env.get_template(template_name)
+        html = tmpl.render(**data, section=section, page_id=page_id)
+        output_path.write_text(html, encoding="utf-8")
+        logging.info("Wrote %s", output_path)
+
+    # Old flat-URL redirect stubs: keep pre-restructure links from hard-404ing.
+    # Written inline (not via Jinja) because each is a bare meta-refresh page.
+    redirect_stubs = [
+        (output_dir / "facts.html",            "/white-horse-reservoir/reservoir/facts.html"),
+        (output_dir / "actions.html",          "/white-horse-reservoir/reservoir/actions.html"),
+        (output_dir / "letters.html",          "/white-horse-reservoir/reservoir/letters.html"),
+        (output_dir / "access-points.html",    "/white-horse-reservoir/reservoir/access-points.html"),
+        (output_dir / "solar-facts.html",      "/white-horse-reservoir/solar/facts.html"),
+        (output_dir / "solar-actions.html",    "/white-horse-reservoir/solar/actions.html"),
+        (output_dir / "solar-letters.html",    "/white-horse-reservoir/solar/letters.html"),
+        (output_dir / "combined-impacts.html", "/white-horse-reservoir/combined/"),
     ]
-
-    available_templates = env.list_templates()
-    for template_name, output_name, page_id in solar_pages:
-        if template_name in available_templates:
-            pages.append((template_name, output_name, page_id))
-
-    for template_name, output_name, page_id in pages:
-        template = env.get_template(template_name)
-        rendered = template.render(**data, page_id=page_id)
-        out_path = output_dir / output_name
-        out_path.write_text(rendered, encoding="utf-8")
-        logging.info("Wrote %s", out_path)
+    for stub_path, target_url in redirect_stubs:
+        stub_path.write_text(
+            f'<!doctype html><html lang="en"><head><meta charset="utf-8">'
+            f'<meta http-equiv="refresh" content="0;url={target_url}">'
+            f'<title>Redirecting — Vale Watch</title></head>'
+            f'<body><p><a href="{target_url}">Redirecting…</a></p></body></html>',
+            encoding="utf-8",
+        )
+        logging.info("Wrote redirect stub %s", stub_path)
 
     # Write lookup-data.json.
     assets_dir = output_dir / "assets"

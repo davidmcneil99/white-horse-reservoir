@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Write a letter | White Horse Reservoir{% endblock %}
+{% block title %}Write a letter — Cearn Solar Farm — Vale Watch{% endblock %}
 
 {% block content %}
-<h1>Write to your representatives</h1>
-<p class="letter-template-note">These are template letters — you should review and adjust the wording before sending to make sure it reflects your own situation and views.</p>
-<p>Use the tools below to find your representatives and generate a letter you can send to them about the White Horse Reservoir project.</p>
+<h1>Write to your representatives about Cearn Solar Farm</h1>
+<p class="letter-template-note">These are template letters -- you should review and adjust the wording before sending to make sure it reflects your own situation and views.</p>
+<p>Use the tools below to find your representatives and generate a letter you can send to them about the Cearn Solar Farm project (EN0110044).</p>
 
 <section class="lookup-section">
   <h2>Step 1: Find your representatives</h2>
@@ -23,17 +23,20 @@
     <label for="letter-type">Letter type</label>
     <select id="letter-type">
       <option value="">Select a letter type</option>
-      <option value="county-councillor">County councillor</option>
-      <option value="defra-secretary-of-state">Secretary of State (Emma Reynolds MP)</option>
-      <option value="district-councillor">District councillor</option>
-      <option value="eir-thames-water">Thames Water (EIR request)</option>
-      <option value="foi-missing-minutes">Thames Water (FOI - missing minutes)</option>
-      <option value="mp">Your MP</option>
-      <option value="ofwat">Ofwat</option>
-      <option value="parish-clerk">Parish clerk</option>
-      <option value="planning-inspectorate-relevant-representation">Planning Inspectorate (Relevant Representation)</option>
-      <option value="thames-water">Thames Water</option>
+      <option value="desnz-secretary-of-state" data-address="Ministerial Correspondence Team, Level 3, 55 Whitehall, London SW1A 2HP" data-postal-only="true">Secretary of State for Energy Security and Net Zero</option>
+      <option value="cearn-developer">Cearn Solar Farm Limited (developer)</option>
+      <option value="solar-mp">Your MP</option>
+      <option value="solar-county-councillor">Oxfordshire County Council councillor</option>
+      <option value="solar-district-councillor">Vale of White Horse District councillor</option>
+      <option value="solar-planning-inspectorate">Planning Inspectorate (EN0110044 - Relevant Representation)</option>
     </select>
+  </div>
+
+  <div class="combined-impact-control" id="combined-impact-control" style="display:none">
+    <label>
+      <input type="checkbox" id="combined-impact-checkbox">
+      Include paragraph about the cumulative impact of Cearn Solar Farm and the White Horse Reservoir
+    </label>
   </div>
 
   <div id="letter-output"></div>
@@ -48,5 +51,6 @@
     <a href="https://github.com/davidmcneil99/white-horse-reservoir/issues/new?title=Correction+report&amp;body=What+is+wrong%3A%0AWhat+it+should+say%3A%0ASource+URL%3A" class="correction-link">Report an error in this letter</a>
   </p>
 </section>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}
