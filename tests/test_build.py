@@ -301,16 +301,20 @@ def test_root_redirect_generated():
 
 def test_section_key_in_reservoir_page():
     build()
-    # section key must reach the template — check via a sentinel comment
-    # added to base.html in Task 1; for now assert the file exists at new path
-    assert Path("docs/reservoir/facts.html").exists()
+    html = Path("docs/reservoir/facts.html").read_text(encoding="utf-8")
+    # section key reaches base.html: Reservoir section tab is active
+    assert 'aria-current' in html
+    # secondary nav resolves to reservoir paths
+    assert "/white-horse-reservoir/reservoir/facts.html" in html
 
 
 def test_reservoir_home_has_active_section_tab():
+    import re
     build()
     html = Path("docs/reservoir/index.html").read_text(encoding="utf-8")
-    # The Reservoir tab must carry aria-current="true" or active class
-    assert 'aria-current' in html
+    # The Reservoir tab must be active; find aria-current near "White Horse Reservoir"
+    matches = re.findall(r'<a[^>]+aria-current[^>]*>[^<]*White Horse Reservoir', html)
+    assert matches, "Reservoir section tab should have aria-current set"
 
 
 def test_combined_facts_has_both_nav_actives():
