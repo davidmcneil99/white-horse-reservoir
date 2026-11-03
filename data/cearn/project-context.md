@@ -21,7 +21,7 @@ Background for the solar section of the tracker app. Status as at 1 November 202
 ## How it is decided
 
 - **Route**: Cearn is a Nationally Significant Infrastructure Project, because solar schemes over 100MW go through the national process. The developer applies for a Development Consent Order to the Planning Inspectorate.
-- **Who decides**: the Planning Inspectorate examines the application and recommends. The Secretary of State for Energy Security and Net Zero decides; that is currently Miatta Fahnbulleh.
+- **Who decides**: the Planning Inspectorate examines the application and recommends. The Secretary of State for Energy Security and Net Zero decides; that is currently Ed Miliband.
 - **Who does not decide**:
   - The Vale of White Horse is only a statutory consultee and will write a Local Impact Report. Its planning committee and speaking rules do not apply.
   - Defra is not the decision-maker for Cearn. It is for the reservoir, which is a common source of confusion; the Vale's own motion asks for a letter to Defra.

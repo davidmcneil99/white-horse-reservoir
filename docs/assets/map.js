@@ -121,11 +121,13 @@
     'including the Thames intake/tunnel corridor to Sutton Courtenay.</small>'
   ).addTo(map);
 
-  WHR_ACCESS_POINTS.forEach(function (ap) {
-    L.circleMarker([ap.lat, ap.lon], {radius: 6, color: '#00539b', fillOpacity: 0.8})
-      .bindPopup('<strong>' + ap.id + '</strong><br>' + ap.label + '<br><em>Position estimated from road/locality description</em>')
-      .addTo(map);
-  });
+  if (SECTION === 'reservoir' || SECTION === 'combined') {
+    WHR_ACCESS_POINTS.forEach(function (ap) {
+      L.circleMarker([ap.lat, ap.lon], {radius: 6, color: '#00539b', fillOpacity: 0.8})
+        .bindPopup('<strong>' + ap.id + '</strong><br>' + ap.label + '<br><em>Position estimated from road/locality description</em>')
+        .addTo(map);
+    });
+  }
 
   // Section filter: remove reservoir layer if this is the solar section.
   if (SECTION === 'solar') {

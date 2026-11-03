@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% block title %}Combined Concerns — Vale Watch{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+{% endblock %}
+{% block extra_scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+{% endblock %}
 {% block content %}
 <h1>Combined Concerns</h1>
 <p class="section-blurb">Two large nationally significant infrastructure projects are proposed in the Vale of White Horse at the same time. This section covers the issues they share: overlapping construction periods, shared roads including the A338 through the Hanneys and the A417, and a combined land take of at least 5,300 acres. Each project has its own decision-maker and its own planning process.</p>

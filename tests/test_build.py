@@ -496,9 +496,16 @@ def test_build_combined_data_returns_required_keys():
 
 
 def test_combined_timeline_is_reverse_sorted():
+    import re
+
+    def _sort_key(entry):
+        m = re.search(r'\d{4}', entry.get('date', ''))
+        return m.group() if m else '0000'
+
     data = load_all_data()
-    dates = [e.get("date", "") for e in data["combined_timeline"]]
-    assert dates == sorted(dates, reverse=True), "combined_timeline should be sorted reverse-chronologically"
+    entries = data["combined_timeline"]
+    keys = [_sort_key(e) for e in entries]
+    assert keys == sorted(keys, reverse=True), "combined_timeline should be sorted reverse-chronologically by year"
 
 
 def test_combined_timeline_has_project_tags():

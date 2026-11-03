@@ -3,6 +3,7 @@
 import csv
 import json
 import logging
+import re
 import shutil
 from datetime import date, datetime
 from pathlib import Path
@@ -278,9 +279,13 @@ def build_combined_data(res_data: dict, cearn_data: dict) -> dict:
     # Merged timeline: each entry gains a 'projects' tag list
     res_timeline = [dict(e, projects=["reservoir"]) for e in res_data["timeline"]]
     solar_timeline = [dict(e, projects=["solar"]) for e in cearn_data["cearn_timeline"]]
+    def _sort_key(entry):
+        m = re.search(r'\d{4}', entry.get('date', ''))
+        return m.group() if m else '0000'
+
     combined_timeline = sorted(
         res_timeline + solar_timeline,
-        key=lambda e: e.get("date", ""),
+        key=_sort_key,
         reverse=True,
     )
 

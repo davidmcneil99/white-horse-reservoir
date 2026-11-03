@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% block title %}White Horse Reservoir — Vale Watch{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+{% endblock %}
+{% block extra_scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+{% endblock %}
 {% block content %}
 <h1>White Horse Reservoir (SESRO)</h1>
 <p class="section-blurb">Thames Water proposes to build a large reservoir in the Vale of
