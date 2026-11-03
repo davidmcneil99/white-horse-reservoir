@@ -280,8 +280,9 @@ def build_combined_data(res_data: dict, cearn_data: dict) -> dict:
     res_timeline = [dict(e, projects=["reservoir"]) for e in res_data["timeline"]]
     solar_timeline = [dict(e, projects=["solar"]) for e in cearn_data["cearn_timeline"]]
     def _sort_key(entry):
-        m = re.search(r'\d{4}', entry.get('date', ''))
-        return m.group() if m else '0000'
+        d = entry.get('date', '')
+        m = re.search(r'\d{4}', d)
+        return (m.group() if m else '0000', d)
 
     combined_timeline = sorted(
         res_timeline + solar_timeline,
