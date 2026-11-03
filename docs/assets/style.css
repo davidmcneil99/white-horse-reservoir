@@ -552,19 +552,6 @@ caption {
   z-index: 1100;
 }
 
-/* Mobile nav toggle (checkbox-hack) */
-.nav-toggle-check { display: none; }
-.nav-toggle-label {
-  display: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  font-size: 1rem;
-}
-@media (max-width: 640px) {
-  .nav-toggle-label { display: block; }
-  .nav-primary { display: none; }
-  .nav-toggle-check:checked ~ .nav-primary { display: block; }
-}
 
 /* Cearn Solar Farm forecast entries */
 .forecast-label { color: var(--muted); font-style: italic; }

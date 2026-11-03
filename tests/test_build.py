@@ -175,6 +175,7 @@ def test_build_creates_all_pages(tmp_path):
     expected = [
         "index.html",
         "about.html",
+        "corrections.html",
         "reservoir/index.html",
         "reservoir/facts.html",
         "reservoir/actions.html",
@@ -541,3 +542,33 @@ def test_map_js_reads_section_attribute():
 def test_lookup_js_filters_by_section():
     js = Path("docs/assets/lookup.js").read_text(encoding="utf-8")
     assert "requiredProject" in js
+
+
+# ---------------------------------------------------------------------------
+# Task 7: About page tests
+# ---------------------------------------------------------------------------
+
+def test_about_page_mentions_both_projects():
+    build()
+    html = Path("docs/about.html").read_text(encoding="utf-8")
+    assert "Vale Watch" in html
+    assert "Cearn" in html or "solar" in html.lower()
+    assert "reservoir" in html.lower()
+
+
+def test_about_page_title_has_vale_watch():
+    build()
+    html = Path("docs/about.html").read_text(encoding="utf-8")
+    assert "Vale Watch" in html
+    assert "White Horse Reservoir" not in html.split("<title>")[1].split("</title>")[0]
+
+
+def test_corrections_page_generated():
+    build()
+    assert Path("docs/corrections.html").exists()
+
+
+def test_corrections_page_title_has_vale_watch():
+    build()
+    html = Path("docs/corrections.html").read_text(encoding="utf-8")
+    assert "Vale Watch" in html

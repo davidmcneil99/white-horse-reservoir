@@ -456,6 +456,7 @@ def build(output_dir: Path = Path("docs")) -> None:
         # Root
         ("root-redirect.html",                output_dir / "index.html",              None,         None),
         ("about.html",                         output_dir / "about.html",              None,         "about"),
+        ("corrections.html",                   output_dir / "corrections.html",        None,         "corrections"),
         # Reservoir
         ("reservoir/index.html",               docs_res_dir / "index.html",            "reservoir",  "reservoir-home"),
         ("reservoir/facts.html",               docs_res_dir / "facts.html",            "reservoir",  "reservoir-facts"),
