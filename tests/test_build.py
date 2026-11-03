@@ -371,10 +371,11 @@ def test_reservoir_home_has_blurb():
 def test_reservoir_home_has_map():
     build()
     html = Path("docs/reservoir/index.html").read_text(encoding="utf-8")
-    assert "map" in html.lower()
+    assert 'id="map"' in html
+    assert 'data-section="reservoir"' in html
 
 
 def test_reservoir_home_has_news_section():
     build()
     html = Path("docs/reservoir/index.html").read_text(encoding="utf-8")
-    assert "news" in html.lower() or "latest" in html.lower()
+    assert 'class="news-list"' in html or 'id="news"' in html or 'Latest news' in html

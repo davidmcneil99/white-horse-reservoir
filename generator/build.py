@@ -182,6 +182,10 @@ def load_all_data() -> dict:
         "actions": actions,
         "actions_by_id": actions_by_id,
         "featured_actions": featured_actions,
+        "featured_actions_intro": (
+            "These are the most time-sensitive actions. "
+            "This is a nationally significant infrastructure project at a critical stage."
+        ),
         "representatives": representatives,
         "local_councils": local_councils,
         "access_points": access_points,
