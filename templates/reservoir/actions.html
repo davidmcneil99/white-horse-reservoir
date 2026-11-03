@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Actions | White Horse Reservoir{% endblock %}
+{% block title %}Actions — White Horse Reservoir — Vale Watch{% endblock %}
 
 {% block content %}
 <h1>What you can do</h1>
@@ -20,7 +20,7 @@
         <a class="btn-primary" href="{{ action.source_url }}" rel="external noopener">Take action</a>
         {% endif %}
         {% if action.letter_key %}
-        <a class="action-letter-btn" href="letters.html#{{ action.letter_key }}">Generate letter</a>
+        <a class="action-letter-btn" href="/white-horse-reservoir/reservoir/letters.html#{{ action.letter_key }}">Generate letter</a>
         {% endif %}
       </div>
     </li>
@@ -52,7 +52,7 @@
       <p class="action-deadline"><strong>Complete by:</strong> {{ action.deadline_display }}</p>
       {% endif %}
       {% if action.letter_key %}
-      <p><a class="action-letter-btn" href="../letters/#{{ action.letter_key }}">Generate letter</a></p>
+      <p><a class="action-letter-btn" href="/white-horse-reservoir/reservoir/letters.html#{{ action.letter_key }}">Generate letter</a></p>
       {% endif %}
     </article>
     {% endfor %}

@@ -194,7 +194,7 @@ def test_home_page_has_most_urgent_actions():
     build()
     html = Path("docs/reservoir/index.html").read_text(encoding="utf-8")
     assert "Most urgent actions" in html
-    assert "home-actions" in html
+    assert "featured-actions" in html
 
 
 def test_cearn_content_files_exist():
@@ -247,7 +247,7 @@ def test_solar_actions_page_generated():
     html = Path("docs/solar/actions.html").read_text(encoding="utf-8")
     assert "DESNZ" in html or "Energy Security" in html
     assert "statutory consultee" in html.lower()
-    assert 'href="solar-letters.html#desnz-secretary-of-state"' in html
+    assert 'href="/white-horse-reservoir/solar/letters.html#desnz-secretary-of-state"' in html
     assert "action-item" in html  # actions actually rendered
 
 
@@ -359,3 +359,22 @@ def test_root_redirect_targets_reservoir():
     build()
     html = Path("docs/index.html").read_text(encoding="utf-8")
     assert "/white-horse-reservoir/reservoir/" in html
+
+
+def test_reservoir_home_has_blurb():
+    build()
+    html = Path("docs/reservoir/index.html").read_text(encoding="utf-8")
+    assert "Thames Water" in html
+    assert "WA010005" in html
+
+
+def test_reservoir_home_has_map():
+    build()
+    html = Path("docs/reservoir/index.html").read_text(encoding="utf-8")
+    assert "map" in html.lower()
+
+
+def test_reservoir_home_has_news_section():
+    build()
+    html = Path("docs/reservoir/index.html").read_text(encoding="utf-8")
+    assert "news" in html.lower() or "latest" in html.lower()
