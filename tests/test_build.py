@@ -300,10 +300,12 @@ def test_root_redirect_generated():
 
 
 def test_section_key_in_reservoir_page():
+    import re
     build()
     html = Path("docs/reservoir/facts.html").read_text(encoding="utf-8")
     # section key reaches base.html: Reservoir section tab is active
-    assert 'aria-current' in html
+    matches = re.findall(r'<a[^>]+aria-current[^>]*>[^<]*White Horse Reservoir', html)
+    assert matches, "Reservoir section tab should have aria-current on facts page"
     # secondary nav resolves to reservoir paths
     assert "/white-horse-reservoir/reservoir/facts.html" in html
 
